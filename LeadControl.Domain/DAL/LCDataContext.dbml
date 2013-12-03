@@ -1,0 +1,305 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="LeadControl" EntityNamespace="LeadControl.Domain.Entities" ContextNamespace="LeadControl.Domain.DAL" Class="LCDataContextDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=.\SQLExpress;Initial Catalog=LeadControl;Integrated Security=True" SettingsObjectName="LeadControl.Domain.Properties.Settings" SettingsPropertyName="LeadControlConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.FEAOrderItems" Member="FEAOrderItems">
+    <Type Name="FEAOrderItem">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="FEAOrderId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="ProductId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Price" Type="System.Decimal" DbType="Money" CanBeNull="true" />
+      <Column Name="DateCreated" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="FEAOrder_FEAOrderItem" Member="FEAOrder" ThisKey="FEAOrderId" OtherKey="Id" Type="FEAOrder" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="ProductType_FEAOrderItem" Member="ProductType" ThisKey="ProductId" OtherKey="Id" Type="ProductType" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Warehouses" Member="Warehouses">
+    <Type Name="Warehouse">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ProjectId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="Title" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="City" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="Address" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="DateCreated" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="DateModified" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="Warehouse_FEAOrder" Member="FEAOrders" ThisKey="Id" OtherKey="TargetWarehouseId" Type="FEAOrder" />
+      <Association Name="Warehouse_WarehouseKeeper" Member="WarehouseKeepers" ThisKey="Id" OtherKey="WarehouseId" Type="WarehouseKeeper" />
+      <Association Name="Warehouse_WarehouseProduct" Member="WarehouseProducts" ThisKey="Id" OtherKey="WarehouseId" Type="WarehouseProduct" />
+    </Type>
+  </Table>
+  <Table Name="dbo.FEAOrders" Member="FEAOrders">
+    <Type Name="FEAOrder">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ProjectId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="TargetWarehouseId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="DateCreated" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="FEAOrder_FEAOrderItem" Member="FEAOrderItems" ThisKey="Id" OtherKey="FEAOrderId" Type="FEAOrderItem" />
+      <Association Name="FEAOrder_FEAOrdersStatusChangement" Member="FEAOrdersStatusChangements" ThisKey="Id" OtherKey="FEAOrderId" Type="FEAOrdersStatusChangement" />
+      <Association Name="Warehouse_FEAOrder" Member="Warehouse" ThisKey="TargetWarehouseId" OtherKey="Id" Type="Warehouse" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.FEAOrdersStatusChangements" Member="FEAOrdersStatusChangements">
+    <Type Name="FEAOrdersStatusChangement">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="FEAOrderId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="AuthorId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="Comments" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="DateCreated" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="FEAOrder_FEAOrdersStatusChangement" Member="FEAOrder" ThisKey="FEAOrderId" OtherKey="Id" Type="FEAOrder" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="User_FEAOrdersStatusChangement" Member="User" ThisKey="AuthorId" OtherKey="Id" Type="User" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.LeadAccountInfo" Member="LeadAccountInfos">
+    <Type Name="LeadAccountInfo">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="LeadId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="Number" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="BankName" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="BIK" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="KNumber" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Association Name="Lead_LeadAccountInfo" Member="Lead" ThisKey="LeadId" OtherKey="Id" Type="Lead" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.LeadLegalInfo" Member="LeadLegalInfos">
+    <Type Name="LeadLegalInfo">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="LeadId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="LegalType" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="CompanyName" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="INN" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="OGRN" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="KPP" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="OKPO" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="LegalAddress" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="FacticalAddress" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="DirectorFIO" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Association Name="Lead_LeadLegalInfo" Member="Lead" ThisKey="LeadId" OtherKey="Id" Type="Lead" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.LeadOrderDocuments" Member="LeadOrderDocuments">
+    <Type Name="LeadOrderDocument">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="OrderId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="DocumentType" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="ServerFilename" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="Size" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="MimeType" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="DateUploaded" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="UploadedBy" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Association Name="LeadOrder_LeadOrderDocument" Member="LeadOrder" ThisKey="OrderId" OtherKey="Id" Type="LeadOrder" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="User_LeadOrderDocument" Member="User" ThisKey="UploadedBy" OtherKey="Id" Type="User" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.LeadOrderItems" Member="LeadOrderItems">
+    <Type Name="LeadOrderItem">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="OrderId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="ProductId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Price" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="Comments" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Association Name="LeadOrder_LeadOrderItem" Member="LeadOrder" ThisKey="OrderId" OtherKey="Id" Type="LeadOrder" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="ProductType_LeadOrderItem" Member="ProductType" ThisKey="ProductId" OtherKey="Id" Type="ProductType" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.LeadOrders" Member="LeadOrders">
+    <Type Name="LeadOrder">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="LeadId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="ProjectId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="DeliveryAddress" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="DateCreated" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="LeadOrder_LeadOrderDocument" Member="LeadOrderDocuments" ThisKey="Id" OtherKey="OrderId" Type="LeadOrderDocument" />
+      <Association Name="LeadOrder_LeadOrderItem" Member="LeadOrderItems" ThisKey="Id" OtherKey="OrderId" Type="LeadOrderItem" />
+      <Association Name="LeadOrder_LeadOrdersComment" Member="LeadOrdersComments" ThisKey="Id" OtherKey="OrderId" Type="LeadOrdersComment" />
+      <Association Name="LeadOrder_LeadOrderStatusChangement" Member="LeadOrderStatusChangements" ThisKey="Id" OtherKey="OrderId" Type="LeadOrderStatusChangement" />
+      <Association Name="LeadOrder_LeadOrderUser" Member="LeadOrderUsers" ThisKey="Id" OtherKey="OrderId" Type="LeadOrderUser" />
+      <Association Name="Lead_LeadOrder" Member="Lead" ThisKey="LeadId" OtherKey="Id" Type="Lead" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="Project_LeadOrder" Member="Project" ThisKey="ProjectId" OtherKey="Id" Type="Project" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.LeadOrdersComments" Member="LeadOrdersComments">
+    <Type Name="LeadOrdersComment">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="OrderId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="AuthorId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="Comments" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="DateCreated" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="LeadOrder_LeadOrdersComment" Member="LeadOrder" ThisKey="OrderId" OtherKey="Id" Type="LeadOrder" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="User_LeadOrdersComment" Member="User" ThisKey="OrderId" OtherKey="Id" Type="User" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.LeadOrderStatusChangements" Member="LeadOrderStatusChangements">
+    <Type Name="LeadOrderStatusChangement">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="OrderId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="AuthorId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="Comments" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="DateCreated" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="LeadOrder_LeadOrderStatusChangement" Member="LeadOrder" ThisKey="OrderId" OtherKey="Id" Type="LeadOrder" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="User_LeadOrderStatusChangement" Member="User" ThisKey="AuthorId" OtherKey="Id" Type="User" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.LeadPassportInfo" Member="LeadPassportInfos">
+    <Type Name="LeadPassportInfo">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="LeadId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="Series" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Number" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="IssuedBy" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="IssueDate" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Column Name="DivisionCode" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Association Name="Lead_LeadPassportInfo" Member="Lead" ThisKey="LeadId" OtherKey="Id" Type="Lead" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Leads" Member="Leads">
+    <Type Name="Lead">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="FirstName" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="SurName" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="LastName" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="Email" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="Phone" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="DateCreated" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="Lead_LeadAccountInfo" Member="LeadAccountInfos" ThisKey="Id" OtherKey="LeadId" Type="LeadAccountInfo" Cardinality="One" />
+      <Association Name="Lead_LeadLegalInfo" Member="LeadLegalInfos" ThisKey="Id" OtherKey="LeadId" Type="LeadLegalInfo" Cardinality="One" />
+      <Association Name="Lead_LeadOrder" Member="LeadOrders" ThisKey="Id" OtherKey="LeadId" Type="LeadOrder" />
+      <Association Name="Lead_LeadPassportInfo" Member="LeadPassportInfos" ThisKey="Id" OtherKey="LeadId" Type="LeadPassportInfo" Cardinality="One" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Permissions" Member="Permissions">
+    <Type Name="Permission">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="[Group]" Member="Group" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Association Name="Permission_RolePermission" Member="RolePermissions" ThisKey="Id" OtherKey="PermissionId" Type="RolePermission" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ProductTypes" Member="ProductTypes">
+    <Type Name="ProductType">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ProjectId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="Article" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Title" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="Photo" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="Weight" Type="System.Decimal" DbType="Money" CanBeNull="true" />
+      <Column Name="MinAmount" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DateCreated" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="DateModified" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="ProductType_FEAOrderItem" Member="FEAOrderItems" ThisKey="Id" OtherKey="ProductId" Type="FEAOrderItem" />
+      <Association Name="ProductType_LeadOrderItem" Member="LeadOrderItems" ThisKey="Id" OtherKey="ProductId" Type="LeadOrderItem" />
+      <Association Name="ProductType_WarehouseProduct" Member="WarehouseProducts" ThisKey="Id" OtherKey="ProductId" Type="WarehouseProduct" />
+      <Association Name="Project_ProductType" Member="Project" ThisKey="ProjectId" OtherKey="Id" Type="Project" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Projects" Member="Projects">
+    <Type Name="Project">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Title" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="Url" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="DateCreated" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="DateModified" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="Project_LeadOrder" Member="LeadOrders" ThisKey="Id" OtherKey="ProjectId" Type="LeadOrder" />
+      <Association Name="Project_ProductType" Member="ProductTypes" ThisKey="Id" OtherKey="ProjectId" Type="ProductType" />
+      <Association Name="Project_ProjectUser" Member="ProjectUsers" ThisKey="Id" OtherKey="ProjectId" Type="ProjectUser" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ProjectUsers" Member="ProjectUsers">
+    <Type Name="ProjectUser">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="UserId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="ProjectId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="DateCreated" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="Project_ProjectUser" Member="Project" ThisKey="ProjectId" OtherKey="Id" Type="Project" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="User_ProjectUser" Member="User" ThisKey="UserId" OtherKey="Id" Type="User" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.RolePermissions" Member="RolePermissions">
+    <Type Name="RolePermission">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="RoleId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="PermissionId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="DateCreated" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="Permission_RolePermission" Member="Permission" ThisKey="PermissionId" OtherKey="Id" Type="Permission" IsForeignKey="true" />
+      <Association Name="Role_RolePermission" Member="Role" ThisKey="RoleId" OtherKey="Id" Type="Role" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Roles" Member="Roles">
+    <Type Name="Role">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="DisplayName" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="DateCreated" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="DateModified" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="Role_RolePermission" Member="RolePermissions" ThisKey="Id" OtherKey="RoleId" Type="RolePermission" />
+      <Association Name="Role_User" Member="Users" ThisKey="Id" OtherKey="RoleId" Type="User" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Users" Member="Users">
+    <Type Name="User">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Email" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="PasswordHash" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="RoleId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="FirstName" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="SurName" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="LastName" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="Phone" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="City" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="Address" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="Status" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="Photo" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="DateRegistred" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="LastLogin" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="User_FEAOrdersStatusChangement" Member="FEAOrdersStatusChangements" ThisKey="Id" OtherKey="AuthorId" Type="FEAOrdersStatusChangement" />
+      <Association Name="User_LeadOrderDocument" Member="LeadOrderDocuments" ThisKey="Id" OtherKey="UploadedBy" Type="LeadOrderDocument" />
+      <Association Name="User_LeadOrdersComment" Member="LeadOrdersComments" ThisKey="Id" OtherKey="OrderId" Type="LeadOrdersComment" />
+      <Association Name="User_LeadOrderStatusChangement" Member="LeadOrderStatusChangements" ThisKey="Id" OtherKey="AuthorId" Type="LeadOrderStatusChangement" />
+      <Association Name="User_ProjectUser" Member="ProjectUsers" ThisKey="Id" OtherKey="UserId" Type="ProjectUser" />
+      <Association Name="User_WarehouseKeeper" Member="WarehouseKeepers" ThisKey="Id" OtherKey="WarehouseId" Type="WarehouseKeeper" />
+      <Association Name="User_LeadOrderUser" Member="LeadOrderUsers" ThisKey="Id" OtherKey="UserId" Type="LeadOrderUser" />
+      <Association Name="Role_User" Member="Role" ThisKey="RoleId" OtherKey="Id" Type="Role" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.WarehouseKeepers" Member="WarehouseKeepers">
+    <Type Name="WarehouseKeeper">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="UserId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="WarehouseId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="DateCreated" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="User_WarehouseKeeper" Member="User" ThisKey="WarehouseId" OtherKey="Id" Type="User" IsForeignKey="true" />
+      <Association Name="Warehouse_WarehouseKeeper" Member="Warehouse" ThisKey="WarehouseId" OtherKey="Id" Type="Warehouse" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.WarehouseProducts" Member="WarehouseProducts">
+    <Type Name="WarehouseProduct">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ProductId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="WarehouseId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="Price" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DeliveryTime" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="OrderTime" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="DateCreated" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="DateModified" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="ProductType_WarehouseProduct" Member="ProductType" ThisKey="ProductId" OtherKey="Id" Type="ProductType" IsForeignKey="true" />
+      <Association Name="Warehouse_WarehouseProduct" Member="Warehouse" ThisKey="WarehouseId" OtherKey="Id" Type="Warehouse" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.LeadOrderUsers" Member="LeadOrderUsers">
+    <Type Name="LeadOrderUser">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="OrderId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="UserId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="OrderRole" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Association Name="LeadOrder_LeadOrderUser" Member="LeadOrder" ThisKey="OrderId" OtherKey="Id" Type="LeadOrder" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="User_LeadOrderUser" Member="User" ThisKey="UserId" OtherKey="Id" Type="User" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>
