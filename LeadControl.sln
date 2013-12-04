@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeadControl.Web", "LeadControl.Web\LeadControl.Web.csproj", "{B34480BC-8626-4D92-9B65-5F738BEEB6A0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeadControl.Domain", "LeadControl.Domain\LeadControl.Domain.csproj", "{561015C7-B5FD-435F-BE8B-4C1CE98BF56E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{B34480BC-8626-4D92-9B65-5F738BEEB6A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B34480BC-8626-4D92-9B65-5F738BEEB6A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B34480BC-8626-4D92-9B65-5F738BEEB6A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{561015C7-B5FD-435F-BE8B-4C1CE98BF56E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{561015C7-B5FD-435F-BE8B-4C1CE98BF56E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{561015C7-B5FD-435F-BE8B-4C1CE98BF56E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{561015C7-B5FD-435F-BE8B-4C1CE98BF56E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
