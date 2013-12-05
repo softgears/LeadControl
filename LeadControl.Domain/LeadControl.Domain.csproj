@@ -62,11 +62,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>LCDataContext.dbml</DependentUpon>
     </Compile>
+    <Compile Include="Entities\LeadOrder.cs" />
     <Compile Include="Entities\Permission.cs" />
     <Compile Include="Entities\Role.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="Enums\EnumDescriptionAttribute.cs" />
     <Compile Include="Enums\EnumUtils.cs" />
+    <Compile Include="Enums\LeadOrderStatus.cs" />
     <Compile Include="Enums\UserStatus.cs" />
     <Compile Include="Infrastructure\InfrasstructureLayer.cs" />
     <Compile Include="Interfaces\Cache\IStringCache.cs" />

@@ -1,0 +1,106 @@
+﻿@using LeadControl.Domain.Entities
+@using LeadControl.Domain.Enums
+@using LeadControl.Web.Classes.Ext
+@using System.Data.Linq
+@model System.Collections.Generic.List<LeadControl.Domain.Entities.Project>
+
+@{
+    ViewBag.Title = "Проекты";
+    Layout = "../Shared/AccountLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="icon"><i class="icon20 i-table"></i></div>
+                <h4>Проекты в системе</h4>
+                <a href="#" class="minimize"></a>
+            </div>
+            <!-- End .panel-heading -->
+            <div class="panel-body">
+                <p>
+                    <a href="/manage/projects/add" class="btn btn-info tip" title="Добавить новый проект в систему">Добавить проект</a>    
+                </p>
+                <table class="table table-striped table-bordered table-hover" id="projects-table">
+                    <thead>
+                        <tr>
+                            <th>
+                                ИД
+                            </th>
+                            <th>
+                                Наименование
+                            </th>
+                            <th>
+                                URL сайта
+                            </th>
+                            <th>
+                                Пользователей
+                            </th>
+                            <th>
+                                Заказов всего
+                            </th>
+                            <th>
+                                Заказов в работе
+                            </th>
+                            <th>
+                                Заказов отправлено
+                            </th>
+                            <th>
+                                Выручка
+                            </th>
+                            <th>
+                                
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Count == 0)
+                        {
+                            <tr>
+                                <td colspan="9">
+                                    Не найдено проектов
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            foreach (var project in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <a href="/manage/projects/@project.Id/edit">@project.Id</a>
+                                    </td>
+                                    <td>
+                                        <a href="/manage/projects/@project.Id/edit">@project.Title</a>
+                                    </td>
+                                    <td>
+                                        <a href="@project.Url" target="_blank">@project.Url</a>
+                                    </td>
+                                    <td>
+                                        @project.ProjectUsers.Count
+                                    </td>
+                                    <td>
+                                        @project.LeadOrders.Count
+                                    </td>
+                                    <td>
+                                        @project.LeadOrders.Count(o => o.Status != (short)LeadOrderStatus.Completed)
+                                    </td>
+                                    <td>
+                                        @project.LeadOrders.Count(o => o.Status == (short)LeadOrderStatus.Completed)
+                                    </td>
+                                    <td>
+                                        @String.Format("{0:c}",project.LeadOrders.Where(o => o.Status >= (short)LeadOrderStatus.Payed).Sum(o => o.GetOrderTotalPrice()))
+                                    </td>
+                                    <td style="width: 45px">
+                                        <a href="/manage/projects/@project.Id/delete" class="btn btn-xs btn-danger tip" onclick="return confirm('Вы действительно хотите удалить этот проект?')" title="Удалить роль из системы"><i class="icon12 i-remove"></i></a>    
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

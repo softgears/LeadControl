@@ -19,6 +19,11 @@ namespace LeadControl.Domain.Entities
         /// <summary>
         /// Управление ролями
         /// </summary>
-         public const long ManageRoles = 1;
+        public const long ManageRoles = 1;
+
+        /// <summary>
+        /// Управление проектами
+        /// </summary>
+        public const long ManageProjects = 2;
     }
 }

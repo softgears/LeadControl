@@ -1,0 +1,109 @@
+﻿@using LeadControl.Domain.Entities
+@model LeadControl.Domain.Entities.Project
+
+@{
+    ViewBag.Title = Model.Id <= 0 ? "Создание нового проекта" : "Редактирование проекта " + Model.Title;
+    Layout = "../Shared/AccountLayout.cshtml";
+    var users = (IEnumerable<User>) ViewBag.users;
+}
+
+<form role="form" id="project-form" action="/manage/projects/save" method="POST" class="form-horizontal">
+    @Html.HiddenFor(m => m.Id)
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="icon"><i class="icon20 i-settings"></i></div>
+                    <h4>Свойства проекта</h4>
+                    <a href="#" class="minimize"></a>
+                </div>
+                <div class="panel-body">
+                    <div class="page-header">
+                        <h4>Общие свойства</h4>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="project-title-field">Наименование проекта</label>
+                        <div class="col-lg-10">
+                            <input class="form-control" name="Title" type="text" id="project-title-field" value="@Model.Title">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="project-url-field">Адрес сайта</label>
+                        <div class="col-lg-10">
+                            <input class="form-control" name="Url" type="text" id="project-url-field" value="@Model.Url">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="project-desc-field">Описание</label>
+                        <div class="col-lg-10">
+                            <textarea name="Description" id="project-desc-field" class="form-control">@Model.Description</textarea>
+                        </div>
+                    </div>
+                    <div class="page-header">
+                        <h4>Пользователи, имеющие доступ к проекту</h4>
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Пользователь
+                                </th>
+                                <th>
+                                    Роль
+                                </th>
+                                <th>
+                                    Доступ разрешен
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var user in users)
+                            {
+                                <tr>
+                                    <td>
+                                        @user.GetFio()
+                                    </td>
+                                    <td>
+                                        @user.Role.DisplayName
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" name="user_@user.Id" value="true" @(Model.ProjectUsers.Any(u => u.UserId == user.Id) ? "checked=checked":"")/>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <p style="margin-top: 10px">
+                        &nbsp;
+                    </p>
+                    <div class="form-group">
+                        <div class="col-lg-offset-2">
+                            <div class="pad-left15">
+                                <button type="submit" class="btn btn-primary">Сохранить</button>
+                                <button type="button" class="btn" onclick="window.location.href='/manage/projects'; return false;">Отмена</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#project-form").validate({
+            Title: {
+                required: true,
+                maxlength: 255
+            },
+            Url: {
+                required: true,
+                maxlength: 255
+            },
+            Description: {
+                required: false,
+                maxlength: 4000
+            }
+        });
+    });
+</script>
