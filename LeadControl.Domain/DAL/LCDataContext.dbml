@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?><Database Name="LeadControl" EntityNamespace="LeadControl.Domain.Entities" ContextNamespace="LeadControl.Domain.DAL" Class="LCDataContextDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="LeadControl" EntityNamespace="LeadControl.Domain.Entities" ContextNamespace="LeadControl.Domain.DAL" Class="LCDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
   <Connection Mode="AppSettings" ConnectionString="Data Source=.\SQLExpress;Initial Catalog=LeadControl;Integrated Security=True" SettingsObjectName="LeadControl.Domain.Properties.Settings" SettingsPropertyName="LeadControlConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.FEAOrderItems" Member="FEAOrderItems">
     <Type Name="FEAOrderItem">
@@ -300,6 +300,27 @@
       <Column Name="OrderRole" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
       <Association Name="LeadOrder_LeadOrderUser" Member="LeadOrder" ThisKey="OrderId" OtherKey="Id" Type="LeadOrder" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
       <Association Name="User_LeadOrderUser" Member="User" ThisKey="UserId" OtherKey="Id" Type="User" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.SMSNotificationMessages" Member="SMSNotificationMessages">
+    <Type Name="SMSNotificationMessage">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Recipient" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="Message" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="Sended" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="DateEnqueued" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="DateSended" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.MailNotificationMessages" Member="MailNotificationMessages">
+    <Type Name="MailNotificationMessage">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Recipient" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="Subject" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="Content" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="Sended" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="DateEnqued" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="DateSended" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
     </Type>
   </Table>
 </Database>

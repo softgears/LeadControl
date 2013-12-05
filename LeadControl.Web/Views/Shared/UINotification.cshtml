@@ -1,0 +1,29 @@
+﻿@using LeadControl.Domain.Interfaces.Notifications
+@using LeadControl.Domain.IoC
+@using LeadControl.Web.Classes.Notifications.UI
+@model dynamic
+
+@{
+    var notificationsManager = (UINotificationManager)Locator.GetService<IUINotificationManager>();
+    var items = notificationsManager.GetOrCreateNotificationStack();
+    notificationsManager.ClearNotificationStack();
+}
+<script type="text/javascript">
+    $(document).ready(function() {
+        @foreach(var item in items)
+        {
+            <text>
+                $.jGrowl("@item.Message", {
+                    group: '@(item.ItemType == NotificationItemType.Success) ? "success":"error"',
+                    position: 'center',
+                    sticky: false,
+                    closeTemplate: '<i class="icon16 i-close-2"></i>',
+                    animateOpen: {
+                        width: 'show',
+                        height: 'show'
+                    }
+                });
+            </text>
+        }
+    });
+</script>

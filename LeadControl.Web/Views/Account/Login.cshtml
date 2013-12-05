@@ -1,0 +1,145 @@
+﻿@model dynamic
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>LeadControl | Авторизация в системе</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Yuri Korshev, SoftGears LLC" />
+    <meta name="description" content="PartDesk - уникальный стол для заказа автозапчастей и обработки заказов" />
+    <meta name="keywords" content="автозапчасти, авто, заказ, логистика" />
+    <meta name="application-name" content="PartDesk" />
+
+    <!-- Headings -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,800,700' rel='stylesheet' type='text/css'>
+    <!-- Text -->
+    <link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css' />
+
+     <!--[if lt IE 9]>
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400" rel="stylesheet" type="text/css" />
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:700" rel="stylesheet" type="text/css" />
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:800" rel="stylesheet" type="text/css" />
+    <link href="http://fonts.googleapis.com/css?family=Droid+Sans:400" rel="stylesheet" type="text/css" />
+    <link href="http://fonts.googleapis.com/css?family=Droid+Sans:700" rel="stylesheet" type="text/css" />
+    <![endif]-->
+
+    <!-- Core stylesheets do not remove -->
+    <link href="~/Content/genyx/css/bootstrap/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/genyx/css/bootstrap/bootstrap-theme.css" rel="stylesheet" />
+    <link href="~/Content/genyx/css/icons.css" rel="stylesheet" />
+
+    <!-- Plugins stylesheets -->
+    <link href="~/Content/genyx/js/plugins/forms/uniform/uniform.default.css" rel="stylesheet" /> 
+
+    <!-- app stylesheets -->
+    <link href="~/Content/genyx/css/app.css" rel="stylesheet" /> 
+
+    <!-- Custom stylesheets ( Put your own changes here ) -->
+    <link href="~/Content/genyx/css/custom.css" rel="stylesheet" /> 
+
+    <!--[if IE 8]><link href="~/Content/genyx/css/ie8.css" rel="stylesheet" type="text/css" /><![endif]-->
+
+    <!-- Force IE9 to render in normal mode -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="~/Content/genyx/js/html5shiv.js"></script>
+      <script src="~/Content/genyx/js/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="~/Content/genyx/images/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="~/Content/genyx/images/ico/apple-touch-icon-114-precomposed.png">
+      <link rel="apple-touch-icon-precomposed" sizes="72x72" href="~/Content/genyx/images/ico/apple-touch-icon-72-precomposed.png">
+                    <link rel="apple-touch-icon-precomposed" href="~/Content/genyx/images/ico/apple-touch-icon-57-precomposed.png">
+                                   <link rel="shortcut icon" href="~/Content/genyx/images/ico/favicon.png">
+    
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Important plugins put in all pages -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="~/Content/genyx/js/bootstrap/bootstrap.js"></script>  
+    <script src="~/Content/genyx/js/conditionizr.min.js"></script>  
+    <script src="~/Content/genyx/js/plugins/core/nicescroll/jquery.nicescroll.min.js"></script>
+    <script src="~/Content/genyx/js/plugins/core/jrespond/jRespond.min.js"></script>
+    <script src="~/Content/genyx/js/jquery.genyxAdmin.js"></script>
+
+    <!-- Form plugins -->
+    <script src="~/Content/genyx/js/plugins/forms/uniform/jquery.uniform.min.js"></script>
+    <script src="~/Content/genyx/js/plugins/forms/validation/jquery.validate.js"></script>
+
+    <!-- Init plugins -->
+    <script src="~/Content/genyx/js/app.js"></script><!-- Core js functions -->
+    <script src="~/Content/genyx/js/pages/login.js"></script><!-- Init plugins only for page -->
+
+  </head>
+  <body>
+    <div class="container-fluid">
+        <div id="login">
+            <div class="login-wrapper" data-active="log">
+               <a class="navbar-brand" href="~/Dashboard"><img src="~/Content/images/logo.png" alt="LeadControl" class="img-responsive"></a>
+                <div id="log">
+                    <div class="page-header">
+                        <h3 class="center">Пожалуйста, авторизуйтесь</h3>
+                    </div>
+                    <form role="form" id="login-form" class="form-horizontal" action="/account/login" method="POST">
+                        <div class="row">
+                            <div class="form-group relative">
+                                <div class="icon"><i class="icon20 i-user"></i></div>
+                                <input class="form-control" type="text" name="Email" id="user" placeholder="Email">
+                                
+                            </div><!-- End .control-group  -->
+                            <div class="form-group relative">
+                                <div class="icon"><i class="icon20 i-key"></i></div>
+                                <input class="form-control" type="password" name="Password" id="password" placeholder="Пароль">
+                                
+                            </div><!-- End .control-group  -->
+                            <div class="form-group relative">
+                                <label class="control-label" class="checkbox pull-left">
+                                    @Html.CheckBox("RememberMe",true)
+                                    Запомнить меня ?
+                                </label>
+                                <button id="loginBtn" type="submit" class="btn btn-primary pull-right col-lg-5">Войти</button>
+                            </div>
+                        </div><!-- End .row-fluid  -->
+                    </form>
+                    @*
+                    <p class="center">Don`t have an account? <a href="#" id="register"><strong>Create one now</strong></a></p>
+                    <div class="or center"><strong>or</strong></div>
+                    <hr class="seperator">
+                    <a href="#" class="btn btn-primary pull-left"><i class="icon16 i-facebook gap-left0"></i> Connect</a>
+                    <a href="#" class="btn btn-info pull-right"><i class="icon16 i-twitter gap-left0"></i> Connect</a>*@
+                </div>
+                <div id="forgot">
+                    <div class="page-header">
+                        <h3 class="center">Забыли пароль</h3>
+                    </div>
+                    <form class="form-horizontal">
+                        <div class="row">
+                            <div class="form-group relative">
+                                <div class="icon"><i class="icon20 i-envelop-2"></i></div>
+                                <input class="form-control" type="text" name="Email" id="email-field" placeholder="Ваш Email">
+                            </div><!-- End .control-group  -->
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-lg btn-block btn-success">Восстановить мой пароль</button>
+                            </div>
+                        </div><!-- End .row-fluid  -->
+                    </form>
+                </div>
+            </div>
+            <div id="bar" data-active="log">
+                <div class="btn-group btn-group-vertical">
+                    <a id="log" href="#" class="btn tipR" title="Авторизация"><i class="icon16 i-key"></i></a>
+                    <a id="forgot" href="#" class="btn tipR" title="Забыл пароль"><i class="icon16 i-question"></i></a>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+  </body>
+</html>

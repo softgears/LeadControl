@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using LeadControl.Domain.Routing;
 
 namespace LeadControl.Web
 {
@@ -13,10 +14,13 @@ namespace LeadControl.Web
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            // Регистрируем роуты
+            RoutesManager.RegisterActionRoutes();
+
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "Dashboard", action = "Index", id = UrlParameter.Optional }
             );
         }
     }

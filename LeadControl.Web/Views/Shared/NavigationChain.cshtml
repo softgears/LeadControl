@@ -1,0 +1,19 @@
+﻿@using LeadControl.Web.Controllers
+@model dynamic
+
+@{
+    var items = ((BaseController)ViewContext.Controller).NavigationChain;
+}
+<ul class="breadcrumb">
+    @foreach (var item in items)
+    {
+        if (items.Last() == item)
+        {
+            <li class="active">@item.Title</li>
+        }
+        else
+        {
+            <li><a href="@item.Url">@item.Title</a></li>    
+        }
+    }
+</ul>
