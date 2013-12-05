@@ -1197,6 +1197,9 @@
   <ItemGroup>
     <Content Include="Views\ManageProjects\EditProject.cshtml" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Account\EditProfile.cshtml" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

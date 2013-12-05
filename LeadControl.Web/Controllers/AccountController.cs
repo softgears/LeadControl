@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using LeadControl.Domain.Entities;
 using LeadControl.Domain.Interfaces.Notifications;
 using LeadControl.Domain.IoC;
 using LeadControl.Domain.Misc;
+using LeadControl.Domain.Routing;
+using LeadControl.Web.Classes.Security;
 using LeadControl.Web.Models.Account;
 
 namespace LeadControl.Web.Controllers
@@ -58,5 +61,59 @@ namespace LeadControl.Web.Controllers
             // Идем в личный кабинет
             return RedirectToAction("Index", "Dashboard");
         }
+
+        /// <summary>
+        /// Выполняет закрытие текущий сессии пользователя и выход из личного кабинета
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Logout()
+        {
+            if (!IsAuthentificated)
+            {
+                return RedirectToAction("Login");
+            }
+
+            CloseAuthorization();
+            return RedirectToAction("Login");
+        }
+
+        #region Профиль пользователя
+
+        /// <summary>
+        /// Отображает форму редактирования пользовательского профиля
+        /// </summary>
+        /// <returns></returns>
+        [Route("account/profile")][AuthorizationCheck]
+        public ActionResult EditProfile()
+        {
+            PushNavigationItem("Профиль","#");
+
+            return View();
+        }
+
+
+
+        /// <summary>
+        /// Обновляет личные данные профиля
+        /// </summary>
+        /// <param name="model">Модель данных</param>
+        /// <returns></returns>
+        [AuthorizationCheck]
+        [HttpPost]
+        [Route("account/profile/update")]
+        public ActionResult UpdateProfile(User model)
+        {
+            CurrentUser.FirstName = model.FirstName;
+            CurrentUser.LastName = model.LastName;
+            CurrentUser.SurName = model.SurName;
+            CurrentUser.Phone = model.Phone;
+            DataContext.SubmitChanges();
+
+            ShowSuccess("Профиль был успешно сохранен");
+
+            return RedirectToAction("Profile");
+        }
+
+        #endregion
     }
 }
