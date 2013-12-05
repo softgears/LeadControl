@@ -1,0 +1,101 @@
+﻿@using LeadControl.Domain.DAL
+@using LeadControl.Domain.Entities
+@using LeadControl.Domain.IoC
+@model LeadControl.Domain.Entities.Role
+
+@{
+    ViewBag.Title = Model.Id <= 0 ? "Создание новой роли" : "Редактирование роли " + Model.DisplayName;
+    Layout = "../Shared/AccountLayout.cshtml";
+    var permissions = (IEnumerable<Permission>) ViewBag.permissions;
+}
+
+<form role="form" id="role-form" action="/manage/roles/save" method="POST" class="form-horizontal">
+    @Html.HiddenFor(m => m.Id)
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="icon"><i class="icon20 i-settings"></i></div>
+                    <h4>Свойства роли</h4>
+                    <a href="#" class="minimize"></a>
+                </div>
+                <div class="panel-body">
+                    <div class="page-header">
+                        <h4>Общие свойства</h4>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="role-sname-field">Системное имя</label>
+                        <div class="col-lg-10">
+                            <input class="form-control" name="Name" type="text" id="role-sname-field" value="@Model.Name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="role-dname-field">Отображаемое имя</label>
+                        <div class="col-lg-10">
+                            <input class="form-control" name="DisplayName" type="text" id="role-dname-field" value="@Model.DisplayName">
+                        </div>
+                    </div>
+                    <div class="page-header">
+                        <h4>Разрешения</h4>
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Имя привилегии
+                                </th>
+                                <th>
+                                    Группа
+                                </th>
+                                <th>
+                                    Разрешено
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var permission in permissions)
+                            {
+                                <tr>
+                                    <td>
+                                        @permission.Name
+                                    </td>
+                                    <td>
+                                        @permission.Group
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" name="permission_@permission.Id" value="true" @(Model.HasPermission(permission.Id) ? "checked=checked":"")/>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <p style="margin-top: 10px">
+                        Список разрешений будет пополняться
+                    </p>
+                    <div class="form-group">
+                        <div class="col-lg-offset-2">
+                            <div class="pad-left15">
+                                <button type="submit" class="btn btn-primary">Сохранить</button>
+                                <button type="button" class="btn" onclick="window.location.href='/manage/roles'; return false;">Отмена</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#role-form").validate({
+            SystemName: {
+                required: true,
+                maxlength: 255
+            },
+            DisplayName: {
+                required: true,
+                maxlength: 255
+            }
+        });
+    });
+</script>
