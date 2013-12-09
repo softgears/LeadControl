@@ -1,0 +1,211 @@
+﻿@using LeadControl.Web.Classes.Ext
+@model LeadControl.Domain.Entities.Lead
+
+@{
+    ViewBag.Title = "Редактирование лида "+Model.ToString();
+    Layout = "../Shared/AccountLayout.cshtml";
+}
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <form action="/leads/save" id="lead-info-form" role="form" class="form-horizontal" enctype="multipart/form-data" method="POST">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="icon"><i class="icon20 i-settings"></i></div>
+                    <h4>Редактирование лида @Model.ToString()</h4>
+                    <a href="#" class="minimize"></a>
+                </div>
+                <div class="panel-body">
+                    @Html.HiddenFor(m => m.Id)
+                    <div class="page-header">
+                        <h4>Общие сведения</h4>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="lead-lastname-field">Фамилия</label>
+                        <div class="col-lg-10">
+                            @Html.TextBoxFor(m => m.LastName,new {@class="form-control",id="lead-lastname-field",placeholder = "Введите фамилию лида"})
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="lead-firstname-field">Имя</label>
+                        <div class="col-lg-10">
+                            @Html.TextBoxFor(m => m.FirstName,new {@class="form-control",id="lead-firstname-field",placeholder = "Введите имя лида"})
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="lead-surname-field">Отчество</label>
+                        <div class="col-lg-10">
+                            @Html.TextBoxFor(m => m.SurName,new {@class="form-control",id="lead-surname-field",placeholder = "Введите отчество лида"})
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="lead-email-field">Email</label>
+                        <div class="col-lg-10">
+                            @Html.TextBoxFor(m => m.Email,new {@class="form-control",id="lead-email-field",placeholder = "Введите Email лида"})
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="lead-phone-field">Телефон</label>
+                        <div class="col-lg-10">
+                            @Html.TextBoxFor(m => m.Phone,new {@class="form-control",id="lead-phone-field",placeholder = "Введите телефон лида"})
+                        </div>
+                    </div>
+                    <div class="page-header">
+                        <h4>Паспортные данные</h4>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="lead-passportseries-field">Серия</label>
+                        <div class="col-lg-10">
+                            @Html.TextBoxFor(m => m.LeadPassportInfos.Series,new {@class="form-control",id="lead-passportseries-field",placeholder = "Введите серию паспорта лида"})
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="lead-passportnumber-field">Номер</label>
+                        <div class="col-lg-10">
+                            @Html.TextBoxFor(m => m.LeadPassportInfos.Number,new {@class="form-control",id="lead-passportnumber-field",placeholder = "Введите номер паспорта лида"})
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="lead-passportissuedby-field">Кем выдано</label>
+                        <div class="col-lg-10">
+                            @Html.TextBoxFor(m => m.LeadPassportInfos.IssuedBy,new {@class="form-control",id="lead-passportissuedby-field",placeholder = "Введите наименование органа, который выдал паспорт лида"})
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="lead-passportissueddate-field">Дата выдачи</label>
+                        <div class="col-lg-10">
+                            @Html.TextBoxFor(m => m.LeadPassportInfos.IssueDate,new {@class="form-control",id="lead-passportissueddate-field",placeholder = "Введите дату выдачи паспорта"})
+                        </div>
+                    </div>
+                    <div class="page-header">
+                        <h4>Юридические сведения</h4>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="lead-legaltype-field">Тип организации</label>
+                        <div class="col-lg-10">
+                            @Html.DropDownListFor(m => m.LeadLegalInfos.LegalType,new []
+                            {
+                                new SelectListItem(){ Value = "0", Text = "Физическое лицо", Selected = Model.LeadLegalInfos != null && Model.LeadLegalInfos.LegalType == 0 },
+                                new SelectListItem(){ Value = "1", Text = "Индивидуальный Предприниматель (ИП)", Selected = Model.LeadLegalInfos != null && Model.LeadLegalInfos.LegalType == 1 },
+                                new SelectListItem(){ Value = "2", Text = "Общество с Ограниченной Ответственностью (ООО)", Selected = Model.LeadLegalInfos != null && Model.LeadLegalInfos.LegalType == 2 },
+                                new SelectListItem(){ Value = "3", Text = "Закрытое Акционерное Общество (ЗАО)", Selected = Model.LeadLegalInfos != null && Model.LeadLegalInfos.LegalType == 3 },
+                                new SelectListItem(){ Value = "4", Text = "Открытое Акционерное Общество (ОАО)", Selected = Model.LeadLegalInfos != null && Model.LeadLegalInfos.LegalType == 4 }
+                            },
+                                new {@class="form-control",id="lead-legaltype-field"})
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="lead-legalcn-field">Полное наименование организации</label>
+                        <div class="col-lg-10">
+                            @Html.TextBoxFor(m => m.LeadLegalInfos.CompanyName,new {@class="form-control",id="lead-legalcn-field",placeholder = "Введите наименование компании лида"})
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="lead-legaldirectorfio-field">Ф.И.О. генерального директора</label>
+                        <div class="col-lg-10">
+                            @Html.TextBoxFor(m => m.LeadLegalInfos.DirectorFIO,new {@class="form-control",id="lead-legaldirectorfio-field",placeholder = "Введите фамилию имя и отчество генерального директора компании лида"})
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="lead-inn-field">ИНН</label>
+                        <div class="col-lg-10">
+                            @Html.TextBoxFor(m => m.LeadLegalInfos.INN,new {@class="form-control",id="lead-inn-field",placeholder = "Введите ИНН компании лида"})
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="lead-kpp-field">КПП</label>
+                        <div class="col-lg-10">
+                            @Html.TextBoxFor(m => m.LeadLegalInfos.KPP,new {@class="form-control",id="lead-kpp-field",placeholder = "Введите КПП компании лида"})
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="lead-ogrn-field">ОГРН</label>
+                        <div class="col-lg-10">
+                            @Html.TextBoxFor(m => m.LeadLegalInfos.OGRN,new {@class="form-control",id="lead-ogrn-field",placeholder = "Введите ОГРН компании лида"})
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="lead-okpo-field">ОКПО</label>
+                        <div class="col-lg-10">
+                            @Html.TextBoxFor(m => m.LeadLegalInfos.OKPO,new {@class="form-control",id="lead-okpo-field",placeholder = "Введите ОКПО компании лида"})
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="lead-legaladdress-field">Юридический адрес</label>
+                        <div class="col-lg-10">
+                            @Html.TextAreaFor(m => m.LeadLegalInfos.LegalAddress,new {@class="form-control",id="lead-legaladdress-field",placeholder = "Введите юридический адрес компании лида"})
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="lead-facticaladdress-field">Фактический адрес</label>
+                        <div class="col-lg-10">
+                            @Html.TextAreaFor(m => m.LeadLegalInfos.FacticalAddress,new {@class="form-control",id="lead-facticaladdress-field",placeholder = "Введите фактический адрес компании лида"})
+                        </div>
+                    </div>
+                    <div class="page-header">
+                        <h4>Банковские реквизиты</h4>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="lead-accountrnumber-field">Рассчетный счет</label>
+                        <div class="col-lg-10">
+                            @Html.TextBoxFor(m => m.LeadAccountInfos.Number,new {@class="form-control",id="lead-accountrnumber-field",placeholder = "Введите номер рассчетного счета лида"})
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="lead-accountbik-field">БИК</label>
+                        <div class="col-lg-10">
+                            @Html.TextBoxFor(m => m.LeadAccountInfos.BIK,new {@class="form-control",id="lead-accountbik-field",placeholder = "Введите БИК код банка лида"})
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="lead-accountname-field">Наименование банка</label>
+                        <div class="col-lg-10">
+                            @Html.TextBoxFor(m => m.LeadAccountInfos.BankName,new {@class="form-control",id="lead-accountname-field",placeholder = "Введите наименование банка лида"})
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="lead-accountknumber-field">Корреспондентский счет</label>
+                        <div class="col-lg-10">
+                            @Html.TextBoxFor(m => m.LeadAccountInfos.KNumber,new {@class="form-control",id="lead-accountrnumber-field",placeholder = "Введите номер корреспондентского счета лида"})
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-offset-2">
+                            <div class="pad-left15">
+                                <button type="submit" class="btn btn-primary">Сохранить</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#lead-info-form").validate({            
+            rules: {
+                FirstName: {
+                    maxlength: 255,
+                },
+                SurName: {
+                    maxlength: 255,
+                },
+                LastName: {
+                    maxlength: 255,
+                },
+                Email: {
+                    maxlength: 255,
+                    required: true,
+                    email: true
+                },
+                Phone: {
+                    maxlength: 255,
+                    required: true
+                }
+            } 
+        });
+        $("#lead-phone-field").mask("9 (999) 999-99-99");
+    });
+</script>

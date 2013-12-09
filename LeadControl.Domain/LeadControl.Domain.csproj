@@ -62,6 +62,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>LCDataContext.dbml</DependentUpon>
     </Compile>
+    <Compile Include="Entities\Lead.cs" />
     <Compile Include="Entities\LeadOrder.cs" />
     <Compile Include="Entities\Permission.cs" />
     <Compile Include="Entities\Role.cs" />
