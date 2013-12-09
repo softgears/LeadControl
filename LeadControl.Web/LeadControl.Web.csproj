@@ -136,6 +136,7 @@
     <Compile Include="Controllers\ManageProductsController.cs" />
     <Compile Include="Controllers\ManageProjectsController.cs" />
     <Compile Include="Controllers\ManageRolesController.cs" />
+    <Compile Include="Controllers\ManageWarehousesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -145,6 +146,7 @@
     <Compile Include="Models\Dashboard\DashboardModel.cs" />
     <Compile Include="Models\Leads\LeadsFiltrationModel.cs" />
     <Compile Include="Models\Manage\ProductsFiltrationModel.cs" />
+    <Compile Include="Models\Manage\WarehousesFiltrationModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -1216,6 +1218,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\ManageProducts\ProductEditForm.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\ManageWarehouses\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\ManageWarehouses\WarehouseEditForm.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

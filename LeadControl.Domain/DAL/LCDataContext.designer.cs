@@ -31,9 +31,6 @@ namespace LeadControl.Domain.DAL
     partial void InsertFEAOrderItem(LeadControl.Domain.Entities.FEAOrderItem instance);
     partial void UpdateFEAOrderItem(LeadControl.Domain.Entities.FEAOrderItem instance);
     partial void DeleteFEAOrderItem(LeadControl.Domain.Entities.FEAOrderItem instance);
-    partial void InsertWarehouse(LeadControl.Domain.Entities.Warehouse instance);
-    partial void UpdateWarehouse(LeadControl.Domain.Entities.Warehouse instance);
-    partial void DeleteWarehouse(LeadControl.Domain.Entities.Warehouse instance);
     partial void InsertFEAOrder(LeadControl.Domain.Entities.FEAOrder instance);
     partial void UpdateFEAOrder(LeadControl.Domain.Entities.FEAOrder instance);
     partial void DeleteFEAOrder(LeadControl.Domain.Entities.FEAOrder instance);
@@ -103,6 +100,9 @@ namespace LeadControl.Domain.DAL
     partial void InsertMailNotificationMessage(LeadControl.Domain.Entities.MailNotificationMessage instance);
     partial void UpdateMailNotificationMessage(LeadControl.Domain.Entities.MailNotificationMessage instance);
     partial void DeleteMailNotificationMessage(LeadControl.Domain.Entities.MailNotificationMessage instance);
+    partial void InsertWarehouse(LeadControl.Domain.Entities.Warehouse instance);
+    partial void UpdateWarehouse(LeadControl.Domain.Entities.Warehouse instance);
+    partial void DeleteWarehouse(LeadControl.Domain.Entities.Warehouse instance);
     #endregion
 		
 		public LCDataContext() : 
@@ -140,14 +140,6 @@ namespace LeadControl.Domain.DAL
 			get
 			{
 				return this.GetTable<LeadControl.Domain.Entities.FEAOrderItem>();
-			}
-		}
-		
-		public System.Data.Linq.Table<LeadControl.Domain.Entities.Warehouse> Warehouses
-		{
-			get
-			{
-				return this.GetTable<LeadControl.Domain.Entities.Warehouse>();
 			}
 		}
 		
@@ -332,6 +324,14 @@ namespace LeadControl.Domain.DAL
 			get
 			{
 				return this.GetTable<LeadControl.Domain.Entities.MailNotificationMessage>();
+			}
+		}
+		
+		public System.Data.Linq.Table<LeadControl.Domain.Entities.Warehouse> Warehouses
+		{
+			get
+			{
+				return this.GetTable<LeadControl.Domain.Entities.Warehouse>();
 			}
 		}
 	}
@@ -605,320 +605,6 @@ namespace LeadControl.Domain.Entities
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Warehouses")]
-	public partial class Warehouse : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private long _Id;
-		
-		private long _ProjectId;
-		
-		private string _Title;
-		
-		private string _Description;
-		
-		private string _City;
-		
-		private string _Address;
-		
-		private System.Nullable<System.DateTime> _DateCreated;
-		
-		private System.Nullable<System.DateTime> _DateModified;
-		
-		private EntitySet<FEAOrder> _FEAOrders;
-		
-		private EntitySet<WarehouseKeeper> _WarehouseKeepers;
-		
-		private EntitySet<WarehouseProduct> _WarehouseProducts;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIdChanging(long value);
-    partial void OnIdChanged();
-    partial void OnProjectIdChanging(long value);
-    partial void OnProjectIdChanged();
-    partial void OnTitleChanging(string value);
-    partial void OnTitleChanged();
-    partial void OnDescriptionChanging(string value);
-    partial void OnDescriptionChanged();
-    partial void OnCityChanging(string value);
-    partial void OnCityChanged();
-    partial void OnAddressChanging(string value);
-    partial void OnAddressChanged();
-    partial void OnDateCreatedChanging(System.Nullable<System.DateTime> value);
-    partial void OnDateCreatedChanged();
-    partial void OnDateModifiedChanging(System.Nullable<System.DateTime> value);
-    partial void OnDateModifiedChanged();
-    #endregion
-		
-		public Warehouse()
-		{
-			this._FEAOrders = new EntitySet<FEAOrder>(new Action<FEAOrder>(this.attach_FEAOrders), new Action<FEAOrder>(this.detach_FEAOrders));
-			this._WarehouseKeepers = new EntitySet<WarehouseKeeper>(new Action<WarehouseKeeper>(this.attach_WarehouseKeepers), new Action<WarehouseKeeper>(this.detach_WarehouseKeepers));
-			this._WarehouseProducts = new EntitySet<WarehouseProduct>(new Action<WarehouseProduct>(this.attach_WarehouseProducts), new Action<WarehouseProduct>(this.detach_WarehouseProducts));
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="BigInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public long Id
-		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				if ((this._Id != value))
-				{
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProjectId", DbType="BigInt NOT NULL")]
-		public long ProjectId
-		{
-			get
-			{
-				return this._ProjectId;
-			}
-			set
-			{
-				if ((this._ProjectId != value))
-				{
-					this.OnProjectIdChanging(value);
-					this.SendPropertyChanging();
-					this._ProjectId = value;
-					this.SendPropertyChanged("ProjectId");
-					this.OnProjectIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Title", DbType="NVarChar(255) NOT NULL", CanBeNull=false)]
-		public string Title
-		{
-			get
-			{
-				return this._Title;
-			}
-			set
-			{
-				if ((this._Title != value))
-				{
-					this.OnTitleChanging(value);
-					this.SendPropertyChanging();
-					this._Title = value;
-					this.SendPropertyChanged("Title");
-					this.OnTitleChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="NVarChar(MAX)")]
-		public string Description
-		{
-			get
-			{
-				return this._Description;
-			}
-			set
-			{
-				if ((this._Description != value))
-				{
-					this.OnDescriptionChanging(value);
-					this.SendPropertyChanging();
-					this._Description = value;
-					this.SendPropertyChanged("Description");
-					this.OnDescriptionChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_City", DbType="NVarChar(255)")]
-		public string City
-		{
-			get
-			{
-				return this._City;
-			}
-			set
-			{
-				if ((this._City != value))
-				{
-					this.OnCityChanging(value);
-					this.SendPropertyChanging();
-					this._City = value;
-					this.SendPropertyChanged("City");
-					this.OnCityChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Address", DbType="NVarChar(MAX)")]
-		public string Address
-		{
-			get
-			{
-				return this._Address;
-			}
-			set
-			{
-				if ((this._Address != value))
-				{
-					this.OnAddressChanging(value);
-					this.SendPropertyChanging();
-					this._Address = value;
-					this.SendPropertyChanged("Address");
-					this.OnAddressChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateCreated", DbType="DateTime")]
-		public System.Nullable<System.DateTime> DateCreated
-		{
-			get
-			{
-				return this._DateCreated;
-			}
-			set
-			{
-				if ((this._DateCreated != value))
-				{
-					this.OnDateCreatedChanging(value);
-					this.SendPropertyChanging();
-					this._DateCreated = value;
-					this.SendPropertyChanged("DateCreated");
-					this.OnDateCreatedChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateModified", DbType="DateTime")]
-		public System.Nullable<System.DateTime> DateModified
-		{
-			get
-			{
-				return this._DateModified;
-			}
-			set
-			{
-				if ((this._DateModified != value))
-				{
-					this.OnDateModifiedChanging(value);
-					this.SendPropertyChanging();
-					this._DateModified = value;
-					this.SendPropertyChanged("DateModified");
-					this.OnDateModifiedChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Warehouse_FEAOrder", Storage="_FEAOrders", ThisKey="Id", OtherKey="TargetWarehouseId")]
-		public EntitySet<FEAOrder> FEAOrders
-		{
-			get
-			{
-				return this._FEAOrders;
-			}
-			set
-			{
-				this._FEAOrders.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Warehouse_WarehouseKeeper", Storage="_WarehouseKeepers", ThisKey="Id", OtherKey="WarehouseId")]
-		public EntitySet<WarehouseKeeper> WarehouseKeepers
-		{
-			get
-			{
-				return this._WarehouseKeepers;
-			}
-			set
-			{
-				this._WarehouseKeepers.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Warehouse_WarehouseProduct", Storage="_WarehouseProducts", ThisKey="Id", OtherKey="WarehouseId")]
-		public EntitySet<WarehouseProduct> WarehouseProducts
-		{
-			get
-			{
-				return this._WarehouseProducts;
-			}
-			set
-			{
-				this._WarehouseProducts.Assign(value);
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_FEAOrders(FEAOrder entity)
-		{
-			this.SendPropertyChanging();
-			entity.Warehouse = this;
-		}
-		
-		private void detach_FEAOrders(FEAOrder entity)
-		{
-			this.SendPropertyChanging();
-			entity.Warehouse = null;
-		}
-		
-		private void attach_WarehouseKeepers(WarehouseKeeper entity)
-		{
-			this.SendPropertyChanging();
-			entity.Warehouse = this;
-		}
-		
-		private void detach_WarehouseKeepers(WarehouseKeeper entity)
-		{
-			this.SendPropertyChanging();
-			entity.Warehouse = null;
-		}
-		
-		private void attach_WarehouseProducts(WarehouseProduct entity)
-		{
-			this.SendPropertyChanging();
-			entity.Warehouse = this;
-		}
-		
-		private void detach_WarehouseProducts(WarehouseProduct entity)
-		{
-			this.SendPropertyChanging();
-			entity.Warehouse = null;
 		}
 	}
 	
@@ -4629,6 +4315,8 @@ namespace LeadControl.Domain.Entities
 		
 		private EntitySet<ProjectUser> _ProjectUsers;
 		
+		private EntitySet<Warehouse> _Warehouses;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -4652,6 +4340,7 @@ namespace LeadControl.Domain.Entities
 			this._LeadOrders = new EntitySet<LeadOrder>(new Action<LeadOrder>(this.attach_LeadOrders), new Action<LeadOrder>(this.detach_LeadOrders));
 			this._ProductTypes = new EntitySet<ProductType>(new Action<ProductType>(this.attach_ProductTypes), new Action<ProductType>(this.detach_ProductTypes));
 			this._ProjectUsers = new EntitySet<ProjectUser>(new Action<ProjectUser>(this.attach_ProjectUsers), new Action<ProjectUser>(this.detach_ProjectUsers));
+			this._Warehouses = new EntitySet<Warehouse>(new Action<Warehouse>(this.attach_Warehouses), new Action<Warehouse>(this.detach_Warehouses));
 			OnCreated();
 		}
 		
@@ -4814,6 +4503,19 @@ namespace LeadControl.Domain.Entities
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Project_Warehouse", Storage="_Warehouses", ThisKey="Id", OtherKey="ProjectId")]
+		public EntitySet<Warehouse> Warehouses
+		{
+			get
+			{
+				return this._Warehouses;
+			}
+			set
+			{
+				this._Warehouses.Assign(value);
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -4865,6 +4567,18 @@ namespace LeadControl.Domain.Entities
 		}
 		
 		private void detach_ProjectUsers(ProjectUser entity)
+		{
+			this.SendPropertyChanging();
+			entity.Project = null;
+		}
+		
+		private void attach_Warehouses(Warehouse entity)
+		{
+			this.SendPropertyChanging();
+			entity.Project = this;
+		}
+		
+		private void detach_Warehouses(Warehouse entity)
 		{
 			this.SendPropertyChanging();
 			entity.Project = null;
@@ -7277,6 +6991,361 @@ namespace LeadControl.Domain.Entities
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Warehouses")]
+	public partial class Warehouse : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private long _Id;
+		
+		private long _ProjectId;
+		
+		private string _Title;
+		
+		private string _Description;
+		
+		private string _City;
+		
+		private string _Address;
+		
+		private System.Nullable<System.DateTime> _DateCreated;
+		
+		private System.Nullable<System.DateTime> _DateModified;
+		
+		private EntitySet<FEAOrder> _FEAOrders;
+		
+		private EntitySet<WarehouseKeeper> _WarehouseKeepers;
+		
+		private EntitySet<WarehouseProduct> _WarehouseProducts;
+		
+		private EntityRef<Project> _Project;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(long value);
+    partial void OnIdChanged();
+    partial void OnProjectIdChanging(long value);
+    partial void OnProjectIdChanged();
+    partial void OnTitleChanging(string value);
+    partial void OnTitleChanged();
+    partial void OnDescriptionChanging(string value);
+    partial void OnDescriptionChanged();
+    partial void OnCityChanging(string value);
+    partial void OnCityChanged();
+    partial void OnAddressChanging(string value);
+    partial void OnAddressChanged();
+    partial void OnDateCreatedChanging(System.Nullable<System.DateTime> value);
+    partial void OnDateCreatedChanged();
+    partial void OnDateModifiedChanging(System.Nullable<System.DateTime> value);
+    partial void OnDateModifiedChanged();
+    #endregion
+		
+		public Warehouse()
+		{
+			this._FEAOrders = new EntitySet<FEAOrder>(new Action<FEAOrder>(this.attach_FEAOrders), new Action<FEAOrder>(this.detach_FEAOrders));
+			this._WarehouseKeepers = new EntitySet<WarehouseKeeper>(new Action<WarehouseKeeper>(this.attach_WarehouseKeepers), new Action<WarehouseKeeper>(this.detach_WarehouseKeepers));
+			this._WarehouseProducts = new EntitySet<WarehouseProduct>(new Action<WarehouseProduct>(this.attach_WarehouseProducts), new Action<WarehouseProduct>(this.detach_WarehouseProducts));
+			this._Project = default(EntityRef<Project>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="BigInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public long Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProjectId", DbType="BigInt NOT NULL")]
+		public long ProjectId
+		{
+			get
+			{
+				return this._ProjectId;
+			}
+			set
+			{
+				if ((this._ProjectId != value))
+				{
+					if (this._Project.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnProjectIdChanging(value);
+					this.SendPropertyChanging();
+					this._ProjectId = value;
+					this.SendPropertyChanged("ProjectId");
+					this.OnProjectIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Title", DbType="NVarChar(255) NOT NULL", CanBeNull=false)]
+		public string Title
+		{
+			get
+			{
+				return this._Title;
+			}
+			set
+			{
+				if ((this._Title != value))
+				{
+					this.OnTitleChanging(value);
+					this.SendPropertyChanging();
+					this._Title = value;
+					this.SendPropertyChanged("Title");
+					this.OnTitleChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="NVarChar(MAX)")]
+		public string Description
+		{
+			get
+			{
+				return this._Description;
+			}
+			set
+			{
+				if ((this._Description != value))
+				{
+					this.OnDescriptionChanging(value);
+					this.SendPropertyChanging();
+					this._Description = value;
+					this.SendPropertyChanged("Description");
+					this.OnDescriptionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_City", DbType="NVarChar(255)")]
+		public string City
+		{
+			get
+			{
+				return this._City;
+			}
+			set
+			{
+				if ((this._City != value))
+				{
+					this.OnCityChanging(value);
+					this.SendPropertyChanging();
+					this._City = value;
+					this.SendPropertyChanged("City");
+					this.OnCityChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Address", DbType="NVarChar(MAX)")]
+		public string Address
+		{
+			get
+			{
+				return this._Address;
+			}
+			set
+			{
+				if ((this._Address != value))
+				{
+					this.OnAddressChanging(value);
+					this.SendPropertyChanging();
+					this._Address = value;
+					this.SendPropertyChanged("Address");
+					this.OnAddressChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateCreated", DbType="DateTime")]
+		public System.Nullable<System.DateTime> DateCreated
+		{
+			get
+			{
+				return this._DateCreated;
+			}
+			set
+			{
+				if ((this._DateCreated != value))
+				{
+					this.OnDateCreatedChanging(value);
+					this.SendPropertyChanging();
+					this._DateCreated = value;
+					this.SendPropertyChanged("DateCreated");
+					this.OnDateCreatedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateModified", DbType="DateTime")]
+		public System.Nullable<System.DateTime> DateModified
+		{
+			get
+			{
+				return this._DateModified;
+			}
+			set
+			{
+				if ((this._DateModified != value))
+				{
+					this.OnDateModifiedChanging(value);
+					this.SendPropertyChanging();
+					this._DateModified = value;
+					this.SendPropertyChanged("DateModified");
+					this.OnDateModifiedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Warehouse_FEAOrder", Storage="_FEAOrders", ThisKey="Id", OtherKey="TargetWarehouseId")]
+		public EntitySet<FEAOrder> FEAOrders
+		{
+			get
+			{
+				return this._FEAOrders;
+			}
+			set
+			{
+				this._FEAOrders.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Warehouse_WarehouseKeeper", Storage="_WarehouseKeepers", ThisKey="Id", OtherKey="WarehouseId")]
+		public EntitySet<WarehouseKeeper> WarehouseKeepers
+		{
+			get
+			{
+				return this._WarehouseKeepers;
+			}
+			set
+			{
+				this._WarehouseKeepers.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Warehouse_WarehouseProduct", Storage="_WarehouseProducts", ThisKey="Id", OtherKey="WarehouseId")]
+		public EntitySet<WarehouseProduct> WarehouseProducts
+		{
+			get
+			{
+				return this._WarehouseProducts;
+			}
+			set
+			{
+				this._WarehouseProducts.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Project_Warehouse", Storage="_Project", ThisKey="ProjectId", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public Project Project
+		{
+			get
+			{
+				return this._Project.Entity;
+			}
+			set
+			{
+				Project previousValue = this._Project.Entity;
+				if (((previousValue != value) 
+							|| (this._Project.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Project.Entity = null;
+						previousValue.Warehouses.Remove(this);
+					}
+					this._Project.Entity = value;
+					if ((value != null))
+					{
+						value.Warehouses.Add(this);
+						this._ProjectId = value.Id;
+					}
+					else
+					{
+						this._ProjectId = default(long);
+					}
+					this.SendPropertyChanged("Project");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_FEAOrders(FEAOrder entity)
+		{
+			this.SendPropertyChanging();
+			entity.Warehouse = this;
+		}
+		
+		private void detach_FEAOrders(FEAOrder entity)
+		{
+			this.SendPropertyChanging();
+			entity.Warehouse = null;
+		}
+		
+		private void attach_WarehouseKeepers(WarehouseKeeper entity)
+		{
+			this.SendPropertyChanging();
+			entity.Warehouse = this;
+		}
+		
+		private void detach_WarehouseKeepers(WarehouseKeeper entity)
+		{
+			this.SendPropertyChanging();
+			entity.Warehouse = null;
+		}
+		
+		private void attach_WarehouseProducts(WarehouseProduct entity)
+		{
+			this.SendPropertyChanging();
+			entity.Warehouse = this;
+		}
+		
+		private void detach_WarehouseProducts(WarehouseProduct entity)
+		{
+			this.SendPropertyChanging();
+			entity.Warehouse = null;
 		}
 	}
 }

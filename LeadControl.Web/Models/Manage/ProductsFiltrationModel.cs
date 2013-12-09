@@ -34,6 +34,9 @@ namespace LeadControl.Web.Models.Manage
         /// </summary>
         public bool Ordered { get; set; }
 
+        /// <summary>
+        /// Конструктор
+        /// </summary>
         public ProductsFiltrationModel()
         {
             ProjectIds = new long[]{};

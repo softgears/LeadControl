@@ -24,7 +24,8 @@ namespace LeadControl.Web.Controllers
         public ActionResult Index(ProductsFiltrationModel model)
         {
             // Фильтруем
-            IEnumerable<ProductType> products = DataContext.ProductTypes;
+            var availableProjects = CurrentUser.ProjectUsers.Select(p => p.ProjectId).ToArray();
+            IEnumerable<ProductType> products = DataContext.ProductTypes.Where(w => availableProjects.Contains(w.ProjectId));
             if (model.ProjectIds.Length > 0)
             {
                 products = products.Where(p => model.ProjectIds.Contains(p.ProjectId));

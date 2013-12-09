@@ -12,21 +12,6 @@
       <Association Name="ProductType_FEAOrderItem" Member="ProductType" ThisKey="ProductId" OtherKey="Id" Type="ProductType" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.Warehouses" Member="Warehouses">
-    <Type Name="Warehouse">
-      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="ProjectId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
-      <Column Name="Title" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
-      <Column Name="Description" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Column Name="City" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
-      <Column Name="Address" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Column Name="DateCreated" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="DateModified" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Association Name="Warehouse_FEAOrder" Member="FEAOrders" ThisKey="Id" OtherKey="TargetWarehouseId" Type="FEAOrder" />
-      <Association Name="Warehouse_WarehouseKeeper" Member="WarehouseKeepers" ThisKey="Id" OtherKey="WarehouseId" Type="WarehouseKeeper" />
-      <Association Name="Warehouse_WarehouseProduct" Member="WarehouseProducts" ThisKey="Id" OtherKey="WarehouseId" Type="WarehouseProduct" />
-    </Type>
-  </Table>
   <Table Name="dbo.FEAOrders" Member="FEAOrders">
     <Type Name="FEAOrder">
       <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -208,6 +193,7 @@
       <Association Name="Project_LeadOrder" Member="LeadOrders" ThisKey="Id" OtherKey="ProjectId" Type="LeadOrder" />
       <Association Name="Project_ProductType" Member="ProductTypes" ThisKey="Id" OtherKey="ProjectId" Type="ProductType" />
       <Association Name="Project_ProjectUser" Member="ProjectUsers" ThisKey="Id" OtherKey="ProjectId" Type="ProjectUser" />
+      <Association Name="Project_Warehouse" Member="Warehouses" ThisKey="Id" OtherKey="ProjectId" Type="Warehouse" />
     </Type>
   </Table>
   <Table Name="dbo.ProjectUsers" Member="ProjectUsers">
@@ -321,6 +307,22 @@
       <Column Name="Sended" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Column Name="DateEnqued" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Column Name="DateSended" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Warehouses" Member="Warehouses">
+    <Type Name="Warehouse">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ProjectId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="Title" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="City" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="Address" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="DateCreated" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="DateModified" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="Warehouse_FEAOrder" Member="FEAOrders" ThisKey="Id" OtherKey="TargetWarehouseId" Type="FEAOrder" />
+      <Association Name="Warehouse_WarehouseKeeper" Member="WarehouseKeepers" ThisKey="Id" OtherKey="WarehouseId" Type="WarehouseKeeper" />
+      <Association Name="Warehouse_WarehouseProduct" Member="WarehouseProducts" ThisKey="Id" OtherKey="WarehouseId" Type="WarehouseProduct" />
+      <Association Name="Project_Warehouse" Member="Project" ThisKey="ProjectId" OtherKey="Id" Type="Project" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
 </Database>
