@@ -151,5 +151,35 @@ namespace LeadControl.Web.Controllers
             return RedirectToAction("Edit", new {id = lead.Id});
         }
 
+        /// <summary>
+        /// Удаляет указанного лида, если в лиде нет заказов
+        /// </summary>
+        /// <param name="id">Идентификатор лида</param>
+        /// <returns></returns>
+        [Route("leads/{id}/delete")]
+        public ActionResult Delete(long id)
+        {
+            var lead = DataContext.Leads.FirstOrDefault(l => l.Id == id);
+            if (lead == null)
+            {
+                ShowError("Такой лид не найден");
+                return RedirectToAction("Index");
+            }
+
+            if (lead.LeadOrders.Count > 0)
+            {
+                ShowError("Нельзя удалить лида, у которого есть заказы");
+                return RedirectToAction("Index");
+            }
+
+            DataContext.Leads.DeleteOnSubmit(lead);
+            DataContext.SubmitChanges();
+            ShowSuccess("Лид был успешно удален");
+
+            return RedirectToAction("Index");
+
+        }
+
     }
 }
+
