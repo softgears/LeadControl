@@ -25,5 +25,20 @@ namespace LeadControl.Domain.Entities
         /// Управление проектами
         /// </summary>
         public const long ManageProjects = 2;
+
+        /// <summary>
+        /// Управление пользователями
+        /// </summary>
+        public const long ManageUsers = 3;
+
+        /// <summary>
+        /// Управление товарами
+        /// </summary>
+        public const long ManageProducts = 4;
+
+        /// <summary>
+        /// Управление складами
+        /// </summary>
+        public const long ManageWarehouses = 5;
     }
 }

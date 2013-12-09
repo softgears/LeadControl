@@ -81,7 +81,7 @@ namespace LeadControl.Web.Controllers
         /// </summary>
         /// <param name="model">Модель с данными</param>
         /// <returns></returns>
-        [Route("leads/save")][AuthorizationCheck]
+        [Route("leads/save")][AuthorizationCheck()]
         public ActionResult Save(Lead model)
         {
             var lead = DataContext.Leads.FirstOrDefault(l => l.Id == model.Id);
@@ -156,7 +156,7 @@ namespace LeadControl.Web.Controllers
         /// </summary>
         /// <param name="id">Идентификатор лида</param>
         /// <returns></returns>
-        [Route("leads/{id}/delete")]
+        [Route("leads/{id}/delete")][AuthorizationCheck()]
         public ActionResult Delete(long id)
         {
             var lead = DataContext.Leads.FirstOrDefault(l => l.Id == id);
@@ -177,7 +177,6 @@ namespace LeadControl.Web.Controllers
             ShowSuccess("Лид был успешно удален");
 
             return RedirectToAction("Index");
-
         }
 
     }

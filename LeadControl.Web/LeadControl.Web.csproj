@@ -133,6 +133,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\LeadsController.cs" />
+    <Compile Include="Controllers\ManageProductsController.cs" />
     <Compile Include="Controllers\ManageProjectsController.cs" />
     <Compile Include="Controllers\ManageRolesController.cs" />
     <Compile Include="Global.asax.cs">
@@ -143,6 +144,7 @@
     <Compile Include="Models\BaseFiltrationModel.cs" />
     <Compile Include="Models\Dashboard\DashboardModel.cs" />
     <Compile Include="Models\Leads\LeadsFiltrationModel.cs" />
+    <Compile Include="Models\Manage\ProductsFiltrationModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -1208,6 +1210,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Leads\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\ManageProducts\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\ManageProducts\ProductEditForm.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -69,6 +69,7 @@
     <Compile Include="Entities\User.cs" />
     <Compile Include="Enums\EnumDescriptionAttribute.cs" />
     <Compile Include="Enums\EnumUtils.cs" />
+    <Compile Include="Enums\FEAOrderStatus.cs" />
     <Compile Include="Enums\LeadOrderStatus.cs" />
     <Compile Include="Enums\UserStatus.cs" />
     <Compile Include="Infrastructure\InfrasstructureLayer.cs" />
