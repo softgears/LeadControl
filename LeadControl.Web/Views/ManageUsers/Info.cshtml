@@ -1,0 +1,97 @@
+﻿@using LeadControl.Domain.DAL
+@using LeadControl.Domain.IoC
+@model LeadControl.Domain.Entities.User
+
+@{
+    ViewBag.Title = "Карточка пользователя "+Model.GetFio();
+    Layout = "../Shared/AccountLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <form action="/manage/users/update-info" id="user-info-form" role="form" class="form-horizontal" enctype="multipart/form-data" method="POST">
+            @Html.HiddenFor(m => m.Id)
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="icon"><i class="icon20 i-settings"></i></div>
+                    <h4>Свойства компании</h4>
+                    <a href="#" class="minimize"></a>
+                </div>
+                <div class="panel-body">
+                    <div class="page-header">
+                        <h4>Общие сведения</h4>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="user-email-field">Email пользователя</label>
+                        <div class="col-lg-10">
+                            <input class="form-control disabled" readonly="readonly" name="Email" type="text" id="user-email-field" value="@Model.Email">
+                        </div>
+                    </div>
+                    <div class="page-header">
+                        <h4>Личные сведения</h4>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="user-fname-field">Имя</label>
+                        <div class="col-lg-10">
+                            <input class="form-control disabled" readonly="readonly" name="FirstName" type="text" id="user-fname-field" value="@Model.FirstName">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="user-sname-field">Отчество</label>
+                        <div class="col-lg-10">
+                            <input class="form-control disabled" readonly="readonly" name="SurName" type="text" id="user-sname-field" value="@Model.SurName">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="user-lname-field">Фамилия</label>
+                        <div class="col-lg-10">
+                            <input class="form-control disabled" readonly="readonly" name="LastName" type="text" id="user-lname-field" value="@Model.LastName">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="user-phone-field">Телефон</label>
+                        <div class="col-lg-10">
+                            <input class="form-control disabled" readonly="readonly" name="LastName" type="text" id="user-phone-field" value="@Model.Phone">
+                        </div>
+                    </div>
+                    <div class="page-header">
+                        <h4>Системное</h4>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="user-role-field">Роль</label>
+                        <div class="col-lg-10">
+                            <select id="user-role-field" name="RoleId">
+                                @foreach (var role in Locator.GetService<LCDataContext>().Roles)
+                                {
+                                    <option value="@role.Id" @(role.Id == Model.RoleId ? "selected=selected" : "")>@role.DisplayName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="user-status-field">Статус</label>
+                        <div class="col-lg-10">
+                            <select id="user-status-field" name="Status">
+                                <option value="0" @(Model.Status == 0 ? "selected=selected":"")>Активен</option>
+                                <option value="1" @(Model.Status == 1 ? "selected=selected":"")>Заблокирован</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-offset-2">
+                            <div class="pad-left15">
+                                <button type="submit" class="btn btn-primary">Сохранить</button>
+                                <button type="button" class="btn" onclick="window.location.href='/manage/users'; return false;">Отмена</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#user-phone-field").mask("9 (999) 999-99-99");
+    });
+</script>

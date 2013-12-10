@@ -136,6 +136,7 @@
     <Compile Include="Controllers\ManageProductsController.cs" />
     <Compile Include="Controllers\ManageProjectsController.cs" />
     <Compile Include="Controllers\ManageRolesController.cs" />
+    <Compile Include="Controllers\ManageUsersController.cs" />
     <Compile Include="Controllers\ManageWarehousesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -146,6 +147,7 @@
     <Compile Include="Models\Dashboard\DashboardModel.cs" />
     <Compile Include="Models\Leads\LeadsFiltrationModel.cs" />
     <Compile Include="Models\Manage\ProductsFiltrationModel.cs" />
+    <Compile Include="Models\Manage\UsersFiltrationModel.cs" />
     <Compile Include="Models\Manage\WarehousesFiltrationModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -1102,6 +1104,9 @@
     <Content Include="Content\images\logo-small.png" />
     <Content Include="Content\images\logo.png" />
     <Content Include="Global.asax" />
+    <Content Include="Templates\Mail\Register.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -1224,6 +1229,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\ManageWarehouses\WarehouseEditForm.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\ManageUsers\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\ManageUsers\CreateUser.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\ManageUsers\Info.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
