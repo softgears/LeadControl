@@ -1,4 +1,4 @@
-// make console.log safe to use
+﻿// make console.log safe to use
 window.console||(console={log:function(){}});
 
 $(document).ready(function() {
@@ -80,3 +80,6 @@ function showSuccess(msg) {
     });
 }
 
+function fmtMoney(amount) {
+    return accounting.formatMoney(amount, "р.", 2, " ", ",", "%v %s");
+}

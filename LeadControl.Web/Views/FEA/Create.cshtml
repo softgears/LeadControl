@@ -1,0 +1,90 @@
+﻿@using LeadControl.Domain.DAL
+@using LeadControl.Domain.Entities
+@using LeadControl.Domain.IoC
+@using LeadControl.Web.Classes.Ext
+@model dynamic
+
+@{
+    ViewBag.Title = "Создание новой заявки";
+    Layout = "../Shared/AccountLayout.cshtml";
+    var dc = Locator.GetService<LCDataContext>();
+    var availableProjects = ViewContext.CurrentUser().IsAdmin() ? dc.Projects.ToList() : ViewContext.CurrentUser().ProjectUsers.Select(pu => pu.Project).ToList();
+    var availableUsers = ViewContext.CurrentUser().IsAdmin() ? (from project in availableProjects from user in project.ProjectUsers select user.User).ToList() : new List<User>() {ViewContext.CurrentUser()};
+    var warehouses = ViewContext.CurrentUser().IsAdmin() ? dc.Warehouses.ToList() : (from user in availableUsers from warehouseKeeper in user.WarehouseKeepers select warehouseKeeper.Warehouse).ToList();
+}
+
+<form role="form" id="fea-order-form" action="/fea/create-order" method="POST" class="form-horizontal">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="icon"><i class="icon20 i-settings"></i></div>
+                    <h4>Основные свойства заявки</h4>
+                    <a href="#" class="minimize"></a>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="order-project-field">Проект</label>
+                        <div class="col-lg-10">
+                            <select name="ProjectId" id="order-project-field">
+                                @foreach (var project in availableProjects)
+                                {
+                                    <option value="@project.Id">@project.Title</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="order-manager-field">Менеджер</label>
+                        <div class="col-lg-10">
+                            <select name="ManagerId" id="order-manager-field">
+                                @foreach (var user in availableUsers)
+                                {
+                                    <option value="@user.Id">@user.GetFio()</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="order-warehouse-field">Склад назначения</label>
+                        <div class="col-lg-10">
+                            <select name="TargetWarehouseId" id="order-warehouse-field">
+                                <option value="-1">Не указан</option>
+                                @foreach (var warehouse in warehouses)
+                                {
+                                    <option value="@warehouse.Id">@warehouse.Title (@warehouse.City)</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="order-desc-field">Описание</label>
+                        <div class="col-lg-10">
+                            <textarea name="Description" class="form-control" id="order-desc-field" placeholder="Введите комментарии к заявке"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-offset-2">
+                            <div class="pad-left15">
+                                <button type="submit" class="btn btn-primary">Создать</button>
+                                <button type="button" class="btn" onclick="history.back();">Отмена</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#fea-order-form").validate({            
+           rules: {
+               Description: {
+                   required: false,
+                   maxlength: 4000,
+               },
+           } 
+        });
+    });
+</script>

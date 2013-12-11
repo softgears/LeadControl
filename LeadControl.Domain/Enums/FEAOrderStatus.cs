@@ -17,6 +17,24 @@ namespace LeadControl.Domain.Enums
     public enum FEAOrderStatus: short
     {
         /// <summary>
+        /// Заявка в стадии формирование
+        /// </summary>
+        [EnumDescription("Формирование")]
+        Gathering = 1,
+
+        /// <summary>
+        /// Заявка успешно сформирована
+        /// </summary>
+        [EnumDescription("Сформирована")]
+        Gathered = 2,
+
+        /// <summary>
+        /// Заявка в процессе выполнения
+        /// </summary>
+        [EnumDescription("В процессе выполнения")]
+        InProcess = 3,
+
+        /// <summary>
         /// Заявка успешно выполнена
         /// </summary>
         [EnumDescription("Завершена")]

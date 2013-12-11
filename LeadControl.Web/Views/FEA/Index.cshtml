@@ -1,0 +1,180 @@
+﻿@using LeadControl.Domain.DAL
+@using LeadControl.Domain.Enums
+@using LeadControl.Domain.IoC
+@using LeadControl.Web.Classes.Ext
+@model LeadControl.Web.Models.FEA.FEAFiltrationModel
+
+@{
+    ViewBag.Title = "Список ВЭД заявок";
+    Layout = "../Shared/AccountLayout.cshtml";
+    var dc = Locator.GetService<LCDataContext>();
+    var availableProjects = ViewContext.CurrentUser().IsAdmin() ? dc.Projects.ToList() : ViewContext.CurrentUser().ProjectUsers.Select(pu => pu.Project).ToList();
+    var availableUsers = ViewContext.CurrentUser().IsAdmin() ? dc.Users.ToList() : (from project in availableProjects from user in project.ProjectUsers select user.User).ToList();
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="icon"><i class="icon20 i-filter-3"></i></div>
+                <h4>Фильтрация</h4>
+                <a href="#" class="minimize"></a>
+            </div>
+            <!-- End .panel-heading -->
+            <div class="panel-body">
+                <form action="/fea" id="fea-orders-form" method="GET" class="form-horizontal">
+                    @Html.HiddenFor(m => m.Page)
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="term-field">Поисковая строка</label>
+                        <div class="col-lg-10">
+                            <input type="text" class="form-control" name="Term" id="term-field" placeholder="Введите фразу для поиска" value="@Model.Term"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="projects-field">Проекты</label>
+                        <div class="col-lg-10">
+                            <select id="projects-field" name="ProjectIds" multiple="multiple">
+                                @foreach (var project in availableProjects)
+                                {
+                                    <option value="@project.Id" @(Model.ProjectIds.Contains(project.Id) ? "selected=selected":"")>@project.Title</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="projects-field">Пользователи</label>
+                        <div class="col-lg-10">
+                            <select id="users-field" name="UserIds" multiple="multiple">
+                                @foreach (var user in availableUsers)
+                                {
+                                    <option value="@user.Id" @(Model.UserIds.Contains(user.Id) ? "selected=selected":"")>@user.GetFio()</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="projects-field">Статусы</label>
+                        <div class="col-lg-10">
+                            <select id="statuses-field" name="Statuses" multiple="multiple">
+                                @foreach (FEAOrderStatus status in Enum.GetValues(typeof(FEAOrderStatus)))
+                                {
+                                    var st = (short) status;
+                                    <option value="@st" @(Model.Statuses.Contains(st) ? "selected=selected":"")>@status.GetEnumMemberName()</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-offset-2">
+                            <div class="pad-left15">
+                                <button type="submit" class="btn btn-primary">Фильтрация</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="icon"><i class="icon20 i-table"></i></div>
+                <h4>Список заявок</h4>
+                <a href="#" class="minimize"></a>
+            </div>
+            <!-- End .panel-heading -->
+            <div class="panel-body">
+                <p>
+                    <a href="/fea/create" class="btn btn-info tip" title="Создание новой ВЭД заявки">Создать ВЭД заявку</a>    
+                </p>
+                <table class="table table-striped table-bordered table-hover" id="leads-table">
+                    <thead>
+                        <tr>
+                            <th>
+                                ИД
+                            </th>
+                            <th>
+                                Проект
+                            </th>
+                            <th>
+                                Менеджер
+                            </th>
+                            <th>
+                                Статус
+                            </th>
+                            <th>
+                                Товаров
+                            </th>
+                            <th>
+                                Стоимость
+                            </th>
+                            <th>
+                                Дата обновления
+                            </th>
+                            <th>
+                                
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Fetched.Count == 0)
+                        {
+                            <tr>
+                                <td colspan="8">
+                                    Не найдено заявок
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            foreach (var order in Model.Fetched)
+                            {
+                                <tr>
+                                    <td>
+                                        <a href="/fea/@order.Id/edit">@order.Id</a>
+                                    </td>
+                                    <td>
+                                        @order.Project.Title
+                                    </td>
+                                    <td>
+                                        @order.Manager.GetFioSmall()
+                                    </td>
+                                    <td>
+                                        @(((FEAOrderStatus)order.Status).GetEnumMemberName())
+                                    </td>
+                                    <td>
+                                        @order.FEAOrderItems.Sum(oi => oi.Quantity) шт
+                                    </td>
+                                    <td>
+                                        @String.Format("{0:c}",order.FEAOrderItems.Sum(oi => oi.Quantity * oi.Price))
+                                    </td>
+                                    <td>
+                                        @order.LastUpdate.FormatDateTime()
+                                    </td>
+                                    <td style="width: 135px">
+                                        <a href="/fea/@order.Id/edit" class="btn btn-xs btn-info tip" title="Карточка заявки"><i class="icon12 i-info"></i></a>    
+                                        @if (ViewContext.CurrentUser().IsAdmin())
+                                        {
+                                            <a href="javascript:changeManager(@order.Id)" class="btn btn-xs btn-warning tip" title="Назначить менеджера"><i class="icon12 i-user-plus"></i></a>    
+                                            if (order.Status == (short) FEAOrderStatus.Gathering)
+                                            {
+                                                <a href="/fea/@order.Id/delete" class="btn btn-xs btn-danger tip" onclick="return confirm('Вы действительно хотите удалить эту заявку?')" title="Удалить заявку"><i class="icon12 i-remove-5"></i></a>             
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#projects-field, #users-field, #statuses-field").select2();
+    });
+</script>

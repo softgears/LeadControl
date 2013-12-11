@@ -132,6 +132,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
+    <Compile Include="Controllers\FEAController.cs" />
     <Compile Include="Controllers\LeadsController.cs" />
     <Compile Include="Controllers\ManageProductsController.cs" />
     <Compile Include="Controllers\ManageProjectsController.cs" />
@@ -145,6 +146,7 @@
     <Compile Include="Models\Account\LoginModel.cs" />
     <Compile Include="Models\BaseFiltrationModel.cs" />
     <Compile Include="Models\Dashboard\DashboardModel.cs" />
+    <Compile Include="Models\FEA\FEAFiltrationModel.cs" />
     <Compile Include="Models\Leads\LeadsFiltrationModel.cs" />
     <Compile Include="Models\Manage\ProductsFiltrationModel.cs" />
     <Compile Include="Models\Manage\UsersFiltrationModel.cs" />
@@ -1238,6 +1240,21 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\ManageUsers\Info.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\FEA\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\FEA\Create.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\FEA\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\FEA\FEAItemsTable.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\FEA\FEAItemsEditor.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

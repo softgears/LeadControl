@@ -8,20 +8,8 @@
       <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Price" Type="System.Decimal" DbType="Money" CanBeNull="true" />
       <Column Name="DateCreated" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Association Name="FEAOrder_FEAOrderItem" Member="FEAOrder" ThisKey="FEAOrderId" OtherKey="Id" Type="FEAOrder" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
       <Association Name="ProductType_FEAOrderItem" Member="ProductType" ThisKey="ProductId" OtherKey="Id" Type="ProductType" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.FEAOrders" Member="FEAOrders">
-    <Type Name="FEAOrder">
-      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="ProjectId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
-      <Column Name="Status" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
-      <Column Name="TargetWarehouseId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
-      <Column Name="DateCreated" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Association Name="FEAOrder_FEAOrderItem" Member="FEAOrderItems" ThisKey="Id" OtherKey="FEAOrderId" Type="FEAOrderItem" />
-      <Association Name="FEAOrder_FEAOrdersStatusChangement" Member="FEAOrdersStatusChangements" ThisKey="Id" OtherKey="FEAOrderId" Type="FEAOrdersStatusChangement" />
-      <Association Name="Warehouse_FEAOrder" Member="Warehouse" ThisKey="TargetWarehouseId" OtherKey="Id" Type="Warehouse" IsForeignKey="true" />
+      <Association Name="FEAOrder_FEAOrderItem" Member="FEAOrder" ThisKey="FEAOrderId" OtherKey="Id" Type="FEAOrder" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
   <Table Name="dbo.FEAOrdersStatusChangements" Member="FEAOrdersStatusChangements">
@@ -32,8 +20,8 @@
       <Column Name="Status" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
       <Column Name="Comments" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Column Name="DateCreated" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Association Name="FEAOrder_FEAOrdersStatusChangement" Member="FEAOrder" ThisKey="FEAOrderId" OtherKey="Id" Type="FEAOrder" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
       <Association Name="User_FEAOrdersStatusChangement" Member="User" ThisKey="AuthorId" OtherKey="Id" Type="User" IsForeignKey="true" />
+      <Association Name="FEAOrder_FEAOrdersStatusChangement" Member="FEAOrder" ThisKey="FEAOrderId" OtherKey="Id" Type="FEAOrder" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
   <Table Name="dbo.LeadAccountInfo" Member="LeadAccountInfos">
@@ -194,6 +182,7 @@
       <Association Name="Project_ProductType" Member="ProductTypes" ThisKey="Id" OtherKey="ProjectId" Type="ProductType" />
       <Association Name="Project_ProjectUser" Member="ProjectUsers" ThisKey="Id" OtherKey="ProjectId" Type="ProjectUser" />
       <Association Name="Project_Warehouse" Member="Warehouses" ThisKey="Id" OtherKey="ProjectId" Type="Warehouse" />
+      <Association Name="Project_FEAOrder" Member="FEAOrders" ThisKey="Id" OtherKey="ProjectId" Type="FEAOrder" />
     </Type>
   </Table>
   <Table Name="dbo.ProjectUsers" Member="ProjectUsers">
@@ -250,6 +239,7 @@
       <Association Name="User_ProjectUser" Member="ProjectUsers" ThisKey="Id" OtherKey="UserId" Type="ProjectUser" />
       <Association Name="User_WarehouseKeeper" Member="WarehouseKeepers" ThisKey="Id" OtherKey="WarehouseId" Type="WarehouseKeeper" />
       <Association Name="User_LeadOrderUser" Member="LeadOrderUsers" ThisKey="Id" OtherKey="UserId" Type="LeadOrderUser" />
+      <Association Name="User_FEAOrder" Member="FEAOrders" ThisKey="Id" OtherKey="ManagerId" Type="FEAOrder" />
       <Association Name="Role_User" Member="Role" ThisKey="RoleId" OtherKey="Id" Type="Role" IsForeignKey="true" />
     </Type>
   </Table>
@@ -319,10 +309,26 @@
       <Column Name="Address" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Column Name="DateCreated" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Column Name="DateModified" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Association Name="Warehouse_FEAOrder" Member="FEAOrders" ThisKey="Id" OtherKey="TargetWarehouseId" Type="FEAOrder" />
       <Association Name="Warehouse_WarehouseKeeper" Member="WarehouseKeepers" ThisKey="Id" OtherKey="WarehouseId" Type="WarehouseKeeper" />
       <Association Name="Warehouse_WarehouseProduct" Member="WarehouseProducts" ThisKey="Id" OtherKey="WarehouseId" Type="WarehouseProduct" />
+      <Association Name="Warehouse_FEAOrder" Member="FEAOrders" ThisKey="Id" OtherKey="TargetWarehouseId" Type="FEAOrder" />
       <Association Name="Project_Warehouse" Member="Project" ThisKey="ProjectId" OtherKey="Id" Type="Project" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.FEAOrders" Member="FEAOrders">
+    <Type Name="FEAOrder">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ProjectId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="ManagerId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="TargetWarehouseId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="DateCreated" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="FEAOrder_FEAOrderItem" Member="FEAOrderItems" ThisKey="Id" OtherKey="FEAOrderId" Type="FEAOrderItem" />
+      <Association Name="FEAOrder_FEAOrdersStatusChangement" Member="FEAOrdersStatusChangements" ThisKey="Id" OtherKey="FEAOrderId" Type="FEAOrdersStatusChangement" />
+      <Association Name="Project_FEAOrder" Member="Project" ThisKey="ProjectId" OtherKey="Id" Type="Project" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="User_FEAOrder" Member="Manager" ThisKey="ManagerId" OtherKey="Id" Type="User" IsForeignKey="true" />
+      <Association Name="Warehouse_FEAOrder" Member="TargetWarehouse" ThisKey="TargetWarehouseId" OtherKey="Id" Type="Warehouse" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

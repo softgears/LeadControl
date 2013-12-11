@@ -1,0 +1,90 @@
+﻿@using LeadControl.Domain.Enums
+@using LeadControl.Web.Classes.Ext
+@model LeadControl.Domain.Entities.FEAOrder
+
+@{
+    ViewBag.Title = "Карточка заявки №" + Model.Id;
+    Layout = "../Shared/AccountLayout.cshtml";
+}
+
+<form role="form" id="fea-order-form" action="/fea/update-order-desc" method="POST" class="form-horizontal">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="icon"><i class="icon20 i-settings"></i></div>
+                    <h4>Основные свойства заявки</h4>
+                    <a href="#" class="minimize"></a>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">Проект</label>
+                        <div class="col-lg-10">
+                            @Model.Project.Title
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">Менеджер</label>
+                        <div class="col-lg-10">
+                            @Model.Manager.GetFio()
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">Склад назначения</label>
+                        <div class="col-lg-10">
+                            @(Model.TargetWarehouse != null ? String.Format("{0} ({1})", Model.TargetWarehouse.Title, Model.TargetWarehouse.City) : "Не указан")
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="order-desc-field">Описание</label>
+                        <div class="col-lg-10">
+                            <textarea name="Description" class="form-control" id="order-desc-field" placeholder="Введите комментарии к заявке">@Model.Description</textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">Дата создания</label>
+                        <div class="col-lg-10">
+                            @Model.DateCreated.FormatDateTime()
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">Дата обновления</label>
+                        <div class="col-lg-10">
+                            @Model.LastUpdate.FormatDateTime()
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-offset-2">
+                            <div class="pad-left15">
+                                <button type="submit" class="btn btn-primary">Обновить</button>
+                                <button type="button" class="btn" onclick="history.back();">Отмена</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<div class="row">
+    <a name="items"></a>
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="icon"><i class="icon20 i-cart"></i></div>
+                <h4>Позиции заявки</h4>
+                <a href="#" class="minimize"></a>
+            </div>
+            <div class="panel-body">
+                @if (Model.Status == (short) FEAOrderStatus.Gathering)
+                {
+                    @Html.Partial("FEAItemsEditor",Model)
+                }
+                else
+                {
+                    @Html.Partial("FEAItemsTable",Model)
+                }
+            </div>
+        </div>
+    </div>
+</div>

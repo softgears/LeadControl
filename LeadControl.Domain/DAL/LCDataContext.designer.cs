@@ -31,9 +31,6 @@ namespace LeadControl.Domain.DAL
     partial void InsertFEAOrderItem(LeadControl.Domain.Entities.FEAOrderItem instance);
     partial void UpdateFEAOrderItem(LeadControl.Domain.Entities.FEAOrderItem instance);
     partial void DeleteFEAOrderItem(LeadControl.Domain.Entities.FEAOrderItem instance);
-    partial void InsertFEAOrder(LeadControl.Domain.Entities.FEAOrder instance);
-    partial void UpdateFEAOrder(LeadControl.Domain.Entities.FEAOrder instance);
-    partial void DeleteFEAOrder(LeadControl.Domain.Entities.FEAOrder instance);
     partial void InsertFEAOrdersStatusChangement(LeadControl.Domain.Entities.FEAOrdersStatusChangement instance);
     partial void UpdateFEAOrdersStatusChangement(LeadControl.Domain.Entities.FEAOrdersStatusChangement instance);
     partial void DeleteFEAOrdersStatusChangement(LeadControl.Domain.Entities.FEAOrdersStatusChangement instance);
@@ -103,6 +100,9 @@ namespace LeadControl.Domain.DAL
     partial void InsertWarehouse(LeadControl.Domain.Entities.Warehouse instance);
     partial void UpdateWarehouse(LeadControl.Domain.Entities.Warehouse instance);
     partial void DeleteWarehouse(LeadControl.Domain.Entities.Warehouse instance);
+    partial void InsertFEAOrder(LeadControl.Domain.Entities.FEAOrder instance);
+    partial void UpdateFEAOrder(LeadControl.Domain.Entities.FEAOrder instance);
+    partial void DeleteFEAOrder(LeadControl.Domain.Entities.FEAOrder instance);
     #endregion
 		
 		public LCDataContext() : 
@@ -140,14 +140,6 @@ namespace LeadControl.Domain.DAL
 			get
 			{
 				return this.GetTable<LeadControl.Domain.Entities.FEAOrderItem>();
-			}
-		}
-		
-		public System.Data.Linq.Table<LeadControl.Domain.Entities.FEAOrder> FEAOrders
-		{
-			get
-			{
-				return this.GetTable<LeadControl.Domain.Entities.FEAOrder>();
 			}
 		}
 		
@@ -334,6 +326,14 @@ namespace LeadControl.Domain.DAL
 				return this.GetTable<LeadControl.Domain.Entities.Warehouse>();
 			}
 		}
+		
+		public System.Data.Linq.Table<LeadControl.Domain.Entities.FEAOrder> FEAOrders
+		{
+			get
+			{
+				return this.GetTable<LeadControl.Domain.Entities.FEAOrder>();
+			}
+		}
 	}
 }
 namespace LeadControl.Domain.Entities
@@ -362,9 +362,9 @@ namespace LeadControl.Domain.Entities
 		
 		private System.Nullable<System.DateTime> _DateCreated;
 		
-		private EntityRef<FEAOrder> _FEAOrder;
-		
 		private EntityRef<ProductType> _ProductType;
+		
+		private EntityRef<FEAOrder> _FEAOrder;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -386,8 +386,8 @@ namespace LeadControl.Domain.Entities
 		
 		public FEAOrderItem()
 		{
-			this._FEAOrder = default(EntityRef<FEAOrder>);
 			this._ProductType = default(EntityRef<ProductType>);
+			this._FEAOrder = default(EntityRef<FEAOrder>);
 			OnCreated();
 		}
 		
@@ -519,40 +519,6 @@ namespace LeadControl.Domain.Entities
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FEAOrder_FEAOrderItem", Storage="_FEAOrder", ThisKey="FEAOrderId", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
-		public FEAOrder FEAOrder
-		{
-			get
-			{
-				return this._FEAOrder.Entity;
-			}
-			set
-			{
-				FEAOrder previousValue = this._FEAOrder.Entity;
-				if (((previousValue != value) 
-							|| (this._FEAOrder.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._FEAOrder.Entity = null;
-						previousValue.FEAOrderItems.Remove(this);
-					}
-					this._FEAOrder.Entity = value;
-					if ((value != null))
-					{
-						value.FEAOrderItems.Add(this);
-						this._FEAOrderId = value.Id;
-					}
-					else
-					{
-						this._FEAOrderId = default(long);
-					}
-					this.SendPropertyChanged("FEAOrder");
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ProductType_FEAOrderItem", Storage="_ProductType", ThisKey="ProductId", OtherKey="Id", IsForeignKey=true)]
 		public ProductType ProductType
 		{
@@ -587,233 +553,36 @@ namespace LeadControl.Domain.Entities
 			}
 		}
 		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.FEAOrders")]
-	public partial class FEAOrder : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private long _Id;
-		
-		private long _ProjectId;
-		
-		private short _Status;
-		
-		private long _TargetWarehouseId;
-		
-		private System.Nullable<System.DateTime> _DateCreated;
-		
-		private EntitySet<FEAOrderItem> _FEAOrderItems;
-		
-		private EntitySet<FEAOrdersStatusChangement> _FEAOrdersStatusChangements;
-		
-		private EntityRef<Warehouse> _Warehouse;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIdChanging(long value);
-    partial void OnIdChanged();
-    partial void OnProjectIdChanging(long value);
-    partial void OnProjectIdChanged();
-    partial void OnStatusChanging(short value);
-    partial void OnStatusChanged();
-    partial void OnTargetWarehouseIdChanging(long value);
-    partial void OnTargetWarehouseIdChanged();
-    partial void OnDateCreatedChanging(System.Nullable<System.DateTime> value);
-    partial void OnDateCreatedChanged();
-    #endregion
-		
-		public FEAOrder()
-		{
-			this._FEAOrderItems = new EntitySet<FEAOrderItem>(new Action<FEAOrderItem>(this.attach_FEAOrderItems), new Action<FEAOrderItem>(this.detach_FEAOrderItems));
-			this._FEAOrdersStatusChangements = new EntitySet<FEAOrdersStatusChangement>(new Action<FEAOrdersStatusChangement>(this.attach_FEAOrdersStatusChangements), new Action<FEAOrdersStatusChangement>(this.detach_FEAOrdersStatusChangements));
-			this._Warehouse = default(EntityRef<Warehouse>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="BigInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public long Id
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FEAOrder_FEAOrderItem", Storage="_FEAOrder", ThisKey="FEAOrderId", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public FEAOrder FEAOrder
 		{
 			get
 			{
-				return this._Id;
+				return this._FEAOrder.Entity;
 			}
 			set
 			{
-				if ((this._Id != value))
-				{
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProjectId", DbType="BigInt NOT NULL")]
-		public long ProjectId
-		{
-			get
-			{
-				return this._ProjectId;
-			}
-			set
-			{
-				if ((this._ProjectId != value))
-				{
-					this.OnProjectIdChanging(value);
-					this.SendPropertyChanging();
-					this._ProjectId = value;
-					this.SendPropertyChanged("ProjectId");
-					this.OnProjectIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="SmallInt NOT NULL")]
-		public short Status
-		{
-			get
-			{
-				return this._Status;
-			}
-			set
-			{
-				if ((this._Status != value))
-				{
-					this.OnStatusChanging(value);
-					this.SendPropertyChanging();
-					this._Status = value;
-					this.SendPropertyChanged("Status");
-					this.OnStatusChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TargetWarehouseId", DbType="BigInt NOT NULL")]
-		public long TargetWarehouseId
-		{
-			get
-			{
-				return this._TargetWarehouseId;
-			}
-			set
-			{
-				if ((this._TargetWarehouseId != value))
-				{
-					if (this._Warehouse.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnTargetWarehouseIdChanging(value);
-					this.SendPropertyChanging();
-					this._TargetWarehouseId = value;
-					this.SendPropertyChanged("TargetWarehouseId");
-					this.OnTargetWarehouseIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateCreated", DbType="DateTime")]
-		public System.Nullable<System.DateTime> DateCreated
-		{
-			get
-			{
-				return this._DateCreated;
-			}
-			set
-			{
-				if ((this._DateCreated != value))
-				{
-					this.OnDateCreatedChanging(value);
-					this.SendPropertyChanging();
-					this._DateCreated = value;
-					this.SendPropertyChanged("DateCreated");
-					this.OnDateCreatedChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FEAOrder_FEAOrderItem", Storage="_FEAOrderItems", ThisKey="Id", OtherKey="FEAOrderId")]
-		public EntitySet<FEAOrderItem> FEAOrderItems
-		{
-			get
-			{
-				return this._FEAOrderItems;
-			}
-			set
-			{
-				this._FEAOrderItems.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FEAOrder_FEAOrdersStatusChangement", Storage="_FEAOrdersStatusChangements", ThisKey="Id", OtherKey="FEAOrderId")]
-		public EntitySet<FEAOrdersStatusChangement> FEAOrdersStatusChangements
-		{
-			get
-			{
-				return this._FEAOrdersStatusChangements;
-			}
-			set
-			{
-				this._FEAOrdersStatusChangements.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Warehouse_FEAOrder", Storage="_Warehouse", ThisKey="TargetWarehouseId", OtherKey="Id", IsForeignKey=true)]
-		public Warehouse Warehouse
-		{
-			get
-			{
-				return this._Warehouse.Entity;
-			}
-			set
-			{
-				Warehouse previousValue = this._Warehouse.Entity;
+				FEAOrder previousValue = this._FEAOrder.Entity;
 				if (((previousValue != value) 
-							|| (this._Warehouse.HasLoadedOrAssignedValue == false)))
+							|| (this._FEAOrder.HasLoadedOrAssignedValue == false)))
 				{
 					this.SendPropertyChanging();
 					if ((previousValue != null))
 					{
-						this._Warehouse.Entity = null;
-						previousValue.FEAOrders.Remove(this);
+						this._FEAOrder.Entity = null;
+						previousValue.FEAOrderItems.Remove(this);
 					}
-					this._Warehouse.Entity = value;
+					this._FEAOrder.Entity = value;
 					if ((value != null))
 					{
-						value.FEAOrders.Add(this);
-						this._TargetWarehouseId = value.Id;
+						value.FEAOrderItems.Add(this);
+						this._FEAOrderId = value.Id;
 					}
 					else
 					{
-						this._TargetWarehouseId = default(long);
+						this._FEAOrderId = default(long);
 					}
-					this.SendPropertyChanged("Warehouse");
+					this.SendPropertyChanged("FEAOrder");
 				}
 			}
 		}
@@ -836,30 +605,6 @@ namespace LeadControl.Domain.Entities
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
-		}
-		
-		private void attach_FEAOrderItems(FEAOrderItem entity)
-		{
-			this.SendPropertyChanging();
-			entity.FEAOrder = this;
-		}
-		
-		private void detach_FEAOrderItems(FEAOrderItem entity)
-		{
-			this.SendPropertyChanging();
-			entity.FEAOrder = null;
-		}
-		
-		private void attach_FEAOrdersStatusChangements(FEAOrdersStatusChangement entity)
-		{
-			this.SendPropertyChanging();
-			entity.FEAOrder = this;
-		}
-		
-		private void detach_FEAOrdersStatusChangements(FEAOrdersStatusChangement entity)
-		{
-			this.SendPropertyChanging();
-			entity.FEAOrder = null;
 		}
 	}
 	
@@ -881,9 +626,9 @@ namespace LeadControl.Domain.Entities
 		
 		private System.Nullable<System.DateTime> _DateCreated;
 		
-		private EntityRef<FEAOrder> _FEAOrder;
-		
 		private EntityRef<User> _User;
+		
+		private EntityRef<FEAOrder> _FEAOrder;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -905,8 +650,8 @@ namespace LeadControl.Domain.Entities
 		
 		public FEAOrdersStatusChangement()
 		{
-			this._FEAOrder = default(EntityRef<FEAOrder>);
 			this._User = default(EntityRef<User>);
+			this._FEAOrder = default(EntityRef<FEAOrder>);
 			OnCreated();
 		}
 		
@@ -1038,40 +783,6 @@ namespace LeadControl.Domain.Entities
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FEAOrder_FEAOrdersStatusChangement", Storage="_FEAOrder", ThisKey="FEAOrderId", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
-		public FEAOrder FEAOrder
-		{
-			get
-			{
-				return this._FEAOrder.Entity;
-			}
-			set
-			{
-				FEAOrder previousValue = this._FEAOrder.Entity;
-				if (((previousValue != value) 
-							|| (this._FEAOrder.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._FEAOrder.Entity = null;
-						previousValue.FEAOrdersStatusChangements.Remove(this);
-					}
-					this._FEAOrder.Entity = value;
-					if ((value != null))
-					{
-						value.FEAOrdersStatusChangements.Add(this);
-						this._FEAOrderId = value.Id;
-					}
-					else
-					{
-						this._FEAOrderId = default(long);
-					}
-					this.SendPropertyChanged("FEAOrder");
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_FEAOrdersStatusChangement", Storage="_User", ThisKey="AuthorId", OtherKey="Id", IsForeignKey=true)]
 		public User User
 		{
@@ -1102,6 +813,40 @@ namespace LeadControl.Domain.Entities
 						this._AuthorId = default(long);
 					}
 					this.SendPropertyChanged("User");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FEAOrder_FEAOrdersStatusChangement", Storage="_FEAOrder", ThisKey="FEAOrderId", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public FEAOrder FEAOrder
+		{
+			get
+			{
+				return this._FEAOrder.Entity;
+			}
+			set
+			{
+				FEAOrder previousValue = this._FEAOrder.Entity;
+				if (((previousValue != value) 
+							|| (this._FEAOrder.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._FEAOrder.Entity = null;
+						previousValue.FEAOrdersStatusChangements.Remove(this);
+					}
+					this._FEAOrder.Entity = value;
+					if ((value != null))
+					{
+						value.FEAOrdersStatusChangements.Add(this);
+						this._FEAOrderId = value.Id;
+					}
+					else
+					{
+						this._FEAOrderId = default(long);
+					}
+					this.SendPropertyChanged("FEAOrder");
 				}
 			}
 		}
@@ -4317,6 +4062,8 @@ namespace LeadControl.Domain.Entities
 		
 		private EntitySet<Warehouse> _Warehouses;
 		
+		private EntitySet<FEAOrder> _FEAOrders;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -4341,6 +4088,7 @@ namespace LeadControl.Domain.Entities
 			this._ProductTypes = new EntitySet<ProductType>(new Action<ProductType>(this.attach_ProductTypes), new Action<ProductType>(this.detach_ProductTypes));
 			this._ProjectUsers = new EntitySet<ProjectUser>(new Action<ProjectUser>(this.attach_ProjectUsers), new Action<ProjectUser>(this.detach_ProjectUsers));
 			this._Warehouses = new EntitySet<Warehouse>(new Action<Warehouse>(this.attach_Warehouses), new Action<Warehouse>(this.detach_Warehouses));
+			this._FEAOrders = new EntitySet<FEAOrder>(new Action<FEAOrder>(this.attach_FEAOrders), new Action<FEAOrder>(this.detach_FEAOrders));
 			OnCreated();
 		}
 		
@@ -4516,6 +4264,19 @@ namespace LeadControl.Domain.Entities
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Project_FEAOrder", Storage="_FEAOrders", ThisKey="Id", OtherKey="ProjectId")]
+		public EntitySet<FEAOrder> FEAOrders
+		{
+			get
+			{
+				return this._FEAOrders;
+			}
+			set
+			{
+				this._FEAOrders.Assign(value);
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -4579,6 +4340,18 @@ namespace LeadControl.Domain.Entities
 		}
 		
 		private void detach_Warehouses(Warehouse entity)
+		{
+			this.SendPropertyChanging();
+			entity.Project = null;
+		}
+		
+		private void attach_FEAOrders(FEAOrder entity)
+		{
+			this.SendPropertyChanging();
+			entity.Project = this;
+		}
+		
+		private void detach_FEAOrders(FEAOrder entity)
 		{
 			this.SendPropertyChanging();
 			entity.Project = null;
@@ -5279,6 +5052,8 @@ namespace LeadControl.Domain.Entities
 		
 		private EntitySet<LeadOrderUser> _LeadOrderUsers;
 		
+		private EntitySet<FEAOrder> _FEAOrders;
+		
 		private EntityRef<Role> _Role;
 		
     #region Extensibility Method Definitions
@@ -5324,6 +5099,7 @@ namespace LeadControl.Domain.Entities
 			this._ProjectUsers = new EntitySet<ProjectUser>(new Action<ProjectUser>(this.attach_ProjectUsers), new Action<ProjectUser>(this.detach_ProjectUsers));
 			this._WarehouseKeepers = new EntitySet<WarehouseKeeper>(new Action<WarehouseKeeper>(this.attach_WarehouseKeepers), new Action<WarehouseKeeper>(this.detach_WarehouseKeepers));
 			this._LeadOrderUsers = new EntitySet<LeadOrderUser>(new Action<LeadOrderUser>(this.attach_LeadOrderUsers), new Action<LeadOrderUser>(this.detach_LeadOrderUsers));
+			this._FEAOrders = new EntitySet<FEAOrder>(new Action<FEAOrder>(this.attach_FEAOrders), new Action<FEAOrder>(this.detach_FEAOrders));
 			this._Role = default(EntityRef<Role>);
 			OnCreated();
 		}
@@ -5703,6 +5479,19 @@ namespace LeadControl.Domain.Entities
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_FEAOrder", Storage="_FEAOrders", ThisKey="Id", OtherKey="ManagerId")]
+		public EntitySet<FEAOrder> FEAOrders
+		{
+			get
+			{
+				return this._FEAOrders;
+			}
+			set
+			{
+				this._FEAOrders.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Role_User", Storage="_Role", ThisKey="RoleId", OtherKey="Id", IsForeignKey=true)]
 		public Role Role
 		{
@@ -5839,6 +5628,18 @@ namespace LeadControl.Domain.Entities
 		{
 			this.SendPropertyChanging();
 			entity.User = null;
+		}
+		
+		private void attach_FEAOrders(FEAOrder entity)
+		{
+			this.SendPropertyChanging();
+			entity.Manager = this;
+		}
+		
+		private void detach_FEAOrders(FEAOrder entity)
+		{
+			this.SendPropertyChanging();
+			entity.Manager = null;
 		}
 	}
 	
@@ -7016,11 +6817,11 @@ namespace LeadControl.Domain.Entities
 		
 		private System.Nullable<System.DateTime> _DateModified;
 		
-		private EntitySet<FEAOrder> _FEAOrders;
-		
 		private EntitySet<WarehouseKeeper> _WarehouseKeepers;
 		
 		private EntitySet<WarehouseProduct> _WarehouseProducts;
+		
+		private EntitySet<FEAOrder> _FEAOrders;
 		
 		private EntityRef<Project> _Project;
 		
@@ -7048,9 +6849,9 @@ namespace LeadControl.Domain.Entities
 		
 		public Warehouse()
 		{
-			this._FEAOrders = new EntitySet<FEAOrder>(new Action<FEAOrder>(this.attach_FEAOrders), new Action<FEAOrder>(this.detach_FEAOrders));
 			this._WarehouseKeepers = new EntitySet<WarehouseKeeper>(new Action<WarehouseKeeper>(this.attach_WarehouseKeepers), new Action<WarehouseKeeper>(this.detach_WarehouseKeepers));
 			this._WarehouseProducts = new EntitySet<WarehouseProduct>(new Action<WarehouseProduct>(this.attach_WarehouseProducts), new Action<WarehouseProduct>(this.detach_WarehouseProducts));
+			this._FEAOrders = new EntitySet<FEAOrder>(new Action<FEAOrder>(this.attach_FEAOrders), new Action<FEAOrder>(this.detach_FEAOrders));
 			this._Project = default(EntityRef<Project>);
 			OnCreated();
 		}
@@ -7219,19 +7020,6 @@ namespace LeadControl.Domain.Entities
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Warehouse_FEAOrder", Storage="_FEAOrders", ThisKey="Id", OtherKey="TargetWarehouseId")]
-		public EntitySet<FEAOrder> FEAOrders
-		{
-			get
-			{
-				return this._FEAOrders;
-			}
-			set
-			{
-				this._FEAOrders.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Warehouse_WarehouseKeeper", Storage="_WarehouseKeepers", ThisKey="Id", OtherKey="WarehouseId")]
 		public EntitySet<WarehouseKeeper> WarehouseKeepers
 		{
@@ -7255,6 +7043,19 @@ namespace LeadControl.Domain.Entities
 			set
 			{
 				this._WarehouseProducts.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Warehouse_FEAOrder", Storage="_FEAOrders", ThisKey="Id", OtherKey="TargetWarehouseId")]
+		public EntitySet<FEAOrder> FEAOrders
+		{
+			get
+			{
+				return this._FEAOrders;
+			}
+			set
+			{
+				this._FEAOrders.Assign(value);
 			}
 		}
 		
@@ -7312,18 +7113,6 @@ namespace LeadControl.Domain.Entities
 			}
 		}
 		
-		private void attach_FEAOrders(FEAOrder entity)
-		{
-			this.SendPropertyChanging();
-			entity.Warehouse = this;
-		}
-		
-		private void detach_FEAOrders(FEAOrder entity)
-		{
-			this.SendPropertyChanging();
-			entity.Warehouse = null;
-		}
-		
 		private void attach_WarehouseKeepers(WarehouseKeeper entity)
 		{
 			this.SendPropertyChanging();
@@ -7346,6 +7135,403 @@ namespace LeadControl.Domain.Entities
 		{
 			this.SendPropertyChanging();
 			entity.Warehouse = null;
+		}
+		
+		private void attach_FEAOrders(FEAOrder entity)
+		{
+			this.SendPropertyChanging();
+			entity.TargetWarehouse = this;
+		}
+		
+		private void detach_FEAOrders(FEAOrder entity)
+		{
+			this.SendPropertyChanging();
+			entity.TargetWarehouse = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.FEAOrders")]
+	public partial class FEAOrder : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private long _Id;
+		
+		private long _ProjectId;
+		
+		private long _ManagerId;
+		
+		private short _Status;
+		
+		private long _TargetWarehouseId;
+		
+		private string _Description;
+		
+		private System.Nullable<System.DateTime> _DateCreated;
+		
+		private EntitySet<FEAOrderItem> _FEAOrderItems;
+		
+		private EntitySet<FEAOrdersStatusChangement> _FEAOrdersStatusChangements;
+		
+		private EntityRef<Project> _Project;
+		
+		private EntityRef<User> _Manager;
+		
+		private EntityRef<Warehouse> _TargetWarehouse;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(long value);
+    partial void OnIdChanged();
+    partial void OnProjectIdChanging(long value);
+    partial void OnProjectIdChanged();
+    partial void OnManagerIdChanging(long value);
+    partial void OnManagerIdChanged();
+    partial void OnStatusChanging(short value);
+    partial void OnStatusChanged();
+    partial void OnTargetWarehouseIdChanging(long value);
+    partial void OnTargetWarehouseIdChanged();
+    partial void OnDescriptionChanging(string value);
+    partial void OnDescriptionChanged();
+    partial void OnDateCreatedChanging(System.Nullable<System.DateTime> value);
+    partial void OnDateCreatedChanged();
+    #endregion
+		
+		public FEAOrder()
+		{
+			this._FEAOrderItems = new EntitySet<FEAOrderItem>(new Action<FEAOrderItem>(this.attach_FEAOrderItems), new Action<FEAOrderItem>(this.detach_FEAOrderItems));
+			this._FEAOrdersStatusChangements = new EntitySet<FEAOrdersStatusChangement>(new Action<FEAOrdersStatusChangement>(this.attach_FEAOrdersStatusChangements), new Action<FEAOrdersStatusChangement>(this.detach_FEAOrdersStatusChangements));
+			this._Project = default(EntityRef<Project>);
+			this._Manager = default(EntityRef<User>);
+			this._TargetWarehouse = default(EntityRef<Warehouse>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="BigInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public long Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProjectId", DbType="BigInt NOT NULL")]
+		public long ProjectId
+		{
+			get
+			{
+				return this._ProjectId;
+			}
+			set
+			{
+				if ((this._ProjectId != value))
+				{
+					if (this._Project.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnProjectIdChanging(value);
+					this.SendPropertyChanging();
+					this._ProjectId = value;
+					this.SendPropertyChanged("ProjectId");
+					this.OnProjectIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ManagerId", DbType="BigInt NOT NULL")]
+		public long ManagerId
+		{
+			get
+			{
+				return this._ManagerId;
+			}
+			set
+			{
+				if ((this._ManagerId != value))
+				{
+					if (this._Manager.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnManagerIdChanging(value);
+					this.SendPropertyChanging();
+					this._ManagerId = value;
+					this.SendPropertyChanged("ManagerId");
+					this.OnManagerIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="SmallInt NOT NULL")]
+		public short Status
+		{
+			get
+			{
+				return this._Status;
+			}
+			set
+			{
+				if ((this._Status != value))
+				{
+					this.OnStatusChanging(value);
+					this.SendPropertyChanging();
+					this._Status = value;
+					this.SendPropertyChanged("Status");
+					this.OnStatusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TargetWarehouseId", DbType="BigInt NOT NULL")]
+		public long TargetWarehouseId
+		{
+			get
+			{
+				return this._TargetWarehouseId;
+			}
+			set
+			{
+				if ((this._TargetWarehouseId != value))
+				{
+					if (this._TargetWarehouse.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnTargetWarehouseIdChanging(value);
+					this.SendPropertyChanging();
+					this._TargetWarehouseId = value;
+					this.SendPropertyChanged("TargetWarehouseId");
+					this.OnTargetWarehouseIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="NVarChar(MAX)")]
+		public string Description
+		{
+			get
+			{
+				return this._Description;
+			}
+			set
+			{
+				if ((this._Description != value))
+				{
+					this.OnDescriptionChanging(value);
+					this.SendPropertyChanging();
+					this._Description = value;
+					this.SendPropertyChanged("Description");
+					this.OnDescriptionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateCreated", DbType="DateTime")]
+		public System.Nullable<System.DateTime> DateCreated
+		{
+			get
+			{
+				return this._DateCreated;
+			}
+			set
+			{
+				if ((this._DateCreated != value))
+				{
+					this.OnDateCreatedChanging(value);
+					this.SendPropertyChanging();
+					this._DateCreated = value;
+					this.SendPropertyChanged("DateCreated");
+					this.OnDateCreatedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FEAOrder_FEAOrderItem", Storage="_FEAOrderItems", ThisKey="Id", OtherKey="FEAOrderId")]
+		public EntitySet<FEAOrderItem> FEAOrderItems
+		{
+			get
+			{
+				return this._FEAOrderItems;
+			}
+			set
+			{
+				this._FEAOrderItems.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FEAOrder_FEAOrdersStatusChangement", Storage="_FEAOrdersStatusChangements", ThisKey="Id", OtherKey="FEAOrderId")]
+		public EntitySet<FEAOrdersStatusChangement> FEAOrdersStatusChangements
+		{
+			get
+			{
+				return this._FEAOrdersStatusChangements;
+			}
+			set
+			{
+				this._FEAOrdersStatusChangements.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Project_FEAOrder", Storage="_Project", ThisKey="ProjectId", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public Project Project
+		{
+			get
+			{
+				return this._Project.Entity;
+			}
+			set
+			{
+				Project previousValue = this._Project.Entity;
+				if (((previousValue != value) 
+							|| (this._Project.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Project.Entity = null;
+						previousValue.FEAOrders.Remove(this);
+					}
+					this._Project.Entity = value;
+					if ((value != null))
+					{
+						value.FEAOrders.Add(this);
+						this._ProjectId = value.Id;
+					}
+					else
+					{
+						this._ProjectId = default(long);
+					}
+					this.SendPropertyChanged("Project");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_FEAOrder", Storage="_Manager", ThisKey="ManagerId", OtherKey="Id", IsForeignKey=true)]
+		public User Manager
+		{
+			get
+			{
+				return this._Manager.Entity;
+			}
+			set
+			{
+				User previousValue = this._Manager.Entity;
+				if (((previousValue != value) 
+							|| (this._Manager.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Manager.Entity = null;
+						previousValue.FEAOrders.Remove(this);
+					}
+					this._Manager.Entity = value;
+					if ((value != null))
+					{
+						value.FEAOrders.Add(this);
+						this._ManagerId = value.Id;
+					}
+					else
+					{
+						this._ManagerId = default(long);
+					}
+					this.SendPropertyChanged("Manager");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Warehouse_FEAOrder", Storage="_TargetWarehouse", ThisKey="TargetWarehouseId", OtherKey="Id", IsForeignKey=true)]
+		public Warehouse TargetWarehouse
+		{
+			get
+			{
+				return this._TargetWarehouse.Entity;
+			}
+			set
+			{
+				Warehouse previousValue = this._TargetWarehouse.Entity;
+				if (((previousValue != value) 
+							|| (this._TargetWarehouse.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._TargetWarehouse.Entity = null;
+						previousValue.FEAOrders.Remove(this);
+					}
+					this._TargetWarehouse.Entity = value;
+					if ((value != null))
+					{
+						value.FEAOrders.Add(this);
+						this._TargetWarehouseId = value.Id;
+					}
+					else
+					{
+						this._TargetWarehouseId = default(long);
+					}
+					this.SendPropertyChanged("TargetWarehouse");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_FEAOrderItems(FEAOrderItem entity)
+		{
+			this.SendPropertyChanging();
+			entity.FEAOrder = this;
+		}
+		
+		private void detach_FEAOrderItems(FEAOrderItem entity)
+		{
+			this.SendPropertyChanging();
+			entity.FEAOrder = null;
+		}
+		
+		private void attach_FEAOrdersStatusChangements(FEAOrdersStatusChangement entity)
+		{
+			this.SendPropertyChanging();
+			entity.FEAOrder = this;
+		}
+		
+		private void detach_FEAOrdersStatusChangements(FEAOrdersStatusChangement entity)
+		{
+			this.SendPropertyChanging();
+			entity.FEAOrder = null;
 		}
 	}
 }

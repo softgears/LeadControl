@@ -101,5 +101,14 @@ namespace LeadControl.Domain.Entities
         {
             return Role.RolePermissions.Any(p => p.Permission.Group == "Администрирование");
         }
+
+        /// <summary>
+        /// Яврляется ли пользователь администратором
+        /// </summary>
+        /// <returns></returns>
+        public bool IsAdmin()
+        {
+            return Role.Id == 1;
+        }
     }
 }

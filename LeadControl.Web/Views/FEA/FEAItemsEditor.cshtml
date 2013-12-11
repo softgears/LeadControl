@@ -1,0 +1,159 @@
+﻿@model LeadControl.Domain.Entities.FEAOrder
+@{
+    var products = Model.Project.ProductTypes.ToList();
+}
+<div id="products-sample" style="display: none">
+    <select class="product-type-selector">
+    @foreach (var product in products)
+    {
+        <option value="@product.Id">@product.Title</option>
+    }
+    </select>    
+</div>
+
+<p>
+    <a href="#" class="btn btn-info tip create" title="Создание новой позиции в заявке">Добавить позицию</a>   
+</p>
+<table class="table table-bordered" id="fea-items-table" style="position: relative">
+    <thead>
+        <tr>
+            <th>Наименование товара</th>    
+            <th>Количество</th>
+            <th>Цена</th>
+            <th>Стоимость</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var orderItem in Model.FEAOrderItems)
+        {
+            <tr data-id="@orderItem.Id" data-product="@orderItem.ProductId" class="item-row">
+                <td>
+                    <select class="product-type-selector" style="width: 100%">
+                        @foreach (var product in products)
+                        {
+                            <option value="@product.Id" @(orderItem.ProductId == product.Id ? "selected=selected":"")>@product.Title</option>
+                        }
+                    </select>
+                </td>
+                <td style="width: 100px">
+                    <input type="text" class="quantity-selector" value="@orderItem.Quantity" style="width: 95px"/>
+                </td>
+                <td style="width: 100px">
+                    <input type="text" class="price-selector" value="@String.Format("{0:0.00}",orderItem.Price)" style="width: 95px"/>
+                </td>
+                <td class="total-price" style="width: 10%">
+                    @String.Format("{0:c}",orderItem.Quantity*orderItem.Price)
+                </td>
+                <td style="width: 45px">
+                    <a href="#" class="btn btn-xs btn-danger tip delete-row" title="Удалить позицию"><i class="icon12 i-remove-5"></i></a>             
+                </td>
+            </tr>
+        }
+        <tr class="summary-row">
+            <td colspan="5" class="center">Общая стоимость <span id="total">@String.Format("{0:c}",Model.FEAOrderItems.Sum(oi => oi.Price*oi.Quantity))</span></td>
+        </tr>
+    </tbody>
+</table>
+<script type="text/javascript">
+    $(document).ready(function() {
+        function bindRow(tr) {
+            $(tr).find(".product-type-selector").change(function(e) {
+                var p = $(this).parent().parent().parent();
+                var id = $(p).data("id");
+                var productId = $(p).data("product");
+                var newId = $(this).val();
+                $.post("/fea/change-order-item-product", { id: @Model.Id, itemId: id, productId: productId, newId: newId }, function (data) {
+                    if (data.success == true) {
+                        showSuccess("Позиция была успешно обновлена");
+                        $(p).data("id", p.id);
+                        $(p).data("product-id", p.productId);
+                    } else {
+                        alert('Не удалось обновить позицию. Обновите страницу');
+                    }
+                }, 'json');
+            });
+            $(tr).find(".quantity-selector").change(function (e) {
+                recalc();
+                var p = $(this).parent().parent().parent();
+                var id = $(p).data("id");
+                var productId = $(p).data("product");
+                var quantity = $(this).val();
+                $.post("/fea/change-order-item-quantity", { id: @Model.Id, itemId: id, productId: productId, quantity: quantity }, function (data) {
+                    if (data.success == true) {
+                        showSuccess("Позиция была успешно обновлена");
+                        p.data("id", p.id);
+                        p.data("product-id", p.productId);
+                    } else {
+                        alert('Не удалось обновить позицию. Обновите страницу');
+                    }
+                }, 'json');
+            });
+            $(tr).find(".price-selector").change(function(e) {
+                recalc();
+                var p = $(this).parent().parent().parent();
+                var id = $(p).data("id");
+                var productId = $(p).data("product");
+                var price = $(this).val();
+                $.post("/fea/change-order-item-price", { id: @Model.Id, itemId: id, productId: productId, price: price }, function (data) {
+                    if (data.success == true) {
+                        showSuccess("Позиция была успешно обновлена");
+                        p.data("id", p.id);
+                        p.data("product-id", p.productId);
+                    } else {
+                        alert('Не удалось обновить позицию. Обновите страницу');
+                    }
+                }, 'json');
+            });
+            $(tr).find(".delete-row").click(function(e) {
+                if (confirm('Вы действительно хотите удалить эту позицию?')) {
+                    var id = parseInt($(this).parent().parent().data("id"));
+                    $(this).parent().parent().remove();
+                    if (id > 0) {
+                        $.post("/fea/delete-order-item", { id: @Model.Id, itemId: id }, function(data) {
+                            if (data.success == true) {
+                                showSuccess("Позиция была успешно удалена из заявки");
+                            } else {
+                                alert('Не удалось удалить позицию. Обновите страницу');
+                            }
+                        }, 'json');
+                    }
+                }
+                return false;
+            });
+        }
+
+        $("#fea-items-table").find("tbody").find('.item-row').each(function(index, item) {
+            bindRow($(item));
+        });
+        
+        function recalc() {
+            var total = 0;
+            $(".item-row").each(function(index, item) {
+                var price = parseFloat($(item).find(".price-selector").val().replace(",", "."));
+                if (isNaN(price)) {
+                    price = 0.0;
+                    $(item).find(".price-selector").val("0");
+                }
+                var quantity = parseInt($(item).find(".quantity-selector").val());
+                var sum = price * quantity;
+                var s = fmtMoney(sum);
+                $(item).find(".total-price").text(s);
+                total += sum;
+            });
+            $("#total").text(fmtMoney(total));
+        }
+        
+        function createRow() {
+            var html = '<tr data-id="0" data-product-type="0" class="item-row"><td>' + $("#products-sample").html() + '</td><td style="width: 100px"><input type="text" class="quantity-selector" value="0" style="width: 95px"/></td><td style="width: 100px"><input type="text" class="price-selector" value="0,00" style="width: 95px"/></td><td class="total-price" style="width: 10%">0,00 р.</td><td style="width: 45px"><a href="#" class="btn btn-xs btn-danger tip delete-row" title="Удалить позицию"><i class="icon12 i-remove-5"></i></a></td>';
+            var row = $(html);
+            $(".summary-row").before(row);
+            bindRow(row);
+        }
+
+        $(".create").click(function() {
+            createRow();
+            return false;
+        });
+    });
+</script>

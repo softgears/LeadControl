@@ -40,5 +40,10 @@ namespace LeadControl.Domain.Entities
         /// Управление складами
         /// </summary>
         public const long ManageWarehouses = 5;
+
+        /// <summary>
+        /// Доступ к ВЭД заявкам
+        /// </summary>
+        public const long FEA = 9;
     }
 }
