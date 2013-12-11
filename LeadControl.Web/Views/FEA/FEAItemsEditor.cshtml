@@ -63,46 +63,52 @@
                 var id = $(p).data("id");
                 var productId = $(p).data("product");
                 var newId = $(this).val();
+                blockEditors(p);
                 $.post("/fea/change-order-item-product", { id: @Model.Id, itemId: id, productId: productId, newId: newId }, function (data) {
                     if (data.success == true) {
                         showSuccess("Позиция была успешно обновлена");
-                        $(p).data("id", p.id);
-                        $(p).data("product-id", p.productId);
+                        $(p).data("id", data.id);
+                        $(p).data("product", data.productId);
                     } else {
                         alert('Не удалось обновить позицию. Обновите страницу');
                     }
+                    unblockEditors(p);
                 }, 'json');
             });
             $(tr).find(".quantity-selector").change(function (e) {
                 recalc();
-                var p = $(this).parent().parent().parent();
+                var p = $(this).parent().parent();
                 var id = $(p).data("id");
                 var productId = $(p).data("product");
                 var quantity = $(this).val();
+                blockEditors(p);
                 $.post("/fea/change-order-item-quantity", { id: @Model.Id, itemId: id, productId: productId, quantity: quantity }, function (data) {
                     if (data.success == true) {
                         showSuccess("Позиция была успешно обновлена");
-                        p.data("id", p.id);
-                        p.data("product-id", p.productId);
+                        $(p).data("id", data.id);
+                        $(p).data("product", data.productId);
                     } else {
                         alert('Не удалось обновить позицию. Обновите страницу');
                     }
+                    unblockEditors(p);
                 }, 'json');
             });
             $(tr).find(".price-selector").change(function(e) {
                 recalc();
-                var p = $(this).parent().parent().parent();
+                var p = $(this).parent().parent();
                 var id = $(p).data("id");
                 var productId = $(p).data("product");
                 var price = $(this).val();
+                blockEditors(p);
                 $.post("/fea/change-order-item-price", { id: @Model.Id, itemId: id, productId: productId, price: price }, function (data) {
                     if (data.success == true) {
                         showSuccess("Позиция была успешно обновлена");
-                        p.data("id", p.id);
-                        p.data("product-id", p.productId);
+                        $(p).data("id", data.id);
+                        $(p).data("product", data.productId);
                     } else {
                         alert('Не удалось обновить позицию. Обновите страницу');
                     }
+                    unblockEditors(p);
                 }, 'json');
             });
             $(tr).find(".delete-row").click(function(e) {
@@ -144,8 +150,16 @@
             $("#total").text(fmtMoney(total));
         }
         
+        function blockEditors(parent) {
+            $(parent).find("input, select").attr("readonly", "readonly");
+        }
+        
+        function unblockEditors(parent) {
+            $(parent).find("input, select").attr("readonly", null);
+        }
+        
         function createRow() {
-            var html = '<tr data-id="0" data-product-type="0" class="item-row"><td>' + $("#products-sample").html() + '</td><td style="width: 100px"><input type="text" class="quantity-selector" value="0" style="width: 95px"/></td><td style="width: 100px"><input type="text" class="price-selector" value="0,00" style="width: 95px"/></td><td class="total-price" style="width: 10%">0,00 р.</td><td style="width: 45px"><a href="#" class="btn btn-xs btn-danger tip delete-row" title="Удалить позицию"><i class="icon12 i-remove-5"></i></a></td>';
+            var html = '<tr data-id="0" data-product="0" class="item-row"><td>' + $("#products-sample").html() + '</td><td style="width: 100px"><input type="text" class="quantity-selector" value="0" style="width: 95px"/></td><td style="width: 100px"><input type="text" class="price-selector" value="0,00" style="width: 95px"/></td><td class="total-price" style="width: 10%">0,00 р.</td><td style="width: 45px"><a href="#" class="btn btn-xs btn-danger tip delete-row" title="Удалить позицию"><i class="icon12 i-remove-5"></i></a></td>';
             var row = $(html);
             $(".summary-row").before(row);
             bindRow(row);
