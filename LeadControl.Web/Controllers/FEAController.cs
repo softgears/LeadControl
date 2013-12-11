@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 using LeadControl.Domain.Entities;
 using LeadControl.Domain.Enums;
 using LeadControl.Domain.Routing;
@@ -398,6 +399,43 @@ namespace LeadControl.Web.Controllers
             }
 
             return Json(new {success = true});
+        }
+
+        /// <summary>
+        /// Изменяет менеджера, назначенного на эту ВЭД заявку
+        /// </summary>
+        /// <param name="id">Идентификатор заявки</param>
+        /// <param name="managerId">Идентификатор нового менеджера</param>
+        /// <returns></returns>
+        [Route("fea/change-manager")][HttpPost][AuthorizationCheck(Permission.FEA)]
+        public ActionResult ChangeOrderManager(long id, long managerId)
+        {
+            // Ищем заявку
+            var availableProjects = CurrentUser.IsAdmin() ? DataContext.Projects.Select(p => p.Id) : CurrentUser.ProjectUsers.Select(pu => pu.ProjectId);
+            var order = DataContext.FEAOrders.FirstOrDefault(o => o.Id == id && availableProjects.Contains(o.ProjectId));
+            if (order == null)
+            {
+                ShowError("Такая заявка не найдена");
+                return RedirectToAction("Index");
+            }
+
+            if (managerId != order.ManagerId)
+            {
+                var newManager = DataContext.Users.FirstOrDefault(m => m.Id == managerId);
+                if (newManager == null)
+                {
+                    ShowError("Такой менеджер не найден");
+                    return RedirectToAction("Index");    
+                }
+
+                order.Manager.FEAOrders.Remove(order);
+                newManager.FEAOrders.Add(order);
+                DataContext.SubmitChanges();
+
+                ShowSuccess(string.Format("Менеджером заявки №{0} назначен {1}", id, newManager.GetFioSmall()));
+            }
+
+            return RedirectToAction("Edit", new {id});
         }
     }
 }

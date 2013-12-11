@@ -173,8 +173,46 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="change-manager-dialog" tabindex="-1" role="dialog" aria-labelledby="changeManagerLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Изменение менеджера ВЭД заявки</h4>
+            </div>
+            <div class="modal-body">
+                <form id="change-manager-form" method="POST" class="form-horizontal" role="form" action="/fea/change-manager">
+                    <input type="hidden" id="change-manager-order-id-field" name="id" value="-1"/>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label" for="change-order-status-field">Новый статус</label>
+                        <div class="col-lg-9">
+                            <select name="managerId" class="form-control">
+                                @foreach (var user in dc.Users)
+                                {
+                                    <option value="@user.Id">@user.GetFioSmall()</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                <button type="button" class="btn btn-primary" onclick="$('#change-manager-form').submit();">Изменить</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
 <script type="text/javascript">
     $(document).ready(function() {
         $("#projects-field, #users-field, #statuses-field").select2();
     });
+    function changeManager(id) {
+        $("#change-manager-order-id-field").val(id);
+        $("#change-manager-dialog").modal({
+            keyboard: true
+        });
+    }
 </script>
