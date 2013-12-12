@@ -103,6 +103,9 @@ namespace LeadControl.Domain.DAL
     partial void InsertFEAOrder(LeadControl.Domain.Entities.FEAOrder instance);
     partial void UpdateFEAOrder(LeadControl.Domain.Entities.FEAOrder instance);
     partial void DeleteFEAOrder(LeadControl.Domain.Entities.FEAOrder instance);
+    partial void InsertWarehouseProductChangement(LeadControl.Domain.Entities.WarehouseProductChangement instance);
+    partial void UpdateWarehouseProductChangement(LeadControl.Domain.Entities.WarehouseProductChangement instance);
+    partial void DeleteWarehouseProductChangement(LeadControl.Domain.Entities.WarehouseProductChangement instance);
     #endregion
 		
 		public LCDataContext() : 
@@ -332,6 +335,14 @@ namespace LeadControl.Domain.DAL
 			get
 			{
 				return this.GetTable<LeadControl.Domain.Entities.FEAOrder>();
+			}
+		}
+		
+		public System.Data.Linq.Table<LeadControl.Domain.Entities.WarehouseProductChangement> WarehouseProductChangements
+		{
+			get
+			{
+				return this.GetTable<LeadControl.Domain.Entities.WarehouseProductChangement>();
 			}
 		}
 	}
@@ -5879,6 +5890,8 @@ namespace LeadControl.Domain.Entities
 		
 		private System.Nullable<System.DateTime> _DateModified;
 		
+		private EntitySet<WarehouseProductChangement> _WarehouseProductChangements;
+		
 		private EntityRef<ProductType> _ProductType;
 		
 		private EntityRef<Warehouse> _Warehouse;
@@ -5909,6 +5922,7 @@ namespace LeadControl.Domain.Entities
 		
 		public WarehouseProduct()
 		{
+			this._WarehouseProductChangements = new EntitySet<WarehouseProductChangement>(new Action<WarehouseProductChangement>(this.attach_WarehouseProductChangements), new Action<WarehouseProductChangement>(this.detach_WarehouseProductChangements));
 			this._ProductType = default(EntityRef<ProductType>);
 			this._Warehouse = default(EntityRef<Warehouse>);
 			OnCreated();
@@ -6102,6 +6116,19 @@ namespace LeadControl.Domain.Entities
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="WarehouseProduct_WarehouseProductChangement", Storage="_WarehouseProductChangements", ThisKey="Id", OtherKey="WarehouseProductId")]
+		public EntitySet<WarehouseProductChangement> WarehouseProductChangements
+		{
+			get
+			{
+				return this._WarehouseProductChangements;
+			}
+			set
+			{
+				this._WarehouseProductChangements.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ProductType_WarehouseProduct", Storage="_ProductType", ThisKey="ProductId", OtherKey="Id", IsForeignKey=true)]
 		public ProductType ProductType
 		{
@@ -6188,6 +6215,18 @@ namespace LeadControl.Domain.Entities
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+		
+		private void attach_WarehouseProductChangements(WarehouseProductChangement entity)
+		{
+			this.SendPropertyChanging();
+			entity.WarehouseProduct = this;
+		}
+		
+		private void detach_WarehouseProductChangements(WarehouseProductChangement entity)
+		{
+			this.SendPropertyChanging();
+			entity.WarehouseProduct = null;
 		}
 	}
 	
@@ -7532,6 +7571,229 @@ namespace LeadControl.Domain.Entities
 		{
 			this.SendPropertyChanging();
 			entity.FEAOrder = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.WarehouseProductChangements")]
+	public partial class WarehouseProductChangement : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private long _Id;
+		
+		private long _WarehouseProductId;
+		
+		private short _Direction;
+		
+		private int _Amount;
+		
+		private string _Description;
+		
+		private System.Nullable<System.DateTime> _DateCreated;
+		
+		private EntityRef<WarehouseProduct> _WarehouseProduct;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(long value);
+    partial void OnIdChanged();
+    partial void OnWarehouseProductIdChanging(long value);
+    partial void OnWarehouseProductIdChanged();
+    partial void OnDirectionChanging(short value);
+    partial void OnDirectionChanged();
+    partial void OnAmountChanging(int value);
+    partial void OnAmountChanged();
+    partial void OnDescriptionChanging(string value);
+    partial void OnDescriptionChanged();
+    partial void OnDateCreatedChanging(System.Nullable<System.DateTime> value);
+    partial void OnDateCreatedChanged();
+    #endregion
+		
+		public WarehouseProductChangement()
+		{
+			this._WarehouseProduct = default(EntityRef<WarehouseProduct>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="BigInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public long Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_WarehouseProductId", DbType="BigInt NOT NULL")]
+		public long WarehouseProductId
+		{
+			get
+			{
+				return this._WarehouseProductId;
+			}
+			set
+			{
+				if ((this._WarehouseProductId != value))
+				{
+					if (this._WarehouseProduct.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnWarehouseProductIdChanging(value);
+					this.SendPropertyChanging();
+					this._WarehouseProductId = value;
+					this.SendPropertyChanged("WarehouseProductId");
+					this.OnWarehouseProductIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Direction", DbType="SmallInt NOT NULL")]
+		public short Direction
+		{
+			get
+			{
+				return this._Direction;
+			}
+			set
+			{
+				if ((this._Direction != value))
+				{
+					this.OnDirectionChanging(value);
+					this.SendPropertyChanging();
+					this._Direction = value;
+					this.SendPropertyChanged("Direction");
+					this.OnDirectionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Amount", DbType="Int NOT NULL")]
+		public int Amount
+		{
+			get
+			{
+				return this._Amount;
+			}
+			set
+			{
+				if ((this._Amount != value))
+				{
+					this.OnAmountChanging(value);
+					this.SendPropertyChanging();
+					this._Amount = value;
+					this.SendPropertyChanged("Amount");
+					this.OnAmountChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="NVarChar(MAX)")]
+		public string Description
+		{
+			get
+			{
+				return this._Description;
+			}
+			set
+			{
+				if ((this._Description != value))
+				{
+					this.OnDescriptionChanging(value);
+					this.SendPropertyChanging();
+					this._Description = value;
+					this.SendPropertyChanged("Description");
+					this.OnDescriptionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateCreated", DbType="DateTime")]
+		public System.Nullable<System.DateTime> DateCreated
+		{
+			get
+			{
+				return this._DateCreated;
+			}
+			set
+			{
+				if ((this._DateCreated != value))
+				{
+					this.OnDateCreatedChanging(value);
+					this.SendPropertyChanging();
+					this._DateCreated = value;
+					this.SendPropertyChanged("DateCreated");
+					this.OnDateCreatedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="WarehouseProduct_WarehouseProductChangement", Storage="_WarehouseProduct", ThisKey="WarehouseProductId", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public WarehouseProduct WarehouseProduct
+		{
+			get
+			{
+				return this._WarehouseProduct.Entity;
+			}
+			set
+			{
+				WarehouseProduct previousValue = this._WarehouseProduct.Entity;
+				if (((previousValue != value) 
+							|| (this._WarehouseProduct.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._WarehouseProduct.Entity = null;
+						previousValue.WarehouseProductChangements.Remove(this);
+					}
+					this._WarehouseProduct.Entity = value;
+					if ((value != null))
+					{
+						value.WarehouseProductChangements.Add(this);
+						this._WarehouseProductId = value.Id;
+					}
+					else
+					{
+						this._WarehouseProductId = default(long);
+					}
+					this.SendPropertyChanged("WarehouseProduct");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
 		}
 	}
 }

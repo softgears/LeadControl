@@ -73,6 +73,7 @@
     <Compile Include="Enums\FEAOrderStatus.cs" />
     <Compile Include="Enums\LeadOrderStatus.cs" />
     <Compile Include="Enums\UserStatus.cs" />
+    <Compile Include="Enums\WarehouseProductChangementDirection.cs" />
     <Compile Include="Infrastructure\InfrasstructureLayer.cs" />
     <Compile Include="Interfaces\Cache\IStringCache.cs" />
     <Compile Include="Interfaces\Notifications\IMailNotificationManager.cs" />

@@ -437,5 +437,92 @@ namespace LeadControl.Web.Controllers
 
             return RedirectToAction("Edit", new {id});
         }
+
+        /// <summary>
+        /// Обновляет изменение статуса указанной ВЭД заявки
+        /// </summary>
+        /// <param name="id">Идентификатор заявки</param>
+        /// <param name="newStatus">Новый статус</param>
+        /// <param name="comments">Комментарии к изменению</param>
+        /// <param name="updateWarehouse">Обновить остатки на указанном складе</param>
+        /// <returns></returns>
+        [Route("fea/change-order-status")][HttpPost][AuthorizationCheck(Permission.FEA)]
+        public ActionResult UpdateOrderStatus(long id, short newStatus, string comments, bool updateWarehouse)
+        {
+            // Ищем заявку
+            var availableProjects = CurrentUser.IsAdmin() ? DataContext.Projects.Select(p => p.Id) : CurrentUser.ProjectUsers.Select(pu => pu.ProjectId);
+            var order = DataContext.FEAOrders.FirstOrDefault(o => o.Id == id && availableProjects.Contains(o.ProjectId));
+            if (order == null)
+            {
+                ShowError("Такая заявка не найдена");
+                return RedirectToAction("Index");
+            }
+
+            // Проверяем можем ли мы изменить статус
+            if (!order.CanChangeStatus(CurrentUser))
+            {
+                ShowError("Нельзя изменить статус у этой заявки");
+                return RedirectToAction("Index");
+            }
+
+            // Изменяем статус
+            if (newStatus != order.Status)
+            {
+                order.Status = newStatus;
+                order.FEAOrdersStatusChangements.Add(new FEAOrdersStatusChangement()
+                {
+                    Status = newStatus,
+                    FEAOrder = order,
+                    Comments = comments,
+                    User = CurrentUser,
+                    DateCreated = DateTime.Now
+                });
+
+                ShowSuccess("Статус ВЭД заявки №{0} успешно изменен");
+
+                // Провряем, требуется ли обновить остатки на указанному складе
+                if (newStatus == (short) FEAOrderStatus.Completed && updateWarehouse && order.TargetWarehouse != null)
+                {
+                    // Обновляем остатки на складе
+                    foreach (var orderItem in order.FEAOrderItems)
+                    {
+                        // Ищем позицию на складе
+                        var warehouseItem =
+                            order.TargetWarehouse.WarehouseProducts.FirstOrDefault(
+                                wp => wp.ProductId == orderItem.ProductId);
+
+                        // Создаем если ее нет
+                        if (warehouseItem == null)
+                        {
+                            warehouseItem = new WarehouseProduct()
+                            {
+                                ProductId = orderItem.ProductId,
+                                DateCreated = DateTime.Now,
+                                WarehouseId = order.TargetWarehouse.Id,
+                                Price = orderItem.Price.HasValue ? orderItem.Price.Value : 0,
+                            };
+                            order.TargetWarehouse.WarehouseProducts.Add(warehouseItem);
+                        }
+
+                        // Добавляем начисление
+                        warehouseItem.Quantity = warehouseItem.Quantity + orderItem.Quantity;
+                        warehouseItem.WarehouseProductChangements.Add(new WarehouseProductChangement()
+                        {
+                            Amount = orderItem.Quantity,
+                            Direction = (short)WarehouseProductChangementDirection.Income,
+                            DateCreated = DateTime.Now,
+                            WarehouseProduct = warehouseItem,
+                            Description = String.Format("Автоматическое начисление остатков по выполнению ВЭД заявки №{0}",order.Id)
+                        });
+                    }
+
+                    ShowSuccess(string.Format("На склад {0} ({1}) успешно зачислены товары из ВЭД заявки №{2}", order.TargetWarehouse.Title, order.TargetWarehouse.City, order.Id));
+                }
+
+                DataContext.SubmitChanges();
+            }
+
+            return Redirect(string.Format("/fea/{0}/edit#history", order.Id));
+        }
     }
 }

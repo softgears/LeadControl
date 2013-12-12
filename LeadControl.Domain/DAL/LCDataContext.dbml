@@ -264,6 +264,7 @@
       <Column Name="OrderTime" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Column Name="DateCreated" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Column Name="DateModified" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="WarehouseProduct_WarehouseProductChangement" Member="WarehouseProductChangements" ThisKey="Id" OtherKey="WarehouseProductId" Type="WarehouseProductChangement" />
       <Association Name="ProductType_WarehouseProduct" Member="ProductType" ThisKey="ProductId" OtherKey="Id" Type="ProductType" IsForeignKey="true" />
       <Association Name="Warehouse_WarehouseProduct" Member="Warehouse" ThisKey="WarehouseId" OtherKey="Id" Type="Warehouse" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
@@ -329,6 +330,17 @@
       <Association Name="Project_FEAOrder" Member="Project" ThisKey="ProjectId" OtherKey="Id" Type="Project" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
       <Association Name="User_FEAOrder" Member="Manager" ThisKey="ManagerId" OtherKey="Id" Type="User" IsForeignKey="true" />
       <Association Name="Warehouse_FEAOrder" Member="TargetWarehouse" ThisKey="TargetWarehouseId" OtherKey="Id" Type="Warehouse" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.WarehouseProductChangements" Member="WarehouseProductChangements">
+    <Type Name="WarehouseProductChangement">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="WarehouseProductId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="Direction" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="Amount" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="DateCreated" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="WarehouseProduct_WarehouseProductChangement" Member="WarehouseProduct" ThisKey="WarehouseProductId" OtherKey="Id" Type="WarehouseProduct" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
 </Database>

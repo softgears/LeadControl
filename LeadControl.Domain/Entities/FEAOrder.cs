@@ -12,6 +12,7 @@
 
 using System;
 using System.Linq;
+using LeadControl.Domain.Enums;
 
 namespace LeadControl.Domain.Entities
 {
@@ -31,6 +32,26 @@ namespace LeadControl.Domain.Entities
                     ? DateCreated.Value
                     : FEAOrdersStatusChangements.OrderByDescending(fo => fo.DateCreated).First().DateCreated.Value;
             }
+        }
+
+        /// <summary>
+        /// Проверяет, может ли указанный пользователь изменять статус заявки
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public bool CanChangeStatus(User user)
+        {
+            if (user.IsAdmin())
+            {
+                return true;
+            }
+
+            if (ManagerId == user.Id && Status != (short) FEAOrderStatus.Completed)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

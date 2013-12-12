@@ -76,15 +76,127 @@
                 <a href="#" class="minimize"></a>
             </div>
             <div class="panel-body">
-                @if (Model.Status == (short) FEAOrderStatus.Gathering)
+                @if (Model.Status == (short)FEAOrderStatus.Gathering)
                 {
-                    @Html.Partial("FEAItemsEditor",Model)
+                    @Html.Partial("FEAItemsEditor", Model)
                 }
                 else
                 {
-                    @Html.Partial("FEAItemsTable",Model)
+                    @Html.Partial("FEAItemsTable", Model)
                 }
             </div>
         </div>
     </div>
 </div>
+<div class="row">
+    <a name="history"></a>
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="icon"><i class="icon20 i-history"></i></div>
+                <h4>История заявки</h4>
+                <a href="#" class="minimize"></a>
+            </div>
+            <div class="panel-body">
+                <div class="chat-layout">
+                    @if (Model.FEAOrdersStatusChangements.Count > 0)
+                    {
+                        <ul>
+                            @foreach (var changement in Model.FEAOrdersStatusChangements.OrderBy(s => s.DateCreated))
+                            {
+                                <li class="clearfix leftside">
+                                    <div class="user center" style="width: 115px">
+                                        <div class="avatar center" style="margin-top: 0px">
+                                            <img style="width: 60px; height: 60px" src="@changement.User.GetAvatar()" alt="@changement.User.GetFio()">
+                                        </div>
+                                        <span class="ago tip" title="@changement.DateCreated.FormatDateTime()">@changement.DateCreated.TimeAgo()</span>
+                                    </div>
+                                    <div class="message" style="margin-left: 120px; min-height: 75px">
+                                        <span class="name">@changement.User.GetFio()</span>
+                                        <span class="txt">
+                                            Статус изменен на <b>@(((FEAOrderStatus)changement.Status).GetEnumMemberName())</b>
+                                            @if (!String.IsNullOrEmpty(changement.Comments))
+                                            {
+                                                <br/>
+                                                @changement.Comments
+                                            }
+                                        </span>
+                                    </div>
+                                </li>
+                            }
+                        </ul>    
+                    }
+                    else
+                    {
+                        <p>
+                            Заявка еще не изменяла своего статуса
+                        </p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@if (Model.CanChangeStatus(ViewContext.CurrentUser()))
+{
+    <div class="row">
+        <a name="change"></a>
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="icon"><i class="icon20 i-stack-play"></i></div>
+                    <h4>Изменение статуса</h4>
+                    <a href="#" class="minimize"></a>
+                </div>
+                <div class="panel-body">
+                    <form action="/fea/change-order-status" id="change-status-form" method="POST" class="form-horizontal">
+                        @Html.Hidden("id",Model.Id)
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Новый статус</label>
+                            <div class="col-lg-10">
+                                <select name="newStatus" id="new-status-field">
+                                    @foreach (FEAOrderStatus status in Enum.GetValues(typeof (FEAOrderStatus)))
+                                    {
+                                        var s = (short) status;
+                                        <option value="@s" @(Model.Status == s ? "selected=selected":"")>@status.GetEnumMemberName()</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Комментарии к изменению</label>
+                            <div class="col-lg-10">
+                                <textarea class="form-control" name="comments" id="new-status-comments-field" placeholder="Введите дополнительные комментарии к изменению статуса заявки"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group" id="update-warehouse-wrapper" style="display: none">
+                            <label class="col-lg-2 control-label">Добавить остатки на склад</label>
+                            <div class="col-lg-10">
+                                @Html.CheckBox("updateWarehouse",false)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-lg-offset-2">
+                                <div class="pad-left15">
+                                    <button type="submit" class="btn btn-primary">Изменить статус</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#new-status-field").change(function() {
+                var val = parseInt($(this).val());
+                if (val == 100) {
+                    $("#update-warehouse-wrapper").show();
+                } else {
+                    $("#update-warehouse-wrapper").hide();
+                }
+            }).change();
+        });
+    </script>
+}
