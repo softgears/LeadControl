@@ -108,12 +108,6 @@ namespace LeadControl.Domain.DAL
     partial void DeleteWarehouseProductChangement(LeadControl.Domain.Entities.WarehouseProductChangement instance);
     #endregion
 		
-		public LCDataContext() : 
-				base(global::LeadControl.Domain.Properties.Settings.Default.LeadControlConnectionString, mappingSource)
-		{
-			OnCreated();
-		}
-		
 		public LCDataContext(string connection) : 
 				base(connection, mappingSource)
 		{

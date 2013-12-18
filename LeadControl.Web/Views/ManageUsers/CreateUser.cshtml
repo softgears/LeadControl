@@ -5,6 +5,8 @@
 @{
     ViewBag.Title = "Создание нового пользователя";
     Layout = "../Shared/AccountLayout.cshtml";
+    var projects = Locator.GetService<LCDataContext>().Projects.ToList();
+    var warehouses = Locator.GetService<LCDataContext>().Warehouses.OrderBy(w => w.Project.Title).ToList();
 }
 
 <form action="/manage/users/create" class="form-horizontal" id="new-user-form" method="POST">
@@ -15,7 +17,7 @@
             <a href="#" class="minimize"></a>
         </div>
         <div class="panel-body">
-            @Html.Hidden("Id",-1)
+            @Html.Hidden("Id", -1)
             <div class="page-header">
                 <h4>Основное</h4>
             </div>
@@ -75,6 +77,61 @@
                     <input class="form-control" name="Phone" type="text" id="user-phone-field" placeholder="Номер телефона">
                 </div>
             </div>
+            <div class="page-header">
+                <h4>Доступ к проектам</h4>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Проект
+                        </th>
+                        <th>Описание
+                        </th>
+                        <th>Доступ разрешен
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var project in projects)
+                    {
+                        <tr>
+                            <td>
+                                @project.Title
+                            </td>
+                            <td>
+                                @project.Description
+                            </td>
+                            <td>
+                                <input type="checkbox" name="project_@project.Id" value="true"/>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="page-header">
+                <h4>Доступ к складам</h4>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Склад</th>
+                        <th>Проект</th>
+                        <th>Доступ разрешен</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var warehouse in warehouses)
+                    {
+                        <tr>
+                            <td>@warehouse.Title (@warehouse.City)</td>
+                            <td>@warehouse.Project.Title</td>
+                            <td>
+                                <input type="checkbox" name="warehouse_@warehouse.Id" value="true"/>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
             <div class="form-group">
                 <div class="col-lg-offset-2">
                     <div class="pad-left15">
@@ -88,7 +145,7 @@
 </form>
 <script type="text/javascript">
     $("#new-user-form").validate({
-        rules: {            
+        rules: {
             Email: {
                 email: true,
                 remote: '/account/CheckLogin',

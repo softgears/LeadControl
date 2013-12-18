@@ -29,7 +29,7 @@ namespace LeadControl.Domain.Entities
             get
             {
                 return FEAOrdersStatusChangements.Count == 0
-                    ? DateCreated.Value
+                    ? (DateCreated.HasValue ? DateCreated.Value : DateTime.Now )
                     : FEAOrdersStatusChangements.OrderByDescending(fo => fo.DateCreated).First().DateCreated.Value;
             }
         }

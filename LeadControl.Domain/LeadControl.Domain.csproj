@@ -57,6 +57,9 @@
   <ItemGroup>
     <Compile Include="DAL\DataAccessLayer.cs" />
     <Compile Include="DAL\DataContextExt.cs" />
+    <Compile Include="DAL\LCDataContext.cs">
+      <DependentUpon>LCDataContext.dbml</DependentUpon>
+    </Compile>
     <Compile Include="DAL\LCDataContext.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

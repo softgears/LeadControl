@@ -1,5 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="LeadControl" EntityNamespace="LeadControl.Domain.Entities" ContextNamespace="LeadControl.Domain.DAL" Class="LCDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=.\SQLExpress;Initial Catalog=LeadControl;Integrated Security=True" SettingsObjectName="LeadControl.Domain.Properties.Settings" SettingsPropertyName="LeadControlConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.FEAOrderItems" Member="FEAOrderItems">
     <Type Name="FEAOrderItem">
       <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />

@@ -72,7 +72,7 @@ namespace LeadControl.Web.Controllers
         [Route("manage/users/create")]
         [HttpPost]
         [AuthorizationCheck(Permission.ManageUsers)]
-        public ActionResult Create(User user, string Password, string PasswordConfirm)
+        public ActionResult Create(User user, string Password, string PasswordConfirm, FormCollection collection)
         {
             // Реп
             if (DataContext.Users.Any(u => u.Email.ToLower() == user.Email.ToLower()))
@@ -84,6 +84,26 @@ namespace LeadControl.Web.Controllers
             // Регистрируем
             user.PasswordHash = PasswordUtils.GenerateMD5PasswordHash(Password);
             user.DateRegistred = DateTime.Now;
+
+            // Устанавливаем допуски для пользователя
+            foreach (var projectId in collection.AllKeys.Where(k => k.StartsWith("project_")).Select(key => Convert.ToInt64(key.Split('_')[1])))
+            {
+                user.ProjectUsers.Add(new ProjectUser()
+                {
+                    ProjectId = projectId,
+                    User = user,
+                    DateCreated = DateTime.Now
+                });
+            }
+            foreach (var warehouseId in collection.AllKeys.Where(k => k.StartsWith("warehouse_")).Select(key => Convert.ToInt64(key.Split('_')[1])))
+            {
+                user.WarehouseKeepers.Add(new WarehouseKeeper()
+                {
+                    WarehouseId = warehouseId,
+                    User = user,
+                    DateCreated = DateTime.Now
+                });
+            }
 
             DataContext.Users.InsertOnSubmit(user);
             DataContext.SubmitChanges();
