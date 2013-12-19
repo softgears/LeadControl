@@ -42,6 +42,11 @@ namespace LeadControl.Domain.Entities
         public const long ManageWarehouses = 5;
 
         /// <summary>
+        /// Привилегии менеджера
+        /// </summary>
+        public const long Manager = 6;
+
+        /// <summary>
         /// Доступ к ВЭД заявкам
         /// </summary>
         public const long FEA = 9;

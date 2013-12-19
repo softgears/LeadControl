@@ -71,10 +71,12 @@
     <Compile Include="Entities\Permission.cs" />
     <Compile Include="Entities\Role.cs" />
     <Compile Include="Entities\User.cs" />
+    <Compile Include="Enums\DeliveryTypes.cs" />
     <Compile Include="Enums\EnumDescriptionAttribute.cs" />
     <Compile Include="Enums\EnumUtils.cs" />
     <Compile Include="Enums\FEAOrderStatus.cs" />
     <Compile Include="Enums\LeadOrderStatus.cs" />
+    <Compile Include="Enums\PaymentTypes.cs" />
     <Compile Include="Enums\UserStatus.cs" />
     <Compile Include="Enums\WarehouseProductChangementDirection.cs" />
     <Compile Include="Infrastructure\InfrasstructureLayer.cs" />

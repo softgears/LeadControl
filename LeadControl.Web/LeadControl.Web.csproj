@@ -139,6 +139,7 @@
     <Compile Include="Controllers\ManageRolesController.cs" />
     <Compile Include="Controllers\ManageUsersController.cs" />
     <Compile Include="Controllers\ManageWarehousesController.cs" />
+    <Compile Include="Controllers\OrdersController.cs" />
     <Compile Include="Controllers\WarehousesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -152,6 +153,8 @@
     <Compile Include="Models\Manage\ProductsFiltrationModel.cs" />
     <Compile Include="Models\Manage\UsersFiltrationModel.cs" />
     <Compile Include="Models\Manage\WarehousesFiltrationModel.cs" />
+    <Compile Include="Models\Orders\LeadOrderFilterModel.cs" />
+    <Compile Include="Models\Orders\OrdersFiltrationModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -1268,6 +1271,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\PublishProfiles\Local FS.pubxml" />
+    <Content Include="Views\Orders\Index.cshtml" />
+    <Content Include="Views\Shared\LeadOrdersFilter.cshtml" />
+    <Content Include="Views\Shared\LeadOrderInfo.cshtml" />
+    <Content Include="Views\Orders\Create.cshtml" />
+    <Content Include="Views\Orders\EditOrderItems.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

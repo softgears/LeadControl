@@ -1,0 +1,121 @@
+﻿@using LeadControl.Domain.DAL
+@using LeadControl.Domain.Enums
+@using LeadControl.Domain.IoC
+@using LeadControl.Web.Classes.Ext
+@model LeadControl.Web.Models.Orders.LeadOrderFilterModel
+@{
+    var dc = Locator.GetService<LCDataContext>();
+    var availableProjects = ViewContext.CurrentUser().IsAdmin() ? dc.Projects.ToList() : ViewContext.CurrentUser().ProjectUsers.Select(pu => pu.Project).ToList();
+    var availableUsers = ViewContext.CurrentUser().IsAdmin() ? dc.Users.ToList() : (from project in availableProjects from user in project.ProjectUsers select user.User).ToList();
+    var availableProductTypes = ViewContext.CurrentUser().IsAdmin() ? dc.ProductTypes.ToList() : (from project in availableProjects from productType in project.ProductTypes select productType).ToList();
+}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="icon"><i class="icon20 i-filter-3"></i></div>
+                <h4>Фильтрация</h4>
+                <a href="#" class="minimize"></a>
+            </div>
+            <!-- End .panel-heading -->
+            <div class="panel-body">
+                <form action="@Model.CallbackUrl" id="filter-orders-form" method="GET" class="form-horizontal">
+                    @Html.HiddenFor(m => m.FilterData.Page)
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="term-field">Поисковая строка</label>
+                        <div class="col-lg-10">
+                            <input type="text" class="form-control" name="Term" id="term-field" placeholder="Введите фразу для поиска" value="@Model.FilterData.Term"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="projects-field">Проекты</label>
+                        <div class="col-lg-10">
+                            <select id="projects-field" name="ProjectIds" multiple="multiple">
+                                @foreach (var project in availableProjects)
+                                {
+                                    <option value="@project.Id" @(Model.FilterData.ProjectIds.Contains(project.Id) ? "selected=selected":"")>@project.Title</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="projects-field">Пользователи</label>
+                        <div class="col-lg-10">
+                            <select id="users-field" name="UsersIds" multiple="multiple">
+                                @foreach (var user in availableUsers)
+                                {
+                                    <option value="@user.Id" @(Model.FilterData.UsersIds.Contains(user.Id) ? "selected=selected":"")>@user.GetFio()</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="projects-field">Статусы</label>
+                        <div class="col-lg-10">
+                            <select id="statuses-field" name="Statuses" multiple="multiple">
+                                @foreach (LeadOrderStatus status in Enum.GetValues(typeof(LeadOrderStatus)))
+                                {
+                                    var st = (short) status;
+                                    <option value="@st" @(Model.FilterData.Statuses.Contains(st) ? "selected=selected":"")>@status.GetEnumMemberName()</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="projects-field">Типы доставки</label>
+                        <div class="col-lg-10">
+                            <select id="delivery-types-field" name="DeliveryTypes" multiple="multiple">
+                                @foreach (DeliveryTypes deliveryType in Enum.GetValues(typeof(DeliveryTypes)))
+                                {
+                                    var dt = (short) deliveryType;
+                                    <option value="@dt" @(Model.FilterData.DeliveryTypes.Contains(dt) ? "selected=selected":"")>@deliveryType.GetEnumMemberName()</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="projects-field">Типы оплаты</label>
+                        <div class="col-lg-10">
+                            <select id="payment-types-field" name="PaymentTypes" multiple="multiple">
+                                @foreach (DeliveryTypes paymentType in Enum.GetValues(typeof(DeliveryTypes)))
+                                {
+                                    var pt = (short) paymentType;
+                                    <option value="@pt" @(Model.FilterData.PaymentTypes.Contains(pt) ? "selected=selected":"")>@paymentType.GetEnumMemberName()</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="projects-field">Типы продуктов</label>
+                        <div class="col-lg-10">
+                            <select id="product-types-field" name="ProductTypesIds" multiple="multiple">
+                                @foreach (var productType in availableProductTypes)
+                                {
+                                    <option value="@productType.Id" @(Model.FilterData.ProductTypesIds.Contains(productType.Id) ? "selected=selected":"")>@productType.Title</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="projects-field">Полностью оплачен</label>
+                        <div class="col-lg-10">
+                            @Html.CheckBox("Payed",Model.FilterData.Payed)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-offset-2">
+                            <div class="pad-left15">
+                                <button type="submit" class="btn btn-primary">Фильтрация</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#users-field, #projects-field, #statuses-field, #delivery-types-field, #payment-types-field, #product-types-field").select2();
+    });
+</script>

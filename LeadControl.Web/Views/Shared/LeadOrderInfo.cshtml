@@ -1,0 +1,6 @@
+﻿@model LeadControl.Domain.Entities.LeadOrder
+
+@{
+    ViewBag.Title = string.Format("Информация о заказе №{0} для {1}", Model.Id, Model.Lead.ToString());
+    Layout = "AccountLayout.cshtml";
+}
