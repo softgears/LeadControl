@@ -195,5 +195,329 @@ namespace LeadControl.Web.Controllers
 
             return View(order);
         }
+
+        /// <summary>
+        /// Обрабатывает изменение типа продукта у позиции в заявки
+        /// </summary>
+        /// <param name="id">Идентификатор заказа</param>
+        /// <param name="itemId">Идентификатор позиции</param>
+        /// <param name="productId">Идентификатор типа продукта</param>
+        /// <param name="newId">Новый идентификатор продукта</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("orders/change-order-item-product")]
+        [AuthorizationCheck(Permission.Manager)]
+        public ActionResult ChangeOrderItemProduct(long id, long itemId, long productId, long newId)
+        {
+            var order = DataContext.LeadOrders.FirstOrDefault(o => o.Id == id);
+            if (order == null)
+            {
+                return Json(new
+                {
+                    success = false,
+                    msg = "Заказ не найден"
+                });
+            }
+
+            if (order.Status != (short) LeadOrderStatus.Initial)
+            {
+                return Json(new
+                {
+                    success = false,
+                    msg = "Нельзя редактировать позиции заказа в этом статусе"
+                });
+            }
+
+            // Ищем позицию
+            LeadOrderItem orderItem;
+            if (productId == 0 && itemId == 0)
+            {
+                orderItem = new LeadOrderItem()
+                {
+                    LeadOrder = order,
+                    Price = 0,
+                    Quantity = 0,
+                    ProductId = newId
+                };
+                order.LeadOrderItems.Add(orderItem);
+            }
+            else
+            {
+                orderItem = order.LeadOrderItems.FirstOrDefault(oi => oi.Id == itemId);
+                if (orderItem == null)
+                {
+                    return Json(new
+                    {
+                        success = false,
+                        msg = "Такая позиция не найдена"
+                    });
+                }
+
+                // Изменяем продукт
+                var productType = order.Project.ProductTypes.FirstOrDefault(pt => pt.Id == newId);
+                if (productType == null)
+                {
+                    return Json(new
+                    {
+                        success = false,
+                        msg = "Новый тип продукта не найден"
+                    });
+                }
+                orderItem.ProductType.LeadOrderItems.Remove(orderItem);
+                productType.LeadOrderItems.Add(orderItem);
+            }
+
+            // Пытаемся сохранить
+            try
+            {
+                DataContext.SubmitChanges();
+            }
+            catch (Exception e)
+            {
+                return Json(new
+                {
+                    success = false,
+                    msg = e.Message
+                });
+            }
+
+            // Отдаем успешный результат
+            return Json(new
+            {
+                success = true,
+                id = orderItem.Id,
+                productId = orderItem.ProductId
+            });
+        }
+
+        /// <summary>
+        /// Обрабатывает изменение количества у позиции в заказе
+        /// </summary>
+        /// <param name="id">Идентификатор заказа</param>
+        /// <param name="itemId">Идентификатор позиции</param>
+        /// <param name="productId">Идентификатор типа продукта</param>
+        /// <param name="quantity">Новый идентификатор продукта</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("orders/change-order-item-quantity")]
+        [AuthorizationCheck(Permission.Manager)]
+        public ActionResult ChangeOrderItemQuantity(long id, long itemId, long productId, int quantity)
+        {
+            var order = DataContext.LeadOrders.FirstOrDefault(o => o.Id == id);
+            if (order == null)
+            {
+                return Json(new
+                {
+                    success = false,
+                    msg = "Заказ не найден"
+                });
+            }
+
+            if (order.Status != (short)LeadOrderStatus.Initial)
+            {
+                return Json(new
+                {
+                    success = false,
+                    msg = "Нельзя редактировать позиции заказа в этом статусе"
+                });
+            }
+
+            // Ищем позицию
+            LeadOrderItem orderItem;
+            if (productId == 0 && itemId == 0)
+            {
+                orderItem = new LeadOrderItem()
+                {
+                    LeadOrder = order,
+                    Price = 0,
+                    Quantity = quantity,
+                    ProductId = order.Project.ProductTypes.First().Id
+                };
+                order.LeadOrderItems.Add(orderItem);
+            }
+            else
+            {
+                orderItem = order.LeadOrderItems.FirstOrDefault(oi => oi.Id == itemId);
+                if (orderItem == null)
+                {
+                    return Json(new
+                    {
+                        success = false,
+                        msg = "Такая позиция не найдена"
+                    });
+                }
+
+                // Изменяем количество
+                orderItem.Quantity = quantity;
+            }
+
+            // Пытаемся сохранить
+            try
+            {
+                DataContext.SubmitChanges();
+            }
+            catch (Exception e)
+            {
+                return Json(new
+                {
+                    success = false,
+                    msg = e.Message
+                });
+            }
+
+            // Отдаем успешный результат
+            return Json(new
+            {
+                success = true,
+                id = orderItem.Id,
+                productId = orderItem.ProductId
+            });
+        }
+
+        /// <summary>
+        /// Обрабатывает изменение количества у позиции в заявки
+        /// </summary>
+        /// <param name="id">Идентификатор заказа</param>
+        /// <param name="itemId">Идентификатор позиции</param>
+        /// <param name="productId">Идентификатор типа продукта</param>
+        /// <param name="price">Новая цена</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("orders/change-order-item-price")]
+        [AuthorizationCheck(Permission.Manager)]
+        public ActionResult ChangeOrderItemPrice(long id, long itemId, long productId, decimal price)
+        {
+            var order = DataContext.LeadOrders.FirstOrDefault(o => o.Id == id);
+            if (order == null)
+            {
+                return Json(new
+                {
+                    success = false,
+                    msg = "Заказ не найден"
+                });
+            }
+
+            if (order.Status != (short)LeadOrderStatus.Initial)
+            {
+                return Json(new
+                {
+                    success = false,
+                    msg = "Нельзя редактировать позиции заказа в этом статусе"
+                });
+            }
+
+            // Ищем позицию
+            LeadOrderItem orderItem;
+            if (productId == 0 && itemId == 0)
+            {
+                orderItem = new LeadOrderItem()
+                {
+                    LeadOrder = order,
+                    Price = price,
+                    Quantity = 0,
+                    ProductId = order.Project.ProductTypes.First().Id
+                };
+                order.LeadOrderItems.Add(orderItem);
+            }
+            else
+            {
+                orderItem = order.LeadOrderItems.FirstOrDefault(oi => oi.Id == itemId);
+                if (orderItem == null)
+                {
+                    return Json(new
+                    {
+                        success = false,
+                        msg = "Такая позиция не найдена"
+                    });
+                }
+
+                // Изменяем количество
+                orderItem.Price = price;
+            }
+
+            // Пытаемся сохранить
+            try
+            {
+                DataContext.SubmitChanges();
+            }
+            catch (Exception e)
+            {
+                return Json(new
+                {
+                    success = false,
+                    msg = e.Message
+                });
+            }
+
+            // Отдаем успешный результат
+            return Json(new
+            {
+                success = true,
+                id = orderItem.Id,
+                productId = orderItem.ProductId
+            });
+        }
+
+        /// <summary>
+        /// Обрабатывает удаление указанной позиции в заявке
+        /// </summary>
+        /// <param name="id">Идентификатор заявки</param>
+        /// <param name="itemId">Идентификатор позиции</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("orders/delete-order-item")]
+        [AuthorizationCheck(Permission.Manager)]
+        public ActionResult DeleteOrderItem(long id, long itemId)
+        {
+            // Ищем заказ
+            var order = DataContext.LeadOrders.FirstOrDefault(o => o.Id == id);
+            if (order == null)
+            {
+                return Json(new
+                {
+                    success = false,
+                    msg = "Заказ не найден"
+                });
+            }
+
+            if (order.Status != (short)LeadOrderStatus.Initial)
+            {
+                return Json(new
+                {
+                    success = false,
+                    msg = "Нельзя редактировать позиции заказа в этом статусе"
+                });
+            }
+
+            // Ищем позицию
+            var orderItem = order.LeadOrderItems.FirstOrDefault(oi => oi.Id == itemId);
+            if (orderItem == null)
+            {
+                return Json(new
+                {
+                    success = false,
+                    msg = "Такая позиция не найдена"
+                });
+            }
+
+            // Удаляем
+            DataContext.LeadOrderItems.DeleteOnSubmit(orderItem);
+
+            // Пытаемся сохранить
+            try
+            {
+                DataContext.SubmitChanges();
+            }
+            catch (Exception e)
+            {
+                return Json(new
+                {
+                    success = false,
+                    msg = e.Message
+                });
+            }
+
+            return Json(new { success = true });
+        }
     }
 }

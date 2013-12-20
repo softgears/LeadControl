@@ -1276,6 +1276,7 @@
     <Content Include="Views\Shared\LeadOrderInfo.cshtml" />
     <Content Include="Views\Orders\Create.cshtml" />
     <Content Include="Views\Orders\EditOrderItems.cshtml" />
+    <Content Include="Views\Orders\OrderItemsEditor.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
