@@ -87,18 +87,6 @@
       <Association Name="LeadOrder_LeadOrdersComment" Member="LeadOrder" ThisKey="OrderId" OtherKey="Id" Type="LeadOrder" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
-  <Table Name="dbo.LeadOrderStatusChangements" Member="LeadOrderStatusChangements">
-    <Type Name="LeadOrderStatusChangement">
-      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="OrderId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
-      <Column Name="AuthorId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
-      <Column Name="Status" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
-      <Column Name="Comments" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
-      <Column Name="DateCreated" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Association Name="User_LeadOrderStatusChangement" Member="User" ThisKey="AuthorId" OtherKey="Id" Type="User" IsForeignKey="true" />
-      <Association Name="LeadOrder_LeadOrderStatusChangement" Member="LeadOrder" ThisKey="OrderId" OtherKey="Id" Type="LeadOrder" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.LeadPassportInfo" Member="LeadPassportInfos">
     <Type Name="LeadPassportInfo">
       <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -217,14 +205,14 @@
       <Association Name="User_FEAOrdersStatusChangement" Member="FEAOrdersStatusChangements" ThisKey="Id" OtherKey="AuthorId" Type="FEAOrdersStatusChangement" />
       <Association Name="User_LeadOrderDocument" Member="LeadOrderDocuments" ThisKey="Id" OtherKey="UploadedBy" Type="LeadOrderDocument" />
       <Association Name="User_LeadOrdersComment" Member="LeadOrdersComments" ThisKey="Id" OtherKey="OrderId" Type="LeadOrdersComment" />
-      <Association Name="User_LeadOrderStatusChangement" Member="LeadOrderStatusChangements" ThisKey="Id" OtherKey="AuthorId" Type="LeadOrderStatusChangement" />
       <Association Name="User_ProjectUser" Member="ProjectUsers" ThisKey="Id" OtherKey="UserId" Type="ProjectUser" />
       <Association Name="User_WarehouseKeeper" Member="WarehouseKeepers" ThisKey="Id" OtherKey="WarehouseId" Type="WarehouseKeeper" />
       <Association Name="User_FEAOrder" Member="FEAOrders" ThisKey="Id" OtherKey="ManagerId" Type="FEAOrder" />
-      <Association Name="User_LeadOrderAssignedUserChangement" Member="LeadOrderAssignedUserChangements" ThisKey="Id" OtherKey="NewAssignedUserId" Type="LeadOrderAssignedUserChangement" />
-      <Association Name="User_LeadOrderAssignedUserChangement1" Member="LeadOrderAuthoredAssignedUserChangements" ThisKey="Id" OtherKey="AuthorId" Type="LeadOrderAssignedUserChangement" />
       <Association Name="User_LeadOrderPayment" Member="LeadOrderPayments" ThisKey="Id" OtherKey="AuthorId" Type="LeadOrderPayment" />
       <Association Name="User_LeadOrder" Member="LeadOrders" ThisKey="Id" OtherKey="AssignedUserId" Type="LeadOrder" />
+      <Association Name="User_LeadOrderChangement" Member="LeadOrderAuthoredChangements" ThisKey="Id" OtherKey="AuthorId" Type="LeadOrderChangement" />
+      <Association Name="User_LeadOrderChangement1" Member="LeadOrderChangementsWithNewAssignedUser" ThisKey="Id" OtherKey="NewAssignedUserId" Type="LeadOrderChangement" />
+      <Association Name="User_LeadOrderChangement2" Member="LeadOrderChangementsWithOldAssignedUser" ThisKey="Id" OtherKey="OldAssignedUserId" Type="LeadOrderChangement" />
       <Association Name="Role_User" Member="Role" ThisKey="RoleId" OtherKey="Id" Type="Role" IsForeignKey="true" />
     </Type>
   </Table>
@@ -289,6 +277,8 @@
       <Association Name="Warehouse_WarehouseProduct" Member="WarehouseProducts" ThisKey="Id" OtherKey="WarehouseId" Type="WarehouseProduct" />
       <Association Name="Warehouse_FEAOrder" Member="FEAOrders" ThisKey="Id" OtherKey="TargetWarehouseId" Type="FEAOrder" />
       <Association Name="Warehouse_LeadOrder" Member="LeadOrders" ThisKey="Id" OtherKey="AssignedWarehouseId" Type="LeadOrder" />
+      <Association Name="Warehouse_LeadOrderChangement" Member="LeadOrderChangementsWithNewWarehouse" ThisKey="Id" OtherKey="NewWarehouseId" Type="LeadOrderChangement" />
+      <Association Name="Warehouse_LeadOrderChangement1" Member="LeadOrderChangementsWithOldWarehouse" ThisKey="Id" OtherKey="OldWarehouseId" Type="LeadOrderChangement" />
       <Association Name="Project_Warehouse" Member="Project" ThisKey="ProjectId" OtherKey="Id" Type="Project" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
@@ -317,19 +307,6 @@
       <Column Name="Description" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Column Name="DateCreated" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Association Name="WarehouseProduct_WarehouseProductChangement" Member="WarehouseProduct" ThisKey="WarehouseProductId" OtherKey="Id" Type="WarehouseProduct" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.LeadOrderAssignedUserChangements" Member="LeadOrderAssignedUserChangements">
-    <Type Name="LeadOrderAssignedUserChangement">
-      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="LeadOrderId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
-      <Column Name="AuthorId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
-      <Column Name="NewAssignedUserId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
-      <Column Name="Comments" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Column Name="DateCreated" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Association Name="User_LeadOrderAssignedUserChangement" Member="AssignedUser" ThisKey="NewAssignedUserId" OtherKey="Id" Type="User" IsForeignKey="true" />
-      <Association Name="User_LeadOrderAssignedUserChangement1" Member="Author" ThisKey="AuthorId" OtherKey="Id" Type="User" IsForeignKey="true" />
-      <Association Name="LeadOrder_LeadOrderAssignedUserChangement" Member="LeadOrder" ThisKey="LeadOrderId" OtherKey="Id" Type="LeadOrder" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
   <Table Name="dbo.LeadOrderPayments" Member="LeadOrderPayments">
@@ -362,13 +339,33 @@
       <Association Name="LeadOrder_LeadOrderDocument" Member="LeadOrderDocuments" ThisKey="Id" OtherKey="OrderId" Type="LeadOrderDocument" />
       <Association Name="LeadOrder_LeadOrderItem" Member="LeadOrderItems" ThisKey="Id" OtherKey="OrderId" Type="LeadOrderItem" />
       <Association Name="LeadOrder_LeadOrdersComment" Member="LeadOrdersComments" ThisKey="Id" OtherKey="OrderId" Type="LeadOrdersComment" />
-      <Association Name="LeadOrder_LeadOrderStatusChangement" Member="LeadOrderStatusChangements" ThisKey="Id" OtherKey="OrderId" Type="LeadOrderStatusChangement" />
-      <Association Name="LeadOrder_LeadOrderAssignedUserChangement" Member="LeadOrderAssignedUserChangements" ThisKey="Id" OtherKey="LeadOrderId" Type="LeadOrderAssignedUserChangement" />
       <Association Name="LeadOrder_LeadOrderPayment" Member="LeadOrderPayments" ThisKey="Id" OtherKey="LeadOrderId" Type="LeadOrderPayment" />
+      <Association Name="LeadOrder_LeadOrderChangement" Member="LeadOrderChangements" ThisKey="Id" OtherKey="LeadOrderId" Type="LeadOrderChangement" />
       <Association Name="Lead_LeadOrder" Member="Lead" ThisKey="LeadId" OtherKey="Id" Type="Lead" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
       <Association Name="Project_LeadOrder" Member="Project" ThisKey="ProjectId" OtherKey="Id" Type="Project" IsForeignKey="true" />
       <Association Name="User_LeadOrder" Member="User" ThisKey="AssignedUserId" OtherKey="Id" Type="User" IsForeignKey="true" />
       <Association Name="Warehouse_LeadOrder" Member="Warehouse" ThisKey="AssignedWarehouseId" OtherKey="Id" Type="Warehouse" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.LeadOrderChangements" Member="LeadOrderChangements">
+    <Type Name="LeadOrderChangement">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="LeadOrderId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="AuthorId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="OldStatus" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="NewStatus" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="OldAssignedUserId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="NewAssignedUserId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="OldWarehouseId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="NewWarehouseId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="Comments" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="DateCreated" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="LeadOrder_LeadOrderChangement" Member="LeadOrder" ThisKey="LeadOrderId" OtherKey="Id" Type="LeadOrder" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="User_LeadOrderChangement" Member="Author" ThisKey="AuthorId" OtherKey="Id" Type="User" IsForeignKey="true" />
+      <Association Name="User_LeadOrderChangement1" Member="NewAssignedUser" ThisKey="NewAssignedUserId" OtherKey="Id" Type="User" IsForeignKey="true" />
+      <Association Name="User_LeadOrderChangement2" Member="OldAssignedUser" ThisKey="OldAssignedUserId" OtherKey="Id" Type="User" IsForeignKey="true" />
+      <Association Name="Warehouse_LeadOrderChangement" Member="NewWarehouse" ThisKey="NewWarehouseId" OtherKey="Id" Type="Warehouse" IsForeignKey="true" />
+      <Association Name="Warehouse_LeadOrderChangement1" Member="OldWarehouse" ThisKey="OldWarehouseId" OtherKey="Id" Type="Warehouse" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

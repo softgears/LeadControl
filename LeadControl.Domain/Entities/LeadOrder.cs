@@ -27,5 +27,19 @@ namespace LeadControl.Domain.Entities
         {
             return LeadOrderItems.Sum(oi => oi.Price*oi.Quantity);
         }
+
+        public bool CanChangeStatus(User user)
+        {
+            if (user.IsAdmin())
+            {
+                return true;
+            }
+            if (user.Id == AssignedUserId ||
+                (LeadOrderChangements.Count > 0 && LeadOrderChangements.First().AuthorId == user.Id))
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

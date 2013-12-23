@@ -119,6 +119,7 @@
                         $.post("/fea/delete-order-item", { id: @Model.Id, itemId: id }, function(data) {
                             if (data.success == true) {
                                 showSuccess("Позиция была успешно удалена из заявки");
+                                recalc();
                             } else {
                                 alert('Не удалось удалить позицию. Обновите страницу');
                             }

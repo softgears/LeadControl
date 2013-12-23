@@ -15,6 +15,9 @@
             </div>
             <div class="panel-body">
                 @Html.Partial("OrderItemsEditor",Model)
+                <p style="margin-top: 10px">
+                    <a class="btn btn-success tip" title="Завершить редактировать позиции заявки и перейти к редактированию информации по доставке" href="/orders/create-info/@Model.Id">Продолжить</a>
+                </p>
             </div>
         </div>
     </div>

@@ -33,6 +33,9 @@
                                 ИД
                             </th>
                             <th>
+                                Лид
+                            </th>
+                            <th>
                                 Проект
                             </th>
                             <th>
@@ -65,7 +68,7 @@
                         @if (Model.Fetched.Count == 0)
                         {
                             <tr>
-                                <td colspan="10">
+                                <td colspan="11">
                                     Не найдено заказов
                                 </td>
                             </tr>
@@ -79,6 +82,9 @@
                                 <tr>
                                     <td>
                                         <a href="/orders/@order.Id/info">@order.Id</a>
+                                    </td>
+                                    <td>
+                                        @order.Lead.ToString()
                                     </td>
                                     <td>
                                         @order.Project.Title
@@ -102,7 +108,7 @@
                                         }
                                         else
                                         {
-                                            <text>нет (осталось @String.Format("{0:c}",(sum - payedSum))</text>
+                                            <text>нет (осталось @String.Format("{0:c}",(sum - payedSum)))</text>
                                         }
                                     </td>
                                     <td>
@@ -111,12 +117,8 @@
                                     <td>
                                         <span class="tip" title="@order.DateModified.FormatDateTime()">@order.DateModified.TimeAgo()</span>
                                     </td>
-                                    <td style="width: 90px">
-                                        <a href="/orders/@order.Id/edit" class="btn btn-xs btn-info tip" title="Карточка заказа"><i class="icon12 i-info"></i></a>  
-                                        @if (order.Status != (short)LeadOrderStatus.Completed || ViewContext.CurrentUser().IsAdmin())
-                                        {
-                                            <a href="javascript:changeStatus(@order.Id)" class="btn btn-xs btn-warning tip" title="Изменить статус и передать пользователю"><i class="icon12 i-user-plus"></i></a>    
-                                        }
+                                    <td style="width: 45px">
+                                        <a href="/orders/@order.Id/info" class="btn btn-xs btn-info tip" title="Карточка заказа"><i class="icon12 i-info"></i></a> 
                                     </td>
                                 </tr>
                             }

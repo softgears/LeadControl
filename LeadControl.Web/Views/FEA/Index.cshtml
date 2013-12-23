@@ -36,7 +36,7 @@
                             <select id="projects-field" name="ProjectIds" multiple="multiple">
                                 @foreach (var project in availableProjects)
                                 {
-                                    <option value="@project.Id" @(Model.ProjectIds.Contains(project.Id) ? "selected=selected":"")>@project.Title</option>
+                                    <option value="@project.Id" @(Model.ProjectIds.Contains(project.Id) ? "selected=selected" : "")>@project.Title</option>
                                 }
                             </select>
                         </div>
@@ -47,7 +47,7 @@
                             <select id="users-field" name="UserIds" multiple="multiple">
                                 @foreach (var user in availableUsers)
                                 {
-                                    <option value="@user.Id" @(Model.UserIds.Contains(user.Id) ? "selected=selected":"")>@user.GetFio()</option>
+                                    <option value="@user.Id" @(Model.UserIds.Contains(user.Id) ? "selected=selected" : "")>@user.GetFio()</option>
                                 }
                             </select>
                         </div>
@@ -58,8 +58,8 @@
                             <select id="statuses-field" name="Statuses" multiple="multiple">
                                 @foreach (FEAOrderStatus status in Enum.GetValues(typeof(FEAOrderStatus)))
                                 {
-                                    var st = (short) status;
-                                    <option value="@st" @(Model.Statuses.Contains(st) ? "selected=selected":"")>@status.GetEnumMemberName()</option>
+                                    var st = (short)status;
+                                    <option value="@st" @(Model.Statuses.Contains(st) ? "selected=selected" : "")>@status.GetEnumMemberName()</option>
                                 }
                             </select>
                         </div>
@@ -87,43 +87,33 @@
             <!-- End .panel-heading -->
             <div class="panel-body">
                 <p>
-                    <a href="/fea/create" class="btn btn-info tip" title="Создание новой ВЭД заявки">Создать ВЭД заявку</a>    
+                    <a href="/fea/create" class="btn btn-info tip" title="Создание новой ВЭД заявки">Создать ВЭД заявку</a>
                 </p>
                 <table class="table table-striped table-bordered table-hover" id="leads-table">
                     <thead>
                         <tr>
-                            <th>
-                                ИД
+                            <th>ИД
                             </th>
-                            <th>
-                                Проект
+                            <th>Проект
                             </th>
-                            <th>
-                                Менеджер
+                            <th>Менеджер
                             </th>
-                            <th>
-                                Статус
+                            <th>Статус
                             </th>
-                            <th>
-                                Товаров
+                            <th>Товаров
                             </th>
-                            <th>
-                                Стоимость
+                            <th>Стоимость
                             </th>
-                            <th>
-                                Дата обновления
+                            <th>Дата обновления
                             </th>
-                            <th>
-                                
-                            </th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         @if (Model.Fetched.Count == 0)
                         {
                             <tr>
-                                <td colspan="8">
-                                    Не найдено заявок
+                                <td colspan="8">Не найдено заявок
                                 </td>
                             </tr>
                         }
@@ -131,40 +121,40 @@
                         {
                             foreach (var order in Model.Fetched)
                             {
-                                <tr>
-                                    <td>
-                                        <a href="/fea/@order.Id/edit">@order.Id</a>
-                                    </td>
-                                    <td>
-                                        @order.Project.Title
-                                    </td>
-                                    <td>
-                                        @order.Manager.GetFioSmall()
-                                    </td>
-                                    <td>
-                                        @(((FEAOrderStatus)order.Status).GetEnumMemberName())
-                                    </td>
-                                    <td>
-                                        @order.FEAOrderItems.Sum(oi => oi.Quantity) шт
-                                    </td>
-                                    <td>
-                                        @String.Format("{0:c}",order.FEAOrderItems.Sum(oi => oi.Quantity * oi.Price))
-                                    </td>
-                                    <td>
-                                        @order.LastUpdate.FormatDateTime()
-                                    </td>
-                                    <td style="width: 135px">
-                                        <a href="/fea/@order.Id/edit" class="btn btn-xs btn-info tip" title="Карточка заявки"><i class="icon12 i-info"></i></a>    
-                                        @if (ViewContext.CurrentUser().IsAdmin())
+                            <tr>
+                                <td>
+                                    <a href="/fea/@order.Id/edit">@order.Id</a>
+                                </td>
+                                <td>
+                                    @order.Project.Title
+                                </td>
+                                <td>
+                                    @order.Manager.GetFioSmall()
+                                </td>
+                                <td>
+                                    @(((FEAOrderStatus)order.Status).GetEnumMemberName())
+                                </td>
+                                <td>
+                                    @order.FEAOrderItems.Sum(oi => oi.Quantity) шт
+                                </td>
+                                <td>
+                                    @String.Format("{0:c}", order.FEAOrderItems.Sum(oi => oi.Quantity * oi.Price))
+                                </td>
+                                <td>
+                                    @order.LastUpdate.FormatDateTime()
+                                </td>
+                                <td style="width: 135px">
+                                    <a href="/fea/@order.Id/edit" class="btn btn-xs btn-info tip" title="Карточка заявки"><i class="icon12 i-info"></i></a>
+                                    @if (ViewContext.CurrentUser().IsAdmin())
+                                    {
+                                        <a href="javascript:changeManager(@order.Id)" class="btn btn-xs btn-warning tip" title="Назначить менеджера"><i class="icon12 i-user-plus"></i></a>    
+                                        if (order.Status == (short)FEAOrderStatus.Gathering)
                                         {
-                                            <a href="javascript:changeManager(@order.Id)" class="btn btn-xs btn-warning tip" title="Назначить менеджера"><i class="icon12 i-user-plus"></i></a>    
-                                            if (order.Status == (short) FEAOrderStatus.Gathering)
-                                            {
-                                                <a href="/fea/@order.Id/delete" class="btn btn-xs btn-danger tip" onclick="return confirm('Вы действительно хотите удалить эту заявку?')" title="Удалить заявку"><i class="icon12 i-remove-5"></i></a>             
-                                            }
+                                        <a href="/fea/@order.Id/delete" class="btn btn-xs btn-danger tip" onclick="return confirm('Вы действительно хотите удалить эту заявку?')" title="Удалить заявку"><i class="icon12 i-remove-5"></i></a>             
                                         }
-                                    </td>
-                                </tr>
+                                    }
+                                </td>
+                            </tr>
                             }
                         }
                     </tbody>
@@ -182,7 +172,7 @@
             </div>
             <div class="modal-body">
                 <form id="change-manager-form" method="POST" class="form-horizontal" role="form" action="/fea/change-manager">
-                    <input type="hidden" id="change-manager-order-id-field" name="id" value="-1"/>
+                    <input type="hidden" id="change-manager-order-id-field" name="id" value="-1" />
                     <div class="form-group">
                         <label class="col-lg-3 control-label" for="change-order-status-field">Новый статус</label>
                         <div class="col-lg-9">
@@ -206,7 +196,7 @@
     <!-- /.modal-dialog -->
 </div>
 <script type="text/javascript">
-    $(document).ready(function() {
+    $(document).ready(function () {
         $("#projects-field, #users-field, #statuses-field").select2();
     });
     function changeManager(id) {

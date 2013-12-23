@@ -54,6 +54,11 @@ namespace LeadControl.Web.Models.Orders
         /// </summary>
         public bool Payed { get; set; }
 
+        /// <summary>
+        /// Идентификаторы лидов
+        /// </summary>
+        public long[] LeadIds { get; set; }
+
         public OrdersFiltrationModel()
         {
             ProjectIds = new long[]{};
@@ -62,6 +67,7 @@ namespace LeadControl.Web.Models.Orders
             DeliveryTypes = new short[]{};
             PaymentTypes = new short[]{};
             ProductTypesIds = new long[]{};
+            LeadIds = new long[]{};
         }
     }
 }

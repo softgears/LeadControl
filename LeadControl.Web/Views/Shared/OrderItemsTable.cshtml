@@ -1,0 +1,42 @@
+﻿@model LeadControl.Domain.Entities.LeadOrder
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Товар</th>
+            <th>Количество</th>
+            <th>Цена</th>
+            <th>Стоимость</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            var counter = 0;
+        }
+        @foreach (var orderItem in Model.LeadOrderItems)
+        {
+            counter++;
+            <tr>
+                <td>
+                    @counter
+                </td>
+                <td>
+                    @orderItem.ProductType.Title     
+                </td>
+                <td>
+                    @orderItem.Quantity шт
+                </td>
+                <td>
+                    @String.Format("{0:c}",orderItem.Price)
+                </td>
+                <td>
+                    @String.Format("{0:c}",orderItem.Price*orderItem.Quantity)
+                </td>
+            </tr>
+        }
+        <tr>
+            <td colspan="5" class="center">Общая стоимость <span id="total">@String.Format("{0:c}",Model.LeadOrderItems.Sum(oi => oi.Price*oi.Quantity))</span></td>
+        </tr>
+    </tbody>
+</table>

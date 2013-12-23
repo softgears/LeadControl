@@ -47,6 +47,11 @@ namespace LeadControl.Domain.Entities
         public const long Manager = 6;
 
         /// <summary>
+        /// Привилегии бухгалтера
+        /// </summary>
+        public const long Finances = 7;
+
+        /// <summary>
         /// Доступ к ВЭД заявкам
         /// </summary>
         public const long FEA = 9;

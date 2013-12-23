@@ -30,7 +30,7 @@
         {
             <tr data-id="@orderItem.Id" data-product="@orderItem.ProductId" class="item-row">
                 <td>
-                    <select class="product-type-selector" style="width: 100%" class="select2">
+                    <select class="product-type-selector select2" style="width: 100%">
                         @foreach (var product in products)
                         {
                             <option value="@product.Id" @(orderItem.ProductId == product.Id ? "selected=selected":"")>@product.Title</option>
@@ -120,6 +120,7 @@
                         $.post("/orders/delete-order-item", { id: @Model.Id, itemId: id }, function(data) {
                             if (data.success == true) {
                                 showSuccess("Позиция была успешно удалена из заявки");
+                                recalc();
                             } else {
                                 alert('Не удалось удалить позицию. Обновите страницу');
                             }

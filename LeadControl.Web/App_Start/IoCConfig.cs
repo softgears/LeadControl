@@ -12,6 +12,7 @@
 
 using LeadControl.Domain.DAL;
 using LeadControl.Domain.Infrastructure;
+using LeadControl.Domain.Interfaces.Notifications;
 using LeadControl.Domain.IoC;
 using LeadControl.Web.Classes;
 
@@ -28,6 +29,7 @@ namespace LeadControl.Web
         public static void Init()
         {
             Locator.Init(new DataAccessLayer(), new InfrasstructureLayer(), new WebLayer());
+            Locator.GetService<IMailNotificationManager>().Init();
         }
     }
 }

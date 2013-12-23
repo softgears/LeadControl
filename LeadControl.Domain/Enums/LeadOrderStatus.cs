@@ -23,10 +23,34 @@ namespace LeadControl.Domain.Enums
         Initial = 1,
 
         /// <summary>
-        /// Заказ оплачен
+        /// Заказ введен в систему
         /// </summary>
-        [EnumDescription("Оплачен")]
-        Payed = 250,
+        [EnumDescription("Сформирован")]
+        Collected = 2,
+
+        /// <summary>
+        /// Заказ введен в систему
+        /// </summary>
+        [EnumDescription("Подтвержден")]
+        Confirmed = 3,
+
+        /// <summary>
+        /// Заказ введен в систему
+        /// </summary>
+        [EnumDescription("Ожидание оплаты")]
+        WaitingPayment = 10,
+
+        /// <summary>
+        /// Заказ введен в систему
+        /// </summary>
+        [EnumDescription("Подготовка к отправке")]
+        Preparing = 200,
+
+        /// <summary>
+        /// Заказ введен в систему
+        /// </summary>
+        [EnumDescription("Отправлен")]
+        Sent = 250,
 
         /// <summary>
         /// Заказ завершен

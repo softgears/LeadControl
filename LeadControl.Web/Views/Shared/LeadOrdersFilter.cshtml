@@ -5,6 +5,7 @@
 @model LeadControl.Web.Models.Orders.LeadOrderFilterModel
 @{
     var dc = Locator.GetService<LCDataContext>();
+    var leads = dc.Leads;
     var availableProjects = ViewContext.CurrentUser().IsAdmin() ? dc.Projects.ToList() : ViewContext.CurrentUser().ProjectUsers.Select(pu => pu.Project).ToList();
     var availableUsers = ViewContext.CurrentUser().IsAdmin() ? dc.Users.ToList() : (from project in availableProjects from user in project.ProjectUsers select user.User).ToList();
     var availableProductTypes = ViewContext.CurrentUser().IsAdmin() ? dc.ProductTypes.ToList() : (from project in availableProjects from productType in project.ProductTypes select productType).ToList();
@@ -25,6 +26,17 @@
                         <label class="col-lg-2 control-label" for="term-field">Поисковая строка</label>
                         <div class="col-lg-10">
                             <input type="text" class="form-control" name="Term" id="term-field" placeholder="Введите фразу для поиска" value="@Model.FilterData.Term"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="projects-field">Лиды - клиенты</label>
+                        <div class="col-lg-10">
+                            <select id="leads-field" name="LeadIds" multiple="multiple">
+                                @foreach (var lead in leads)
+                                {
+                                    <option value="@lead.Id" @(Model.FilterData.LeadIds.Contains(lead.Id) ? "selected=selected":"")>@lead.ToString()</option>
+                                }
+                            </select>
                         </div>
                     </div>
                     <div class="form-group">
@@ -116,6 +128,6 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function() {
-        $("#users-field, #projects-field, #statuses-field, #delivery-types-field, #payment-types-field, #product-types-field").select2();
+        $("#users-field, #projects-field, #statuses-field, #delivery-types-field, #payment-types-field, #product-types-field, #leads-field").select2();
     });
 </script>

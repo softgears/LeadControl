@@ -49,9 +49,6 @@ namespace LeadControl.Domain.DAL
     partial void InsertLeadOrdersComment(LeadControl.Domain.Entities.LeadOrdersComment instance);
     partial void UpdateLeadOrdersComment(LeadControl.Domain.Entities.LeadOrdersComment instance);
     partial void DeleteLeadOrdersComment(LeadControl.Domain.Entities.LeadOrdersComment instance);
-    partial void InsertLeadOrderStatusChangement(LeadControl.Domain.Entities.LeadOrderStatusChangement instance);
-    partial void UpdateLeadOrderStatusChangement(LeadControl.Domain.Entities.LeadOrderStatusChangement instance);
-    partial void DeleteLeadOrderStatusChangement(LeadControl.Domain.Entities.LeadOrderStatusChangement instance);
     partial void InsertLeadPassportInfo(LeadControl.Domain.Entities.LeadPassportInfo instance);
     partial void UpdateLeadPassportInfo(LeadControl.Domain.Entities.LeadPassportInfo instance);
     partial void DeleteLeadPassportInfo(LeadControl.Domain.Entities.LeadPassportInfo instance);
@@ -100,15 +97,15 @@ namespace LeadControl.Domain.DAL
     partial void InsertWarehouseProductChangement(LeadControl.Domain.Entities.WarehouseProductChangement instance);
     partial void UpdateWarehouseProductChangement(LeadControl.Domain.Entities.WarehouseProductChangement instance);
     partial void DeleteWarehouseProductChangement(LeadControl.Domain.Entities.WarehouseProductChangement instance);
-    partial void InsertLeadOrderAssignedUserChangement(LeadControl.Domain.Entities.LeadOrderAssignedUserChangement instance);
-    partial void UpdateLeadOrderAssignedUserChangement(LeadControl.Domain.Entities.LeadOrderAssignedUserChangement instance);
-    partial void DeleteLeadOrderAssignedUserChangement(LeadControl.Domain.Entities.LeadOrderAssignedUserChangement instance);
     partial void InsertLeadOrderPayment(LeadControl.Domain.Entities.LeadOrderPayment instance);
     partial void UpdateLeadOrderPayment(LeadControl.Domain.Entities.LeadOrderPayment instance);
     partial void DeleteLeadOrderPayment(LeadControl.Domain.Entities.LeadOrderPayment instance);
     partial void InsertLeadOrder(LeadControl.Domain.Entities.LeadOrder instance);
     partial void UpdateLeadOrder(LeadControl.Domain.Entities.LeadOrder instance);
     partial void DeleteLeadOrder(LeadControl.Domain.Entities.LeadOrder instance);
+    partial void InsertLeadOrderChangement(LeadControl.Domain.Entities.LeadOrderChangement instance);
+    partial void UpdateLeadOrderChangement(LeadControl.Domain.Entities.LeadOrderChangement instance);
+    partial void DeleteLeadOrderChangement(LeadControl.Domain.Entities.LeadOrderChangement instance);
     #endregion
 		
 		public LCDataContext(string connection) : 
@@ -188,14 +185,6 @@ namespace LeadControl.Domain.DAL
 			get
 			{
 				return this.GetTable<LeadControl.Domain.Entities.LeadOrdersComment>();
-			}
-		}
-		
-		public System.Data.Linq.Table<LeadControl.Domain.Entities.LeadOrderStatusChangement> LeadOrderStatusChangements
-		{
-			get
-			{
-				return this.GetTable<LeadControl.Domain.Entities.LeadOrderStatusChangement>();
 			}
 		}
 		
@@ -327,14 +316,6 @@ namespace LeadControl.Domain.DAL
 			}
 		}
 		
-		public System.Data.Linq.Table<LeadControl.Domain.Entities.LeadOrderAssignedUserChangement> LeadOrderAssignedUserChangements
-		{
-			get
-			{
-				return this.GetTable<LeadControl.Domain.Entities.LeadOrderAssignedUserChangement>();
-			}
-		}
-		
 		public System.Data.Linq.Table<LeadControl.Domain.Entities.LeadOrderPayment> LeadOrderPayments
 		{
 			get
@@ -348,6 +329,14 @@ namespace LeadControl.Domain.DAL
 			get
 			{
 				return this.GetTable<LeadControl.Domain.Entities.LeadOrder>();
+			}
+		}
+		
+		public System.Data.Linq.Table<LeadControl.Domain.Entities.LeadOrderChangement> LeadOrderChangements
+		{
+			get
+			{
+				return this.GetTable<LeadControl.Domain.Entities.LeadOrderChangement>();
 			}
 		}
 	}
@@ -2234,270 +2223,6 @@ namespace LeadControl.Domain.Entities
 					if ((value != null))
 					{
 						value.LeadOrdersComments.Add(this);
-						this._OrderId = value.Id;
-					}
-					else
-					{
-						this._OrderId = default(long);
-					}
-					this.SendPropertyChanged("LeadOrder");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.LeadOrderStatusChangements")]
-	public partial class LeadOrderStatusChangement : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private long _Id;
-		
-		private long _OrderId;
-		
-		private long _AuthorId;
-		
-		private short _Status;
-		
-		private string _Comments;
-		
-		private System.Nullable<System.DateTime> _DateCreated;
-		
-		private EntityRef<User> _User;
-		
-		private EntityRef<LeadOrder> _LeadOrder;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIdChanging(long value);
-    partial void OnIdChanged();
-    partial void OnOrderIdChanging(long value);
-    partial void OnOrderIdChanged();
-    partial void OnAuthorIdChanging(long value);
-    partial void OnAuthorIdChanged();
-    partial void OnStatusChanging(short value);
-    partial void OnStatusChanged();
-    partial void OnCommentsChanging(string value);
-    partial void OnCommentsChanged();
-    partial void OnDateCreatedChanging(System.Nullable<System.DateTime> value);
-    partial void OnDateCreatedChanged();
-    #endregion
-		
-		public LeadOrderStatusChangement()
-		{
-			this._User = default(EntityRef<User>);
-			this._LeadOrder = default(EntityRef<LeadOrder>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="BigInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public long Id
-		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				if ((this._Id != value))
-				{
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OrderId", DbType="BigInt NOT NULL")]
-		public long OrderId
-		{
-			get
-			{
-				return this._OrderId;
-			}
-			set
-			{
-				if ((this._OrderId != value))
-				{
-					if (this._LeadOrder.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnOrderIdChanging(value);
-					this.SendPropertyChanging();
-					this._OrderId = value;
-					this.SendPropertyChanged("OrderId");
-					this.OnOrderIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AuthorId", DbType="BigInt NOT NULL")]
-		public long AuthorId
-		{
-			get
-			{
-				return this._AuthorId;
-			}
-			set
-			{
-				if ((this._AuthorId != value))
-				{
-					if (this._User.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnAuthorIdChanging(value);
-					this.SendPropertyChanging();
-					this._AuthorId = value;
-					this.SendPropertyChanged("AuthorId");
-					this.OnAuthorIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="SmallInt NOT NULL")]
-		public short Status
-		{
-			get
-			{
-				return this._Status;
-			}
-			set
-			{
-				if ((this._Status != value))
-				{
-					this.OnStatusChanging(value);
-					this.SendPropertyChanging();
-					this._Status = value;
-					this.SendPropertyChanged("Status");
-					this.OnStatusChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Comments", DbType="NVarChar(255)")]
-		public string Comments
-		{
-			get
-			{
-				return this._Comments;
-			}
-			set
-			{
-				if ((this._Comments != value))
-				{
-					this.OnCommentsChanging(value);
-					this.SendPropertyChanging();
-					this._Comments = value;
-					this.SendPropertyChanged("Comments");
-					this.OnCommentsChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateCreated", DbType="DateTime")]
-		public System.Nullable<System.DateTime> DateCreated
-		{
-			get
-			{
-				return this._DateCreated;
-			}
-			set
-			{
-				if ((this._DateCreated != value))
-				{
-					this.OnDateCreatedChanging(value);
-					this.SendPropertyChanging();
-					this._DateCreated = value;
-					this.SendPropertyChanged("DateCreated");
-					this.OnDateCreatedChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_LeadOrderStatusChangement", Storage="_User", ThisKey="AuthorId", OtherKey="Id", IsForeignKey=true)]
-		public User User
-		{
-			get
-			{
-				return this._User.Entity;
-			}
-			set
-			{
-				User previousValue = this._User.Entity;
-				if (((previousValue != value) 
-							|| (this._User.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._User.Entity = null;
-						previousValue.LeadOrderStatusChangements.Remove(this);
-					}
-					this._User.Entity = value;
-					if ((value != null))
-					{
-						value.LeadOrderStatusChangements.Add(this);
-						this._AuthorId = value.Id;
-					}
-					else
-					{
-						this._AuthorId = default(long);
-					}
-					this.SendPropertyChanged("User");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LeadOrder_LeadOrderStatusChangement", Storage="_LeadOrder", ThisKey="OrderId", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
-		public LeadOrder LeadOrder
-		{
-			get
-			{
-				return this._LeadOrder.Entity;
-			}
-			set
-			{
-				LeadOrder previousValue = this._LeadOrder.Entity;
-				if (((previousValue != value) 
-							|| (this._LeadOrder.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._LeadOrder.Entity = null;
-						previousValue.LeadOrderStatusChangements.Remove(this);
-					}
-					this._LeadOrder.Entity = value;
-					if ((value != null))
-					{
-						value.LeadOrderStatusChangements.Add(this);
 						this._OrderId = value.Id;
 					}
 					else
@@ -4656,21 +4381,21 @@ namespace LeadControl.Domain.Entities
 		
 		private EntitySet<LeadOrdersComment> _LeadOrdersComments;
 		
-		private EntitySet<LeadOrderStatusChangement> _LeadOrderStatusChangements;
-		
 		private EntitySet<ProjectUser> _ProjectUsers;
 		
 		private EntitySet<WarehouseKeeper> _WarehouseKeepers;
 		
 		private EntitySet<FEAOrder> _FEAOrders;
 		
-		private EntitySet<LeadOrderAssignedUserChangement> _LeadOrderAssignedUserChangements;
-		
-		private EntitySet<LeadOrderAssignedUserChangement> _LeadOrderAuthoredAssignedUserChangements;
-		
 		private EntitySet<LeadOrderPayment> _LeadOrderPayments;
 		
 		private EntitySet<LeadOrder> _LeadOrders;
+		
+		private EntitySet<LeadOrderChangement> _LeadOrderAuthoredChangements;
+		
+		private EntitySet<LeadOrderChangement> _LeadOrderChangementsWithNewAssignedUser;
+		
+		private EntitySet<LeadOrderChangement> _LeadOrderChangementsWithOldAssignedUser;
 		
 		private EntityRef<Role> _Role;
 		
@@ -4713,14 +4438,14 @@ namespace LeadControl.Domain.Entities
 			this._FEAOrdersStatusChangements = new EntitySet<FEAOrdersStatusChangement>(new Action<FEAOrdersStatusChangement>(this.attach_FEAOrdersStatusChangements), new Action<FEAOrdersStatusChangement>(this.detach_FEAOrdersStatusChangements));
 			this._LeadOrderDocuments = new EntitySet<LeadOrderDocument>(new Action<LeadOrderDocument>(this.attach_LeadOrderDocuments), new Action<LeadOrderDocument>(this.detach_LeadOrderDocuments));
 			this._LeadOrdersComments = new EntitySet<LeadOrdersComment>(new Action<LeadOrdersComment>(this.attach_LeadOrdersComments), new Action<LeadOrdersComment>(this.detach_LeadOrdersComments));
-			this._LeadOrderStatusChangements = new EntitySet<LeadOrderStatusChangement>(new Action<LeadOrderStatusChangement>(this.attach_LeadOrderStatusChangements), new Action<LeadOrderStatusChangement>(this.detach_LeadOrderStatusChangements));
 			this._ProjectUsers = new EntitySet<ProjectUser>(new Action<ProjectUser>(this.attach_ProjectUsers), new Action<ProjectUser>(this.detach_ProjectUsers));
 			this._WarehouseKeepers = new EntitySet<WarehouseKeeper>(new Action<WarehouseKeeper>(this.attach_WarehouseKeepers), new Action<WarehouseKeeper>(this.detach_WarehouseKeepers));
 			this._FEAOrders = new EntitySet<FEAOrder>(new Action<FEAOrder>(this.attach_FEAOrders), new Action<FEAOrder>(this.detach_FEAOrders));
-			this._LeadOrderAssignedUserChangements = new EntitySet<LeadOrderAssignedUserChangement>(new Action<LeadOrderAssignedUserChangement>(this.attach_LeadOrderAssignedUserChangements), new Action<LeadOrderAssignedUserChangement>(this.detach_LeadOrderAssignedUserChangements));
-			this._LeadOrderAuthoredAssignedUserChangements = new EntitySet<LeadOrderAssignedUserChangement>(new Action<LeadOrderAssignedUserChangement>(this.attach_LeadOrderAuthoredAssignedUserChangements), new Action<LeadOrderAssignedUserChangement>(this.detach_LeadOrderAuthoredAssignedUserChangements));
 			this._LeadOrderPayments = new EntitySet<LeadOrderPayment>(new Action<LeadOrderPayment>(this.attach_LeadOrderPayments), new Action<LeadOrderPayment>(this.detach_LeadOrderPayments));
 			this._LeadOrders = new EntitySet<LeadOrder>(new Action<LeadOrder>(this.attach_LeadOrders), new Action<LeadOrder>(this.detach_LeadOrders));
+			this._LeadOrderAuthoredChangements = new EntitySet<LeadOrderChangement>(new Action<LeadOrderChangement>(this.attach_LeadOrderAuthoredChangements), new Action<LeadOrderChangement>(this.detach_LeadOrderAuthoredChangements));
+			this._LeadOrderChangementsWithNewAssignedUser = new EntitySet<LeadOrderChangement>(new Action<LeadOrderChangement>(this.attach_LeadOrderChangementsWithNewAssignedUser), new Action<LeadOrderChangement>(this.detach_LeadOrderChangementsWithNewAssignedUser));
+			this._LeadOrderChangementsWithOldAssignedUser = new EntitySet<LeadOrderChangement>(new Action<LeadOrderChangement>(this.attach_LeadOrderChangementsWithOldAssignedUser), new Action<LeadOrderChangement>(this.detach_LeadOrderChangementsWithOldAssignedUser));
 			this._Role = default(EntityRef<Role>);
 			OnCreated();
 		}
@@ -5048,19 +4773,6 @@ namespace LeadControl.Domain.Entities
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_LeadOrderStatusChangement", Storage="_LeadOrderStatusChangements", ThisKey="Id", OtherKey="AuthorId")]
-		public EntitySet<LeadOrderStatusChangement> LeadOrderStatusChangements
-		{
-			get
-			{
-				return this._LeadOrderStatusChangements;
-			}
-			set
-			{
-				this._LeadOrderStatusChangements.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_ProjectUser", Storage="_ProjectUsers", ThisKey="Id", OtherKey="UserId")]
 		public EntitySet<ProjectUser> ProjectUsers
 		{
@@ -5100,32 +4812,6 @@ namespace LeadControl.Domain.Entities
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_LeadOrderAssignedUserChangement", Storage="_LeadOrderAssignedUserChangements", ThisKey="Id", OtherKey="NewAssignedUserId")]
-		public EntitySet<LeadOrderAssignedUserChangement> LeadOrderAssignedUserChangements
-		{
-			get
-			{
-				return this._LeadOrderAssignedUserChangements;
-			}
-			set
-			{
-				this._LeadOrderAssignedUserChangements.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_LeadOrderAssignedUserChangement1", Storage="_LeadOrderAuthoredAssignedUserChangements", ThisKey="Id", OtherKey="AuthorId")]
-		public EntitySet<LeadOrderAssignedUserChangement> LeadOrderAuthoredAssignedUserChangements
-		{
-			get
-			{
-				return this._LeadOrderAuthoredAssignedUserChangements;
-			}
-			set
-			{
-				this._LeadOrderAuthoredAssignedUserChangements.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_LeadOrderPayment", Storage="_LeadOrderPayments", ThisKey="Id", OtherKey="AuthorId")]
 		public EntitySet<LeadOrderPayment> LeadOrderPayments
 		{
@@ -5149,6 +4835,45 @@ namespace LeadControl.Domain.Entities
 			set
 			{
 				this._LeadOrders.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_LeadOrderChangement", Storage="_LeadOrderAuthoredChangements", ThisKey="Id", OtherKey="AuthorId")]
+		public EntitySet<LeadOrderChangement> LeadOrderAuthoredChangements
+		{
+			get
+			{
+				return this._LeadOrderAuthoredChangements;
+			}
+			set
+			{
+				this._LeadOrderAuthoredChangements.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_LeadOrderChangement1", Storage="_LeadOrderChangementsWithNewAssignedUser", ThisKey="Id", OtherKey="NewAssignedUserId")]
+		public EntitySet<LeadOrderChangement> LeadOrderChangementsWithNewAssignedUser
+		{
+			get
+			{
+				return this._LeadOrderChangementsWithNewAssignedUser;
+			}
+			set
+			{
+				this._LeadOrderChangementsWithNewAssignedUser.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_LeadOrderChangement2", Storage="_LeadOrderChangementsWithOldAssignedUser", ThisKey="Id", OtherKey="OldAssignedUserId")]
+		public EntitySet<LeadOrderChangement> LeadOrderChangementsWithOldAssignedUser
+		{
+			get
+			{
+				return this._LeadOrderChangementsWithOldAssignedUser;
+			}
+			set
+			{
+				this._LeadOrderChangementsWithOldAssignedUser.Assign(value);
 			}
 		}
 		
@@ -5242,18 +4967,6 @@ namespace LeadControl.Domain.Entities
 			entity.User = null;
 		}
 		
-		private void attach_LeadOrderStatusChangements(LeadOrderStatusChangement entity)
-		{
-			this.SendPropertyChanging();
-			entity.User = this;
-		}
-		
-		private void detach_LeadOrderStatusChangements(LeadOrderStatusChangement entity)
-		{
-			this.SendPropertyChanging();
-			entity.User = null;
-		}
-		
 		private void attach_ProjectUsers(ProjectUser entity)
 		{
 			this.SendPropertyChanging();
@@ -5290,30 +5003,6 @@ namespace LeadControl.Domain.Entities
 			entity.Manager = null;
 		}
 		
-		private void attach_LeadOrderAssignedUserChangements(LeadOrderAssignedUserChangement entity)
-		{
-			this.SendPropertyChanging();
-			entity.AssignedUser = this;
-		}
-		
-		private void detach_LeadOrderAssignedUserChangements(LeadOrderAssignedUserChangement entity)
-		{
-			this.SendPropertyChanging();
-			entity.AssignedUser = null;
-		}
-		
-		private void attach_LeadOrderAuthoredAssignedUserChangements(LeadOrderAssignedUserChangement entity)
-		{
-			this.SendPropertyChanging();
-			entity.Author = this;
-		}
-		
-		private void detach_LeadOrderAuthoredAssignedUserChangements(LeadOrderAssignedUserChangement entity)
-		{
-			this.SendPropertyChanging();
-			entity.Author = null;
-		}
-		
 		private void attach_LeadOrderPayments(LeadOrderPayment entity)
 		{
 			this.SendPropertyChanging();
@@ -5336,6 +5025,42 @@ namespace LeadControl.Domain.Entities
 		{
 			this.SendPropertyChanging();
 			entity.User = null;
+		}
+		
+		private void attach_LeadOrderAuthoredChangements(LeadOrderChangement entity)
+		{
+			this.SendPropertyChanging();
+			entity.Author = this;
+		}
+		
+		private void detach_LeadOrderAuthoredChangements(LeadOrderChangement entity)
+		{
+			this.SendPropertyChanging();
+			entity.Author = null;
+		}
+		
+		private void attach_LeadOrderChangementsWithNewAssignedUser(LeadOrderChangement entity)
+		{
+			this.SendPropertyChanging();
+			entity.NewAssignedUser = this;
+		}
+		
+		private void detach_LeadOrderChangementsWithNewAssignedUser(LeadOrderChangement entity)
+		{
+			this.SendPropertyChanging();
+			entity.NewAssignedUser = null;
+		}
+		
+		private void attach_LeadOrderChangementsWithOldAssignedUser(LeadOrderChangement entity)
+		{
+			this.SendPropertyChanging();
+			entity.OldAssignedUser = this;
+		}
+		
+		private void detach_LeadOrderChangementsWithOldAssignedUser(LeadOrderChangement entity)
+		{
+			this.SendPropertyChanging();
+			entity.OldAssignedUser = null;
 		}
 	}
 	
@@ -6333,6 +6058,10 @@ namespace LeadControl.Domain.Entities
 		
 		private EntitySet<LeadOrder> _LeadOrders;
 		
+		private EntitySet<LeadOrderChangement> _LeadOrderChangementsWithNewWarehouse;
+		
+		private EntitySet<LeadOrderChangement> _LeadOrderChangementsWithOldWarehouse;
+		
 		private EntityRef<Project> _Project;
 		
     #region Extensibility Method Definitions
@@ -6363,6 +6092,8 @@ namespace LeadControl.Domain.Entities
 			this._WarehouseProducts = new EntitySet<WarehouseProduct>(new Action<WarehouseProduct>(this.attach_WarehouseProducts), new Action<WarehouseProduct>(this.detach_WarehouseProducts));
 			this._FEAOrders = new EntitySet<FEAOrder>(new Action<FEAOrder>(this.attach_FEAOrders), new Action<FEAOrder>(this.detach_FEAOrders));
 			this._LeadOrders = new EntitySet<LeadOrder>(new Action<LeadOrder>(this.attach_LeadOrders), new Action<LeadOrder>(this.detach_LeadOrders));
+			this._LeadOrderChangementsWithNewWarehouse = new EntitySet<LeadOrderChangement>(new Action<LeadOrderChangement>(this.attach_LeadOrderChangementsWithNewWarehouse), new Action<LeadOrderChangement>(this.detach_LeadOrderChangementsWithNewWarehouse));
+			this._LeadOrderChangementsWithOldWarehouse = new EntitySet<LeadOrderChangement>(new Action<LeadOrderChangement>(this.attach_LeadOrderChangementsWithOldWarehouse), new Action<LeadOrderChangement>(this.detach_LeadOrderChangementsWithOldWarehouse));
 			this._Project = default(EntityRef<Project>);
 			OnCreated();
 		}
@@ -6583,6 +6314,32 @@ namespace LeadControl.Domain.Entities
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Warehouse_LeadOrderChangement", Storage="_LeadOrderChangementsWithNewWarehouse", ThisKey="Id", OtherKey="NewWarehouseId")]
+		public EntitySet<LeadOrderChangement> LeadOrderChangementsWithNewWarehouse
+		{
+			get
+			{
+				return this._LeadOrderChangementsWithNewWarehouse;
+			}
+			set
+			{
+				this._LeadOrderChangementsWithNewWarehouse.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Warehouse_LeadOrderChangement1", Storage="_LeadOrderChangementsWithOldWarehouse", ThisKey="Id", OtherKey="OldWarehouseId")]
+		public EntitySet<LeadOrderChangement> LeadOrderChangementsWithOldWarehouse
+		{
+			get
+			{
+				return this._LeadOrderChangementsWithOldWarehouse;
+			}
+			set
+			{
+				this._LeadOrderChangementsWithOldWarehouse.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Project_Warehouse", Storage="_Project", ThisKey="ProjectId", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
 		public Project Project
 		{
@@ -6683,6 +6440,30 @@ namespace LeadControl.Domain.Entities
 		{
 			this.SendPropertyChanging();
 			entity.Warehouse = null;
+		}
+		
+		private void attach_LeadOrderChangementsWithNewWarehouse(LeadOrderChangement entity)
+		{
+			this.SendPropertyChanging();
+			entity.NewWarehouse = this;
+		}
+		
+		private void detach_LeadOrderChangementsWithNewWarehouse(LeadOrderChangement entity)
+		{
+			this.SendPropertyChanging();
+			entity.NewWarehouse = null;
+		}
+		
+		private void attach_LeadOrderChangementsWithOldWarehouse(LeadOrderChangement entity)
+		{
+			this.SendPropertyChanging();
+			entity.OldWarehouse = this;
+		}
+		
+		private void detach_LeadOrderChangementsWithOldWarehouse(LeadOrderChangement entity)
+		{
+			this.SendPropertyChanging();
+			entity.OldWarehouse = null;
 		}
 	}
 	
@@ -7294,311 +7075,6 @@ namespace LeadControl.Domain.Entities
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.LeadOrderAssignedUserChangements")]
-	public partial class LeadOrderAssignedUserChangement : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private long _Id;
-		
-		private long _LeadOrderId;
-		
-		private long _AuthorId;
-		
-		private long _NewAssignedUserId;
-		
-		private string _Comments;
-		
-		private System.Nullable<System.DateTime> _DateCreated;
-		
-		private EntityRef<User> _AssignedUser;
-		
-		private EntityRef<User> _Author;
-		
-		private EntityRef<LeadOrder> _LeadOrder;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIdChanging(long value);
-    partial void OnIdChanged();
-    partial void OnLeadOrderIdChanging(long value);
-    partial void OnLeadOrderIdChanged();
-    partial void OnAuthorIdChanging(long value);
-    partial void OnAuthorIdChanged();
-    partial void OnNewAssignedUserIdChanging(long value);
-    partial void OnNewAssignedUserIdChanged();
-    partial void OnCommentsChanging(string value);
-    partial void OnCommentsChanged();
-    partial void OnDateCreatedChanging(System.Nullable<System.DateTime> value);
-    partial void OnDateCreatedChanged();
-    #endregion
-		
-		public LeadOrderAssignedUserChangement()
-		{
-			this._AssignedUser = default(EntityRef<User>);
-			this._Author = default(EntityRef<User>);
-			this._LeadOrder = default(EntityRef<LeadOrder>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="BigInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public long Id
-		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				if ((this._Id != value))
-				{
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LeadOrderId", DbType="BigInt NOT NULL")]
-		public long LeadOrderId
-		{
-			get
-			{
-				return this._LeadOrderId;
-			}
-			set
-			{
-				if ((this._LeadOrderId != value))
-				{
-					if (this._LeadOrder.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnLeadOrderIdChanging(value);
-					this.SendPropertyChanging();
-					this._LeadOrderId = value;
-					this.SendPropertyChanged("LeadOrderId");
-					this.OnLeadOrderIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AuthorId", DbType="BigInt NOT NULL")]
-		public long AuthorId
-		{
-			get
-			{
-				return this._AuthorId;
-			}
-			set
-			{
-				if ((this._AuthorId != value))
-				{
-					if (this._Author.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnAuthorIdChanging(value);
-					this.SendPropertyChanging();
-					this._AuthorId = value;
-					this.SendPropertyChanged("AuthorId");
-					this.OnAuthorIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_NewAssignedUserId", DbType="BigInt NOT NULL")]
-		public long NewAssignedUserId
-		{
-			get
-			{
-				return this._NewAssignedUserId;
-			}
-			set
-			{
-				if ((this._NewAssignedUserId != value))
-				{
-					if (this._AssignedUser.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnNewAssignedUserIdChanging(value);
-					this.SendPropertyChanging();
-					this._NewAssignedUserId = value;
-					this.SendPropertyChanged("NewAssignedUserId");
-					this.OnNewAssignedUserIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Comments", DbType="NVarChar(MAX)")]
-		public string Comments
-		{
-			get
-			{
-				return this._Comments;
-			}
-			set
-			{
-				if ((this._Comments != value))
-				{
-					this.OnCommentsChanging(value);
-					this.SendPropertyChanging();
-					this._Comments = value;
-					this.SendPropertyChanged("Comments");
-					this.OnCommentsChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateCreated", DbType="DateTime")]
-		public System.Nullable<System.DateTime> DateCreated
-		{
-			get
-			{
-				return this._DateCreated;
-			}
-			set
-			{
-				if ((this._DateCreated != value))
-				{
-					this.OnDateCreatedChanging(value);
-					this.SendPropertyChanging();
-					this._DateCreated = value;
-					this.SendPropertyChanged("DateCreated");
-					this.OnDateCreatedChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_LeadOrderAssignedUserChangement", Storage="_AssignedUser", ThisKey="NewAssignedUserId", OtherKey="Id", IsForeignKey=true)]
-		public User AssignedUser
-		{
-			get
-			{
-				return this._AssignedUser.Entity;
-			}
-			set
-			{
-				User previousValue = this._AssignedUser.Entity;
-				if (((previousValue != value) 
-							|| (this._AssignedUser.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._AssignedUser.Entity = null;
-						previousValue.LeadOrderAssignedUserChangements.Remove(this);
-					}
-					this._AssignedUser.Entity = value;
-					if ((value != null))
-					{
-						value.LeadOrderAssignedUserChangements.Add(this);
-						this._NewAssignedUserId = value.Id;
-					}
-					else
-					{
-						this._NewAssignedUserId = default(long);
-					}
-					this.SendPropertyChanged("AssignedUser");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_LeadOrderAssignedUserChangement1", Storage="_Author", ThisKey="AuthorId", OtherKey="Id", IsForeignKey=true)]
-		public User Author
-		{
-			get
-			{
-				return this._Author.Entity;
-			}
-			set
-			{
-				User previousValue = this._Author.Entity;
-				if (((previousValue != value) 
-							|| (this._Author.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Author.Entity = null;
-						previousValue.LeadOrderAuthoredAssignedUserChangements.Remove(this);
-					}
-					this._Author.Entity = value;
-					if ((value != null))
-					{
-						value.LeadOrderAuthoredAssignedUserChangements.Add(this);
-						this._AuthorId = value.Id;
-					}
-					else
-					{
-						this._AuthorId = default(long);
-					}
-					this.SendPropertyChanged("Author");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LeadOrder_LeadOrderAssignedUserChangement", Storage="_LeadOrder", ThisKey="LeadOrderId", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
-		public LeadOrder LeadOrder
-		{
-			get
-			{
-				return this._LeadOrder.Entity;
-			}
-			set
-			{
-				LeadOrder previousValue = this._LeadOrder.Entity;
-				if (((previousValue != value) 
-							|| (this._LeadOrder.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._LeadOrder.Entity = null;
-						previousValue.LeadOrderAssignedUserChangements.Remove(this);
-					}
-					this._LeadOrder.Entity = value;
-					if ((value != null))
-					{
-						value.LeadOrderAssignedUserChangements.Add(this);
-						this._LeadOrderId = value.Id;
-					}
-					else
-					{
-						this._LeadOrderId = default(long);
-					}
-					this.SendPropertyChanged("LeadOrder");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.LeadOrderPayments")]
 	public partial class LeadOrderPayment : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -7945,11 +7421,9 @@ namespace LeadControl.Domain.Entities
 		
 		private EntitySet<LeadOrdersComment> _LeadOrdersComments;
 		
-		private EntitySet<LeadOrderStatusChangement> _LeadOrderStatusChangements;
-		
-		private EntitySet<LeadOrderAssignedUserChangement> _LeadOrderAssignedUserChangements;
-		
 		private EntitySet<LeadOrderPayment> _LeadOrderPayments;
+		
+		private EntitySet<LeadOrderChangement> _LeadOrderChangements;
 		
 		private EntityRef<Lead> _Lead;
 		
@@ -7992,9 +7466,8 @@ namespace LeadControl.Domain.Entities
 			this._LeadOrderDocuments = new EntitySet<LeadOrderDocument>(new Action<LeadOrderDocument>(this.attach_LeadOrderDocuments), new Action<LeadOrderDocument>(this.detach_LeadOrderDocuments));
 			this._LeadOrderItems = new EntitySet<LeadOrderItem>(new Action<LeadOrderItem>(this.attach_LeadOrderItems), new Action<LeadOrderItem>(this.detach_LeadOrderItems));
 			this._LeadOrdersComments = new EntitySet<LeadOrdersComment>(new Action<LeadOrdersComment>(this.attach_LeadOrdersComments), new Action<LeadOrdersComment>(this.detach_LeadOrdersComments));
-			this._LeadOrderStatusChangements = new EntitySet<LeadOrderStatusChangement>(new Action<LeadOrderStatusChangement>(this.attach_LeadOrderStatusChangements), new Action<LeadOrderStatusChangement>(this.detach_LeadOrderStatusChangements));
-			this._LeadOrderAssignedUserChangements = new EntitySet<LeadOrderAssignedUserChangement>(new Action<LeadOrderAssignedUserChangement>(this.attach_LeadOrderAssignedUserChangements), new Action<LeadOrderAssignedUserChangement>(this.detach_LeadOrderAssignedUserChangements));
 			this._LeadOrderPayments = new EntitySet<LeadOrderPayment>(new Action<LeadOrderPayment>(this.attach_LeadOrderPayments), new Action<LeadOrderPayment>(this.detach_LeadOrderPayments));
+			this._LeadOrderChangements = new EntitySet<LeadOrderChangement>(new Action<LeadOrderChangement>(this.attach_LeadOrderChangements), new Action<LeadOrderChangement>(this.detach_LeadOrderChangements));
 			this._Lead = default(EntityRef<Lead>);
 			this._Project = default(EntityRef<Project>);
 			this._User = default(EntityRef<User>);
@@ -8277,32 +7750,6 @@ namespace LeadControl.Domain.Entities
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LeadOrder_LeadOrderStatusChangement", Storage="_LeadOrderStatusChangements", ThisKey="Id", OtherKey="OrderId")]
-		public EntitySet<LeadOrderStatusChangement> LeadOrderStatusChangements
-		{
-			get
-			{
-				return this._LeadOrderStatusChangements;
-			}
-			set
-			{
-				this._LeadOrderStatusChangements.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LeadOrder_LeadOrderAssignedUserChangement", Storage="_LeadOrderAssignedUserChangements", ThisKey="Id", OtherKey="LeadOrderId")]
-		public EntitySet<LeadOrderAssignedUserChangement> LeadOrderAssignedUserChangements
-		{
-			get
-			{
-				return this._LeadOrderAssignedUserChangements;
-			}
-			set
-			{
-				this._LeadOrderAssignedUserChangements.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LeadOrder_LeadOrderPayment", Storage="_LeadOrderPayments", ThisKey="Id", OtherKey="LeadOrderId")]
 		public EntitySet<LeadOrderPayment> LeadOrderPayments
 		{
@@ -8313,6 +7760,19 @@ namespace LeadControl.Domain.Entities
 			set
 			{
 				this._LeadOrderPayments.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LeadOrder_LeadOrderChangement", Storage="_LeadOrderChangements", ThisKey="Id", OtherKey="LeadOrderId")]
+		public EntitySet<LeadOrderChangement> LeadOrderChangements
+		{
+			get
+			{
+				return this._LeadOrderChangements;
+			}
+			set
+			{
+				this._LeadOrderChangements.Assign(value);
 			}
 		}
 		
@@ -8508,30 +7968,6 @@ namespace LeadControl.Domain.Entities
 			entity.LeadOrder = null;
 		}
 		
-		private void attach_LeadOrderStatusChangements(LeadOrderStatusChangement entity)
-		{
-			this.SendPropertyChanging();
-			entity.LeadOrder = this;
-		}
-		
-		private void detach_LeadOrderStatusChangements(LeadOrderStatusChangement entity)
-		{
-			this.SendPropertyChanging();
-			entity.LeadOrder = null;
-		}
-		
-		private void attach_LeadOrderAssignedUserChangements(LeadOrderAssignedUserChangement entity)
-		{
-			this.SendPropertyChanging();
-			entity.LeadOrder = this;
-		}
-		
-		private void detach_LeadOrderAssignedUserChangements(LeadOrderAssignedUserChangement entity)
-		{
-			this.SendPropertyChanging();
-			entity.LeadOrder = null;
-		}
-		
 		private void attach_LeadOrderPayments(LeadOrderPayment entity)
 		{
 			this.SendPropertyChanging();
@@ -8542,6 +7978,566 @@ namespace LeadControl.Domain.Entities
 		{
 			this.SendPropertyChanging();
 			entity.LeadOrder = null;
+		}
+		
+		private void attach_LeadOrderChangements(LeadOrderChangement entity)
+		{
+			this.SendPropertyChanging();
+			entity.LeadOrder = this;
+		}
+		
+		private void detach_LeadOrderChangements(LeadOrderChangement entity)
+		{
+			this.SendPropertyChanging();
+			entity.LeadOrder = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.LeadOrderChangements")]
+	public partial class LeadOrderChangement : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private long _Id;
+		
+		private long _LeadOrderId;
+		
+		private long _AuthorId;
+		
+		private short _OldStatus;
+		
+		private short _NewStatus;
+		
+		private long _OldAssignedUserId;
+		
+		private long _NewAssignedUserId;
+		
+		private long _OldWarehouseId;
+		
+		private long _NewWarehouseId;
+		
+		private string _Comments;
+		
+		private System.Nullable<System.DateTime> _DateCreated;
+		
+		private EntityRef<LeadOrder> _LeadOrder;
+		
+		private EntityRef<User> _Author;
+		
+		private EntityRef<User> _NewAssignedUser;
+		
+		private EntityRef<User> _OldAssignedUser;
+		
+		private EntityRef<Warehouse> _NewWarehouse;
+		
+		private EntityRef<Warehouse> _OldWarehouse;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(long value);
+    partial void OnIdChanged();
+    partial void OnLeadOrderIdChanging(long value);
+    partial void OnLeadOrderIdChanged();
+    partial void OnAuthorIdChanging(long value);
+    partial void OnAuthorIdChanged();
+    partial void OnOldStatusChanging(short value);
+    partial void OnOldStatusChanged();
+    partial void OnNewStatusChanging(short value);
+    partial void OnNewStatusChanged();
+    partial void OnOldAssignedUserIdChanging(long value);
+    partial void OnOldAssignedUserIdChanged();
+    partial void OnNewAssignedUserIdChanging(long value);
+    partial void OnNewAssignedUserIdChanged();
+    partial void OnOldWarehouseIdChanging(long value);
+    partial void OnOldWarehouseIdChanged();
+    partial void OnNewWarehouseIdChanging(long value);
+    partial void OnNewWarehouseIdChanged();
+    partial void OnCommentsChanging(string value);
+    partial void OnCommentsChanged();
+    partial void OnDateCreatedChanging(System.Nullable<System.DateTime> value);
+    partial void OnDateCreatedChanged();
+    #endregion
+		
+		public LeadOrderChangement()
+		{
+			this._LeadOrder = default(EntityRef<LeadOrder>);
+			this._Author = default(EntityRef<User>);
+			this._NewAssignedUser = default(EntityRef<User>);
+			this._OldAssignedUser = default(EntityRef<User>);
+			this._NewWarehouse = default(EntityRef<Warehouse>);
+			this._OldWarehouse = default(EntityRef<Warehouse>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="BigInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public long Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LeadOrderId", DbType="BigInt NOT NULL")]
+		public long LeadOrderId
+		{
+			get
+			{
+				return this._LeadOrderId;
+			}
+			set
+			{
+				if ((this._LeadOrderId != value))
+				{
+					if (this._LeadOrder.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnLeadOrderIdChanging(value);
+					this.SendPropertyChanging();
+					this._LeadOrderId = value;
+					this.SendPropertyChanged("LeadOrderId");
+					this.OnLeadOrderIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AuthorId", DbType="BigInt NOT NULL")]
+		public long AuthorId
+		{
+			get
+			{
+				return this._AuthorId;
+			}
+			set
+			{
+				if ((this._AuthorId != value))
+				{
+					if (this._Author.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnAuthorIdChanging(value);
+					this.SendPropertyChanging();
+					this._AuthorId = value;
+					this.SendPropertyChanged("AuthorId");
+					this.OnAuthorIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OldStatus", DbType="SmallInt NOT NULL")]
+		public short OldStatus
+		{
+			get
+			{
+				return this._OldStatus;
+			}
+			set
+			{
+				if ((this._OldStatus != value))
+				{
+					this.OnOldStatusChanging(value);
+					this.SendPropertyChanging();
+					this._OldStatus = value;
+					this.SendPropertyChanged("OldStatus");
+					this.OnOldStatusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_NewStatus", DbType="SmallInt NOT NULL")]
+		public short NewStatus
+		{
+			get
+			{
+				return this._NewStatus;
+			}
+			set
+			{
+				if ((this._NewStatus != value))
+				{
+					this.OnNewStatusChanging(value);
+					this.SendPropertyChanging();
+					this._NewStatus = value;
+					this.SendPropertyChanged("NewStatus");
+					this.OnNewStatusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OldAssignedUserId", DbType="BigInt NOT NULL")]
+		public long OldAssignedUserId
+		{
+			get
+			{
+				return this._OldAssignedUserId;
+			}
+			set
+			{
+				if ((this._OldAssignedUserId != value))
+				{
+					if (this._OldAssignedUser.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnOldAssignedUserIdChanging(value);
+					this.SendPropertyChanging();
+					this._OldAssignedUserId = value;
+					this.SendPropertyChanged("OldAssignedUserId");
+					this.OnOldAssignedUserIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_NewAssignedUserId", DbType="BigInt NOT NULL")]
+		public long NewAssignedUserId
+		{
+			get
+			{
+				return this._NewAssignedUserId;
+			}
+			set
+			{
+				if ((this._NewAssignedUserId != value))
+				{
+					if (this._NewAssignedUser.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnNewAssignedUserIdChanging(value);
+					this.SendPropertyChanging();
+					this._NewAssignedUserId = value;
+					this.SendPropertyChanged("NewAssignedUserId");
+					this.OnNewAssignedUserIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OldWarehouseId", DbType="BigInt NOT NULL")]
+		public long OldWarehouseId
+		{
+			get
+			{
+				return this._OldWarehouseId;
+			}
+			set
+			{
+				if ((this._OldWarehouseId != value))
+				{
+					if (this._OldWarehouse.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnOldWarehouseIdChanging(value);
+					this.SendPropertyChanging();
+					this._OldWarehouseId = value;
+					this.SendPropertyChanged("OldWarehouseId");
+					this.OnOldWarehouseIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_NewWarehouseId", DbType="BigInt NOT NULL")]
+		public long NewWarehouseId
+		{
+			get
+			{
+				return this._NewWarehouseId;
+			}
+			set
+			{
+				if ((this._NewWarehouseId != value))
+				{
+					if (this._NewWarehouse.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnNewWarehouseIdChanging(value);
+					this.SendPropertyChanging();
+					this._NewWarehouseId = value;
+					this.SendPropertyChanged("NewWarehouseId");
+					this.OnNewWarehouseIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Comments", DbType="NVarChar(MAX)")]
+		public string Comments
+		{
+			get
+			{
+				return this._Comments;
+			}
+			set
+			{
+				if ((this._Comments != value))
+				{
+					this.OnCommentsChanging(value);
+					this.SendPropertyChanging();
+					this._Comments = value;
+					this.SendPropertyChanged("Comments");
+					this.OnCommentsChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateCreated", DbType="DateTime")]
+		public System.Nullable<System.DateTime> DateCreated
+		{
+			get
+			{
+				return this._DateCreated;
+			}
+			set
+			{
+				if ((this._DateCreated != value))
+				{
+					this.OnDateCreatedChanging(value);
+					this.SendPropertyChanging();
+					this._DateCreated = value;
+					this.SendPropertyChanged("DateCreated");
+					this.OnDateCreatedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LeadOrder_LeadOrderChangement", Storage="_LeadOrder", ThisKey="LeadOrderId", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public LeadOrder LeadOrder
+		{
+			get
+			{
+				return this._LeadOrder.Entity;
+			}
+			set
+			{
+				LeadOrder previousValue = this._LeadOrder.Entity;
+				if (((previousValue != value) 
+							|| (this._LeadOrder.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._LeadOrder.Entity = null;
+						previousValue.LeadOrderChangements.Remove(this);
+					}
+					this._LeadOrder.Entity = value;
+					if ((value != null))
+					{
+						value.LeadOrderChangements.Add(this);
+						this._LeadOrderId = value.Id;
+					}
+					else
+					{
+						this._LeadOrderId = default(long);
+					}
+					this.SendPropertyChanged("LeadOrder");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_LeadOrderChangement", Storage="_Author", ThisKey="AuthorId", OtherKey="Id", IsForeignKey=true)]
+		public User Author
+		{
+			get
+			{
+				return this._Author.Entity;
+			}
+			set
+			{
+				User previousValue = this._Author.Entity;
+				if (((previousValue != value) 
+							|| (this._Author.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Author.Entity = null;
+						previousValue.LeadOrderAuthoredChangements.Remove(this);
+					}
+					this._Author.Entity = value;
+					if ((value != null))
+					{
+						value.LeadOrderAuthoredChangements.Add(this);
+						this._AuthorId = value.Id;
+					}
+					else
+					{
+						this._AuthorId = default(long);
+					}
+					this.SendPropertyChanged("Author");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_LeadOrderChangement1", Storage="_NewAssignedUser", ThisKey="NewAssignedUserId", OtherKey="Id", IsForeignKey=true)]
+		public User NewAssignedUser
+		{
+			get
+			{
+				return this._NewAssignedUser.Entity;
+			}
+			set
+			{
+				User previousValue = this._NewAssignedUser.Entity;
+				if (((previousValue != value) 
+							|| (this._NewAssignedUser.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._NewAssignedUser.Entity = null;
+						previousValue.LeadOrderChangementsWithNewAssignedUser.Remove(this);
+					}
+					this._NewAssignedUser.Entity = value;
+					if ((value != null))
+					{
+						value.LeadOrderChangementsWithNewAssignedUser.Add(this);
+						this._NewAssignedUserId = value.Id;
+					}
+					else
+					{
+						this._NewAssignedUserId = default(long);
+					}
+					this.SendPropertyChanged("NewAssignedUser");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_LeadOrderChangement2", Storage="_OldAssignedUser", ThisKey="OldAssignedUserId", OtherKey="Id", IsForeignKey=true)]
+		public User OldAssignedUser
+		{
+			get
+			{
+				return this._OldAssignedUser.Entity;
+			}
+			set
+			{
+				User previousValue = this._OldAssignedUser.Entity;
+				if (((previousValue != value) 
+							|| (this._OldAssignedUser.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._OldAssignedUser.Entity = null;
+						previousValue.LeadOrderChangementsWithOldAssignedUser.Remove(this);
+					}
+					this._OldAssignedUser.Entity = value;
+					if ((value != null))
+					{
+						value.LeadOrderChangementsWithOldAssignedUser.Add(this);
+						this._OldAssignedUserId = value.Id;
+					}
+					else
+					{
+						this._OldAssignedUserId = default(long);
+					}
+					this.SendPropertyChanged("OldAssignedUser");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Warehouse_LeadOrderChangement", Storage="_NewWarehouse", ThisKey="NewWarehouseId", OtherKey="Id", IsForeignKey=true)]
+		public Warehouse NewWarehouse
+		{
+			get
+			{
+				return this._NewWarehouse.Entity;
+			}
+			set
+			{
+				Warehouse previousValue = this._NewWarehouse.Entity;
+				if (((previousValue != value) 
+							|| (this._NewWarehouse.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._NewWarehouse.Entity = null;
+						previousValue.LeadOrderChangementsWithNewWarehouse.Remove(this);
+					}
+					this._NewWarehouse.Entity = value;
+					if ((value != null))
+					{
+						value.LeadOrderChangementsWithNewWarehouse.Add(this);
+						this._NewWarehouseId = value.Id;
+					}
+					else
+					{
+						this._NewWarehouseId = default(long);
+					}
+					this.SendPropertyChanged("NewWarehouse");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Warehouse_LeadOrderChangement1", Storage="_OldWarehouse", ThisKey="OldWarehouseId", OtherKey="Id", IsForeignKey=true)]
+		public Warehouse OldWarehouse
+		{
+			get
+			{
+				return this._OldWarehouse.Entity;
+			}
+			set
+			{
+				Warehouse previousValue = this._OldWarehouse.Entity;
+				if (((previousValue != value) 
+							|| (this._OldWarehouse.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._OldWarehouse.Entity = null;
+						previousValue.LeadOrderChangementsWithOldWarehouse.Remove(this);
+					}
+					this._OldWarehouse.Entity = value;
+					if ((value != null))
+					{
+						value.LeadOrderChangementsWithOldWarehouse.Add(this);
+						this._OldWarehouseId = value.Id;
+					}
+					else
+					{
+						this._OldWarehouseId = default(long);
+					}
+					this.SendPropertyChanged("OldWarehouse");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
 		}
 	}
 }

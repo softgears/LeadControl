@@ -26,6 +26,10 @@ namespace LeadControl.Web.Controllers
             // Выбираем
             var projects = CurrentUser.IsAdmin() ? DataContext.Projects.Select(p => p.Id) : CurrentUser.ProjectUsers.Select(p => p.ProjectId);
             IEnumerable<LeadOrder> orders = DataContext.LeadOrders.Where(o => projects.Contains(o.ProjectId));
+            if (model.LeadIds.Length > 0)
+            {
+                orders = orders.Where(o => model.LeadIds.Contains(o.LeadId));
+            }
             if (model.ProjectIds.Length > 0)
             {
                 orders = orders.Where(o => model.ProjectIds.Contains(o.ProjectId));
@@ -44,7 +48,7 @@ namespace LeadControl.Web.Controllers
             }
             if (model.UsersIds.Length > 0)
             {
-                orders = orders.Where(o => model.UsersIds.Contains(o.AssignedUserId) || o.LeadOrderAssignedUserChangements.Any(ac => model.UsersIds.Contains(ac.NewAssignedUserId)));
+                orders = orders.Where(o => model.UsersIds.Contains(o.AssignedUserId) || o.LeadOrderChangements.Any(ac => model.UsersIds.Contains(ac.NewAssignedUserId) || model.UsersIds.Contains(ac.OldAssignedUserId)));
             }
             if (model.ProductTypesIds.Length > 0)
             {
@@ -66,7 +70,7 @@ namespace LeadControl.Web.Controllers
                         o =>
                             (o.DeliveryAddress != null && o.DeliveryAddress.ToLower().Contains(term) ||
                              (o.LeadOrdersComments.Any(loc => loc.Comments != null && loc.Comments.Contains(term))) ||
-                             (o.LeadOrderStatusChangements.Any(loc => loc.Comments != null && loc.Comments.Contains(term)))));
+                             (o.LeadOrderChangements.Any(loc => loc.Comments != null && loc.Comments.Contains(term)))));
             }
             
             PushNavigationItem("Заказы","/orders");
@@ -151,12 +155,12 @@ namespace LeadControl.Web.Controllers
             };
 
             // Создаем первоначальные данные по истории заявки
-            order.LeadOrderStatusChangements.Add(new LeadOrderStatusChangement()
+            order.LeadOrderChangements.Add(new LeadOrderChangement()
             {
                 AuthorId = CurrentUser.Id,
                 LeadOrder = order,
                 DateCreated = DateTime.Now,
-                Status = (short)LeadOrderStatus.Initial,
+                NewStatus = (short)LeadOrderStatus.Initial,
                 Comments = "Создание заказа пользователем "+CurrentUser.GetFio()
             });
 
@@ -519,5 +523,131 @@ namespace LeadControl.Web.Controllers
 
             return Json(new { success = true });
         }
+
+        /// <summary>
+        /// Отображает форму редактирования дополнительных сведений по заказу - способы доставки и оплаты
+        /// </summary>
+        /// <param name="id">Идентификатор заказа</param>
+        /// <returns></returns>
+        [Route("orders/create-info/{id}")][AuthorizationCheck(Permission.Manager)]
+        public ActionResult EditOrderInfo(long id)
+        {
+            var order = DataContext.LeadOrders.FirstOrDefault(lo => lo.Id == id);
+            if (order == null)
+            {
+                ShowError("Такой заказ не найден");
+                return RedirectToAction("Index");
+            }
+
+            PushNavigationItem("Заказы", "/orders");
+            PushNavigationItem("Создание нового заказа. Шаг 3 - Информация по доставке и оплате", "#");
+
+            return View(order);
+        }
+
+        /// <summary>
+        /// Обрабатывает последний этап создания заявки
+        /// </summary>
+        /// <param name="id">Идентификатор заказа</param>
+        /// <param name="paymentType">Способ оплаты</param>
+        /// <param name="deliveryType">Способ доставки</param>
+        /// <param name="deliveryAddress">Адрес доставки</param>
+        /// <returns></returns>
+        [Route("orders/create-3")][HttpPost][AuthorizationCheck(Permission.Manager)]
+        public ActionResult Create3Step(long id,short paymentType, short deliveryType, string deliveryAddress)
+        {
+            var order = DataContext.LeadOrders.FirstOrDefault(lo => lo.Id == id);
+            if (order == null)
+            {
+                ShowError("Такой заказ не найден");
+                return RedirectToAction("Index");
+            }
+
+            if (order.Status == (short) LeadOrderStatus.Completed)
+            {
+                ShowError("Заказ уже выполнен");
+                return RedirectToAction("Index");
+            }
+
+            order.DeliveryType = deliveryType;
+            order.PaymentType = paymentType;
+            order.DeliveryAddress = deliveryAddress;
+            order.DateModified = DateTime.Now;
+            DataContext.SubmitChanges();
+
+            return RedirectToAction("Info", new {id});
+        }
+
+        /// <summary>
+        /// Обрабатывает изменения статуса указанного заказа
+        /// </summary>
+        /// <param name="id">Идентификатор заказа</param>
+        /// <param name="newStatus">Новый статус</param>
+        /// <param name="newUser">Новый пользователь</param>
+        /// <param name="newWarehouse">Новый назначенный склад</param>
+        /// <param name="comments">Комментарии</param>
+        /// <param name="createFeaOrder">Создать ли заявку на дозакуп</param>
+        /// <param name="redirectUrl">Url куда сделать редирект</param>
+        /// <param name="extractFromWarehouse">Извлечь ли остатки товара с назначенного склада</param>
+        /// <returns></returns>
+        [HttpPost][Route("orders/change-order-status")][AuthorizationCheck()]
+        public ActionResult ChangeOrderStatus(long id, short newStatus, long newUser, long newWarehouse, string comments,
+            bool createFeaOrder, string redirectUrl, bool extractFromWarehouse = false)
+        {
+            var order = DataContext.LeadOrders.FirstOrDefault(lo => lo.Id == id);
+            if (order == null)
+            {
+                ShowError("Такой заказ не найден");
+                return RedirectToAction("Index");
+            }
+
+            if (!order.CanChangeStatus(CurrentUser))
+            {
+                ShowError("Такой заказ не найден");
+                return RedirectToAction("Index");
+            }
+
+            // Изменяем статус
+            var oldStatus = order.Status;
+            var oldAssignedUserId = order.AssignedUserId;
+            var oldWarehouse = order.AssignedWarehouseId;
+            order.Status = newStatus;
+            order.DateModified = DateTime.Now;
+            if (newUser != oldAssignedUserId)
+            {
+                order.User.LeadOrders.Remove(order);
+                DataContext.Users.First(u => u.Id == newUser).LeadOrders.Add(order);
+            }
+            if (newWarehouse != oldWarehouse)
+            {
+                if (order.Warehouse != null)
+                {
+                    order.Warehouse.LeadOrders.Remove(order);
+                }
+                DataContext.Warehouses.First(w => w.Id == newWarehouse).LeadOrders.Add(order);
+            }
+            order.LeadOrderChangements.Add(new LeadOrderChangement()
+            {
+                Author = CurrentUser,
+                Comments = comments,
+                OldStatus = oldStatus,
+                OldAssignedUserId = oldAssignedUserId,
+                OldWarehouseId = oldWarehouse,
+                NewStatus = newStatus,
+                NewAssignedUserId = newUser,
+                NewWarehouseId = newWarehouse,
+                LeadOrder = order,
+                DateCreated = DateTime.Now
+            });
+
+            // Сохраняем
+            DataContext.SubmitChanges();
+
+            ShowSuccess(string.Format("Статус заказа №{0} для {1} был успешно изменен", order.Id, order.Lead.ToString()));
+
+            return Redirect(redirectUrl + "#history");
+        }
     }
+
+    
 }
