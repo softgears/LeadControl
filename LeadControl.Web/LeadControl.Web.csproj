@@ -133,6 +133,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\FEAController.cs" />
+    <Compile Include="Controllers\FinancesController.cs" />
     <Compile Include="Controllers\LeadsController.cs" />
     <Compile Include="Controllers\ManageProductsController.cs" />
     <Compile Include="Controllers\ManageProjectsController.cs" />
@@ -1279,6 +1280,7 @@
     <Content Include="Views\Shared\OrderItemsEditor.cshtml" />
     <Content Include="Views\Orders\EditOrderInfo.cshtml" />
     <Content Include="Views\Shared\OrderItemsTable.cshtml" />
+    <Content Include="Views\Finances\Index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
