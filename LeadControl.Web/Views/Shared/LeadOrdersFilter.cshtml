@@ -89,7 +89,7 @@
                         <label class="col-lg-2 control-label" for="projects-field">Типы оплаты</label>
                         <div class="col-lg-10">
                             <select id="payment-types-field" name="PaymentTypes" multiple="multiple">
-                                @foreach (DeliveryTypes paymentType in Enum.GetValues(typeof(DeliveryTypes)))
+                                @foreach (PaymentTypes paymentType in Enum.GetValues(typeof(PaymentTypes)))
                                 {
                                     var pt = (short) paymentType;
                                     <option value="@pt" @(Model.FilterData.PaymentTypes.Contains(pt) ? "selected=selected":"")>@paymentType.GetEnumMemberName()</option>

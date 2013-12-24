@@ -38,6 +38,6 @@ namespace LeadControl.Domain.Enums
         /// Оплата банковским безналичным переводом по выставленному счету
         /// </summary>
         [EnumDescription("Банковский безналичный платеж")]
-        BankPayment = 3,
+        BankPayment = 4,
     }
 }
