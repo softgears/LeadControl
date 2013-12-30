@@ -12,21 +12,25 @@ using LeadControl.Web.Models.Orders;
 namespace LeadControl.Web.Controllers
 {
     /// <summary>
-    /// Контроллер управления бухгатерской информацией по заказам
+    /// Контроллер управления логистикой
     /// </summary>
-    public class FinancesController : BaseController
+    public class LogisticsController : BaseController
     {
         /// <summary>
         /// Отображает список заказов, над которыми доступны финансовые операции
         /// </summary>
         /// <param name="model">Модель данных для фильтрации</param>
         /// <returns></returns>
-        [Route("finances")][AuthorizationCheck(Permission.Finances)]
+        [Route("logistics")]
+        [AuthorizationCheck(Permission.Logistics)]
         public ActionResult Index(OrdersFiltrationModel model)
         {
             // Выбираем
             var projects = CurrentUser.IsAdmin() ? DataContext.Projects.Select(p => p.Id) : CurrentUser.ProjectUsers.Select(p => p.ProjectId);
-            IEnumerable<LeadOrder> orders = DataContext.LeadOrders.Where(o => projects.Contains(o.ProjectId) && o.Status > (short)LeadOrderStatus.Initial && o.Status != (short)LeadOrderStatus.Completed);
+            var warehouses = CurrentUser.IsAdmin()
+                ? DataContext.Warehouses.Select(w => w.Id)
+                : CurrentUser.WarehouseKeepers.Select(w => w.WarehouseId);
+            IEnumerable<LeadOrder> orders = DataContext.LeadOrders.Where(o => projects.Contains(o.ProjectId) && warehouses.Contains(o.AssignedWarehouseId) && o.Status > (short)LeadOrderStatus.Initial && o.Status != (short)LeadOrderStatus.Completed);
             if (model.LeadIds.Length > 0)
             {
                 orders = orders.Where(o => model.LeadIds.Contains(o.LeadId));
@@ -74,21 +78,20 @@ namespace LeadControl.Web.Controllers
                              (o.LeadOrderChangements.Any(loc => loc.Comments != null && loc.Comments.Contains(term)))));
             }
 
-            PushNavigationItem("Финансы", "/logistics");
-            PushNavigationItem("Оплаты по заказам", "#");
+            PushNavigationItem("Логистика", "/logistics");
+            PushNavigationItem("Заказы на выдачу", "#");
 
             model.Fetched = orders.OrderByDescending(d => d.DateModified).ToList();
 
             return View(model);
         }
 
-
         /// <summary>
         /// Отображает карточку указанного заказа
         /// </summary>
         /// <param name="id">Идентификатор заказа</param>
         /// <returns></returns>
-        [Route("finances/{id}/info")]
+        [Route("logistics/{id}/info")]
         [AuthorizationCheck()]
         public ActionResult Info(long id)
         {
@@ -99,57 +102,10 @@ namespace LeadControl.Web.Controllers
                 return RedirectToAction("Index");
             }
 
-            PushNavigationItem("Финансы", "/finances");
+            PushNavigationItem("Логистика", "/logistics");
             PushNavigationItem(string.Format("Информация о заказе №{0} для {1}", order.Id, order.Lead.ToString()), "#");
 
             return View("LeadOrderInfo", order);
-        }
-
-        /// <summary>
-        /// Обрабатывает добавление платежа за заказ
-        /// </summary>
-        /// <param name="id">Идентификатор заказа</param>
-        /// <param name="amount">Сумма оплаты</param>
-        /// <param name="paymentType">Тип оплаты</param>
-        /// <param name="customer">Информация о заказчике</param>
-        /// <param name="document">Информация о платежке</param>
-        /// <returns></returns>
-        [HttpPost][AuthorizationCheck(Permission.Finances)][Route("finances/add-order-payment")]
-        public ActionResult AddPayment(long id, decimal amount, short paymentType, string customer, string document)
-        {
-            var order = DataContext.LeadOrders.FirstOrDefault(lo => lo.Id == id);
-            if (order == null)
-            {
-                ShowError("Такой заказ не найден");
-                return RedirectToAction("Index");
-            }
-
-            order.LeadOrderPayments.Add(new LeadOrderPayment()
-            {
-                LeadOrder = order,
-                Amount = amount,
-                User = CurrentUser,
-                Customer = customer,
-                PaymentType = paymentType,
-                DocumentNumber = document,
-                DateCreated = DateTime.Now
-            });
-            order.LeadOrderChangements.Add(new LeadOrderChangement()
-            {
-                Author = CurrentUser,
-                DateCreated = DateTime.Now,
-                NewStatus = order.Status,
-                OldStatus = order.Status,
-                NewWarehouseId = order.AssignedWarehouseId,
-                OldWarehouseId = order.AssignedWarehouseId,
-                OldAssignedUserId = order.AssignedUserId,
-                NewAssignedUserId = order.AssignedUserId,
-                Comments = String.Format("Поступление оплаты за заказ в размере {0:c} по документу {1} от {2}", amount, document, customer)
-            });
-            order.DateModified = DateTime.Now;
-            DataContext.SubmitChanges();
-
-            return Redirect(string.Format("/finances/{0}/info#money", id));
         }
 
     }

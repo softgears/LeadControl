@@ -20,7 +20,8 @@ namespace LeadControl.Web.Controllers
         /// Отображает список заказов исходя из указанных условий фильтрации
         /// </summary>
         /// <returns></returns>
-        [Route("orders")][AuthorizationCheck(Permission.Manager)]
+        [Route("orders")]
+        [AuthorizationCheck(Permission.Manager)]
         public ActionResult Index(OrdersFiltrationModel model)
         {
             // Выбираем
@@ -60,7 +61,7 @@ namespace LeadControl.Web.Controllers
                     orders.Where(
                         o =>
                             o.LeadOrderPayments.Sum(p => p.Amount) >=
-                            o.LeadOrderItems.Sum(loi => loi.Price*loi.Quantity));
+                            o.LeadOrderItems.Sum(loi => loi.Price * loi.Quantity));
             }
             if (!String.IsNullOrEmpty(model.Term))
             {
@@ -72,9 +73,9 @@ namespace LeadControl.Web.Controllers
                              (o.LeadOrdersComments.Any(loc => loc.Comments != null && loc.Comments.Contains(term))) ||
                              (o.LeadOrderChangements.Any(loc => loc.Comments != null && loc.Comments.Contains(term)))));
             }
-            
-            PushNavigationItem("Заказы","/orders");
-            PushNavigationItem("Список заказов","#");
+
+            PushNavigationItem("Заказы", "/orders");
+            PushNavigationItem("Список заказов", "#");
 
             model.Fetched = orders.OrderByDescending(d => d.DateModified).ToList();
 
@@ -86,7 +87,8 @@ namespace LeadControl.Web.Controllers
         /// </summary>
         /// <param name="id">Идентификатор заказа</param>
         /// <returns></returns>
-        [Route("orders/{id}/info")][AuthorizationCheck()]
+        [Route("orders/{id}/info")]
+        [AuthorizationCheck()]
         public ActionResult Info(long id)
         {
             var order = DataContext.LeadOrders.FirstOrDefault(lo => lo.Id == id);
@@ -106,7 +108,8 @@ namespace LeadControl.Web.Controllers
         /// Отображает форму создания нового заказа
         /// </summary>
         /// <returns></returns>
-        [Route("orders/create")][AuthorizationCheck(Permission.Manager)]
+        [Route("orders/create")]
+        [AuthorizationCheck(Permission.Manager)]
         public ActionResult Create()
         {
             PushNavigationItem("Заказы", "/orders");
@@ -122,7 +125,9 @@ namespace LeadControl.Web.Controllers
         /// <param name="ProjectId">Идентификатор проекта в рамках которого создается заказ</param>
         /// <param name="model">Модель данных по новому лиду</param>
         /// <returns></returns>
-        [Route("orders/create-1")][AuthorizationCheck(Permission.Manager)][HttpPost]
+        [Route("orders/create-1")]
+        [AuthorizationCheck(Permission.Manager)]
+        [HttpPost]
         public ActionResult Create1Step(long LeadId, long ProjectId, Lead model)
         {
             // Ищем или создаем лида, к которому создается заказ
@@ -148,9 +153,9 @@ namespace LeadControl.Web.Controllers
             {
                 DateCreated = DateTime.Now,
                 User = CurrentUser,
-                DeliveryType = (short) DeliveryTypes.Self,
-                PaymentType = (short) PaymentTypes.BankPayment,
-                Status = (short) LeadOrderStatus.Initial,
+                DeliveryType = (short)DeliveryTypes.Self,
+                PaymentType = (short)PaymentTypes.BankPayment,
+                Status = (short)LeadOrderStatus.Initial,
                 ProjectId = ProjectId
             };
 
@@ -161,7 +166,7 @@ namespace LeadControl.Web.Controllers
                 LeadOrder = order,
                 DateCreated = DateTime.Now,
                 NewStatus = (short)LeadOrderStatus.Initial,
-                Comments = "Создание заказа пользователем "+CurrentUser.GetFio()
+                Comments = "Создание заказа пользователем " + CurrentUser.GetFio()
             });
 
             lead.LeadOrders.Add(order);
@@ -169,7 +174,7 @@ namespace LeadControl.Web.Controllers
 
             ShowSuccess(string.Format("Заказ №{0} успешно создан для лида {1}", order.Id, lead.ToString()));
 
-            return RedirectToAction("EditOrderItems", new {id = order.Id});
+            return RedirectToAction("EditOrderItems", new { id = order.Id });
         }
 
         /// <summary>
@@ -177,7 +182,8 @@ namespace LeadControl.Web.Controllers
         /// </summary>
         /// <param name="id">Идентификатор заказа</param>
         /// <returns></returns>
-        [Route("orders/create-edit-items/{id}")][AuthorizationCheck(Permission.Manager)]
+        [Route("orders/create-edit-items/{id}")]
+        [AuthorizationCheck(Permission.Manager)]
         public ActionResult EditOrderItems(long id)
         {
             var order = DataContext.LeadOrders.FirstOrDefault(lo => lo.Id == id);
@@ -191,7 +197,7 @@ namespace LeadControl.Web.Controllers
             if (order.Status != (short)LeadOrderStatus.Initial)
             {
                 ShowError("Можно редактировать только те заказы, которые находятся в статусе формирования");
-                return RedirectToAction("Info",new {id});
+                return RedirectToAction("Info", new { id });
             }
 
             PushNavigationItem("Заказы", "/orders");
@@ -223,7 +229,7 @@ namespace LeadControl.Web.Controllers
                 });
             }
 
-            if (order.Status != (short) LeadOrderStatus.Initial)
+            if (order.Status != (short)LeadOrderStatus.Initial)
             {
                 return Json(new
                 {
@@ -529,7 +535,8 @@ namespace LeadControl.Web.Controllers
         /// </summary>
         /// <param name="id">Идентификатор заказа</param>
         /// <returns></returns>
-        [Route("orders/create-info/{id}")][AuthorizationCheck(Permission.Manager)]
+        [Route("orders/create-info/{id}")]
+        [AuthorizationCheck(Permission.Manager)]
         public ActionResult EditOrderInfo(long id)
         {
             var order = DataContext.LeadOrders.FirstOrDefault(lo => lo.Id == id);
@@ -553,8 +560,10 @@ namespace LeadControl.Web.Controllers
         /// <param name="deliveryType">Способ доставки</param>
         /// <param name="deliveryAddress">Адрес доставки</param>
         /// <returns></returns>
-        [Route("orders/create-3")][HttpPost][AuthorizationCheck(Permission.Manager)]
-        public ActionResult Create3Step(long id,short paymentType, short deliveryType, string deliveryAddress)
+        [Route("orders/create-3")]
+        [HttpPost]
+        [AuthorizationCheck(Permission.Manager)]
+        public ActionResult Create3Step(long id, short paymentType, short deliveryType, string deliveryAddress)
         {
             var order = DataContext.LeadOrders.FirstOrDefault(lo => lo.Id == id);
             if (order == null)
@@ -563,7 +572,7 @@ namespace LeadControl.Web.Controllers
                 return RedirectToAction("Index");
             }
 
-            if (order.Status == (short) LeadOrderStatus.Completed)
+            if (order.Status == (short)LeadOrderStatus.Completed)
             {
                 ShowError("Заказ уже выполнен");
                 return RedirectToAction("Index");
@@ -575,7 +584,7 @@ namespace LeadControl.Web.Controllers
             order.DateModified = DateTime.Now;
             DataContext.SubmitChanges();
 
-            return RedirectToAction("Info", new {id});
+            return RedirectToAction("Info", new { id });
         }
 
         /// <summary>
@@ -590,7 +599,9 @@ namespace LeadControl.Web.Controllers
         /// <param name="redirectUrl">Url куда сделать редирект</param>
         /// <param name="extractFromWarehouse">Извлечь ли остатки товара с назначенного склада</param>
         /// <returns></returns>
-        [HttpPost][Route("orders/change-order-status")][AuthorizationCheck()]
+        [HttpPost]
+        [Route("orders/change-order-status")]
+        [AuthorizationCheck()]
         public ActionResult ChangeOrderStatus(long id, short newStatus, long newUser, long newWarehouse, string comments,
             bool createFeaOrder, string redirectUrl, bool extractFromWarehouse = false)
         {
@@ -645,9 +656,113 @@ namespace LeadControl.Web.Controllers
 
             ShowSuccess(string.Format("Статус заказа №{0} для {1} был успешно изменен", order.Id, order.Lead.ToString()));
 
+            if (extractFromWarehouse && order.Warehouse != null)
+            {
+                // Извлекаем остатки со склада
+                foreach (var orderItem in order.LeadOrderItems)
+                {
+                    var warehouseProduct =
+                        order.Warehouse.WarehouseProducts.FirstOrDefault(wp => wp.ProductId == orderItem.ProductId);
+                    if (warehouseProduct == null)
+                    {
+                        warehouseProduct = new WarehouseProduct()
+                        {
+                            DateCreated = DateTime.Now,
+                            ProductId = orderItem.ProductId,
+                            Quantity = 0,
+                            Warehouse = order.Warehouse,
+                            Price = orderItem.Price
+                        };
+                        order.Warehouse.WarehouseProducts.Add(warehouseProduct);
+                    }
+                    warehouseProduct.Quantity = warehouseProduct.Quantity - orderItem.Quantity;
+                    warehouseProduct.DateModified = DateTime.Now;
+                    warehouseProduct.WarehouseProductChangements.Add(new WarehouseProductChangement()
+                    {
+                        DateCreated = DateTime.Now,
+                        Amount = orderItem.Quantity,
+                        Direction = (short)WarehouseProductChangementDirection.Outcome,
+                        WarehouseProduct = warehouseProduct,
+                        Description = String.Format("Изъятие остатков в количестве {0} для выполнения заказа №{1} пользователем {2}", orderItem.Quantity, order.Id, CurrentUser.GetFio())
+                    });
+                }
+                order.LeadOrderChangements.Add(new LeadOrderChangement()
+                {
+                    Author = CurrentUser,
+                    NewAssignedUserId = order.AssignedUserId,
+                    OldAssignedUserId = order.AssignedUserId,
+                    OldStatus = order.Status,
+                    NewStatus = order.Status,
+                    OldWarehouseId = order.AssignedWarehouseId,
+                    NewWarehouseId = order.AssignedWarehouseId,
+                    DateCreated = DateTime.Now,
+                    Comments = String.Format("Извлечение остатков со склада {0} ({1}) в общем количестве {2}", order.Warehouse.Title, order.Warehouse.City, order.LeadOrderItems.Sum(oi => oi.Quantity))
+                });
+                DataContext.SubmitChanges();
+                ShowSuccess(string.Format("Остатки со склада {0} ({1}) были успешно извлечены", order.Warehouse.Title, order.Warehouse.City));
+            }
+
+            // Создаем заявку на дозакуп
+            if (createFeaOrder)
+            {
+                // Ищем менеджера
+                var targetManagers =
+                    order.Project.ProjectUsers.Where(u => u.User.HasPermission(Permission.FEA))
+                        .Select(u => u.User)
+                        .ToList();
+                if (targetManagers.Count > 0)
+                {
+                    User targetManager = null;
+                    targetManager = targetManagers.FirstOrDefault(u => u.RoleId != 1) ?? targetManagers.FirstOrDefault();
+                    if (targetManager != null)
+                    {
+                        var newFeaOrder = new FEAOrder()
+                        {
+                            Description =
+                                string.Format("Заявка на дозакуп, сформированная автоматически из заказа №{0}", order.Id),
+                            DateCreated = DateTime.Now,
+                            Status = (short)FEAOrderStatus.Gathering,
+                            Manager = targetManager,
+                            Project = order.Project,
+                            TargetWarehouse = order.Warehouse
+                        };
+                        newFeaOrder.FEAOrderItems.AddRange(order.LeadOrderItems.Select(oi => new FEAOrderItem()
+                        {
+                            DateCreated = DateTime.Now,
+                            FEAOrder = newFeaOrder,
+                            Price = oi.Price,
+                            ProductId = oi.ProductId,
+                            Quantity = oi.Quantity*2
+                        }));
+                        newFeaOrder.FEAOrdersStatusChangements.Add(new FEAOrdersStatusChangement()
+                        {
+                            User = CurrentUser,
+                            FEAOrder = newFeaOrder,
+                            DateCreated = DateTime.Now,
+                            Status = (short)FEAOrderStatus.Gathering,
+                            Comments = string.Format("Автоматическое создание заявку на дозакуп из заказа №{0}", order.Id)
+                        });
+                        order.LeadOrderChangements.Add(new LeadOrderChangement()
+                        {
+                            Author = CurrentUser,
+                            NewAssignedUserId = order.AssignedUserId,
+                            OldAssignedUserId = order.AssignedUserId,
+                            OldStatus = order.Status,
+                            NewStatus = order.Status,
+                            OldWarehouseId = order.AssignedWarehouseId,
+                            NewWarehouseId = order.AssignedWarehouseId,
+                            DateCreated = DateTime.Now,
+                            Comments = String.Format("Автоматическое создание заявки на дозакуп №{0} на пользователя {1}",newFeaOrder.Id,targetManager.GetFio())
+                        });
+                        DataContext.SubmitChanges();
+                        ShowSuccess(string.Format("Заявка на дозакуп №{0} успешно сформирована", newFeaOrder.Id));
+                    }
+                }
+            }
+
             return Redirect(redirectUrl + "#history");
         }
     }
 
-    
+
 }

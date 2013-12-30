@@ -52,6 +52,11 @@ namespace LeadControl.Domain.Entities
         public const long Finances = 7;
 
         /// <summary>
+        /// Привилегии логиста
+        /// </summary>
+        public const long Logistics = 8;
+
+        /// <summary>
         /// Доступ к ВЭД заявкам
         /// </summary>
         public const long FEA = 9;

@@ -1,0 +1,117 @@
+﻿@using LeadControl.Domain.Enums
+@using LeadControl.Web.Classes.Ext
+@using LeadControl.Web.Controllers
+@using LeadControl.Web.Models.Orders
+@model LeadControl.Web.Models.Orders.OrdersFiltrationModel
+
+@{
+    ViewBag.Title = "Заказы на выдачу";
+    Layout = "../Shared/AccountLayout.cshtml";
+}
+
+@Html.Partial("LeadOrdersFilter", new LeadOrderFilterModel()
+{
+    CallbackUrl = "/finances",
+    FilterData = Model
+})
+@foreach (var group in Model.Fetched.GroupBy(o => o.Warehouse).Where(g => g.Key != null))
+{
+    var orders = group.ToList();
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="icon"><i class="icon20 i-table"></i></div>
+                    <h4>На выдачу со склада <b>@group.Key.Title (@group.Key.City)</b></h4>
+                    <a href="#" class="minimize"></a>
+                </div>
+                <!-- End .panel-heading -->
+                <div class="panel-body">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>ИД
+                                </th>
+                                <th>Лид
+                                </th>
+                                <th>Проект
+                                </th>
+                                <th>Статус
+                                </th>
+                                <th>Товаров
+                                </th>
+                                <th>Стоимость
+                                </th>
+                                <th>Оплачен
+                                </th>
+                                <th>Тип доставки</th>
+                                <th>Дата создания
+                                </th>
+                                <th>Дата обновления
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (orders.Count == 0)
+                            {
+                                <tr>
+                                    <td colspan="11">Не найдено заказов
+                                    </td>
+                                </tr>
+                            }
+                            else
+                            {
+                                foreach (var order in orders)
+                                {
+                                    var sum = order.LeadOrderItems.Sum(oi => oi.Quantity * oi.Price);
+                                    var payedSum = order.LeadOrderPayments.Sum(p => p.Amount);
+                                <tr>
+                                    <td>
+                                        <a href="/logistics/@order.Id/info">@order.Id</a>
+                                    </td>
+                                    <td>
+                                        @order.Lead.ToString()
+                                    </td>
+                                    <td>
+                                        @order.Project.Title
+                                    </td>
+                                    <td>
+                                        @(((LeadOrderStatus)order.Status).GetEnumMemberName())
+                                    </td>
+                                    <td>
+                                        @order.LeadOrderItems.Sum(oi => oi.Quantity) шт
+                                    </td>
+                                    <td>
+                                        @String.Format("{0:c}", sum)
+                                    </td>
+                                    <td>
+                                        @if (payedSum >= sum)
+                                        {
+                                            <text>полностью</text>
+                                        }
+                                        else
+                                        {
+                                            <text>нет (осталось @String.Format("{0:c}", (sum - payedSum)))</text>
+                                        }
+                                    </td>
+                                    <td>@(((DeliveryTypes)order.DeliveryType).GetEnumMemberName())</td>
+                                    <td>
+                                        <span class="tip" title="@order.DateCreated.FormatDateTime()">@order.DateCreated.TimeAgo()</span>
+                                    </td>
+                                    <td>
+                                        <span class="tip" title="@order.DateModified.FormatDateTime()">@order.DateModified.TimeAgo()</span>
+                                    </td>
+                                    <td style="width: 45px">
+                                        <a href="/logistics/@order.Id/info" class="btn btn-xs btn-info tip" title="Карточка заказа"><i class="icon12 i-info"></i></a>
+                                    </td>
+                                </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+}

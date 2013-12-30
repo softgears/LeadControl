@@ -172,36 +172,51 @@
                                 <span class="txt">Лиды</span>
                             </a>
                         </li>
+                        @if (ViewContext.CurrentUser().HasPermission(Permission.Manager))
+                        {
                         <li>
                             <a href="/orders">
                                 <span class="icon"><i class="icon20 i-cart-3"></i></span>
                                 <span class="txt">Заказы</span>
                             </a>
-                        </li>
+                        </li>    
+                        }
+                        @if (ViewContext.CurrentUser().HasPermission(Permission.Finances))
+                        {
                         <li>
                             <a href="/finances">
                                 <span class="icon"><i class="icon20 i-coins"></i></span>
                                 <span class="txt">Бухгалтерия</span>
                             </a>
-                        </li>
+                        </li>    
+                        }
+                        @if (ViewContext.CurrentUser().HasPermission(Permission.Warehousing))
+                        {
                         <li>
                             <a href="/warehouses">
                                 <span class="icon"><i class="icon20 i-home-12"></i></span>
                                 <span class="txt">Склады</span>
                             </a>
                         </li>
+                        }
+                        @if (ViewContext.CurrentUser().HasPermission(Permission.Logistics))
+                        {
                         <li>
                             <a href="/logistics">
                                 <span class="icon"><i class="icon20 i-car"></i></span>
                                 <span class="txt">Логистика</span>
                             </a>
                         </li>
+                        }
+                        @if (ViewContext.CurrentUser().HasPermission(Permission.FEA))
+                        {
                         <li>
                             <a href="/fea">
                                 <span class="icon"><i class="icon20 i-shield-2"></i></span>
                                 <span class="txt">ВЭД</span>
                             </a>
                         </li>
+                        }
                         @if (ViewContext.CurrentUser().HasAdministrativePermission())
                         {
                         <li>
@@ -210,42 +225,51 @@
                                 <span class="txt">Администрирование</span>
                             </a>
                             <ul class="sub">
+                                @if (ViewContext.CurrentUser().HasPermission(Permission.ManageProjects))
+                                {
                                 <li>
                                     <a href="/manage/projects">
                                         <span class="icon"><i class="icon20 i-vcard"></i></span>
                                         <span class="txt">Проекты</span>
                                     </a>
                                 </li>
+                                }
+                                @if (ViewContext.CurrentUser().HasPermission(Permission.ManageProducts))
+                                {
                                 <li>
                                     <a href="/manage/products">
                                         <span class="icon"><i class="icon20 i-golf"></i></span>
                                         <span class="txt">Товары</span>
                                     </a>
                                 </li>
+                                }
+                                @if (ViewContext.CurrentUser().HasPermission(Permission.ManageWarehouses))
+                                {
                                 <li>
                                     <a href="/manage/warehouses">
                                         <span class="icon"><i class="icon20 i-home-3"></i></span>
                                         <span class="txt">Склады</span>
                                     </a>
                                 </li>
+                                }
+                                @if (ViewContext.CurrentUser().HasPermission(Permission.ManageUsers))
+                                {
                                 <li>
                                     <a href="/manage/users">
                                         <span class="icon"><i class="icon20 i-users"></i></span>
                                         <span class="txt">Пользователи</span>
                                     </a>
                                 </li>
+                                }
+                                @if (ViewContext.CurrentUser().HasPermission(Permission.ManageRoles))
+                                {
                                 <li>
                                     <a href="/manage/roles">
                                         <span class="icon"><i class="icon20 i-user-2"></i></span>
                                         <span class="txt">Роли</span>
                                     </a>
                                 </li>
-                                <li>
-                                    <a href="/manage/docs">
-                                        <span class="icon"><i class="icon20 i-file-3"></i></span>
-                                        <span class="txt">Шаблоны документов</span>
-                                    </a>
-                                </li>
+                                }
                             </ul>
                         </li>
                         }

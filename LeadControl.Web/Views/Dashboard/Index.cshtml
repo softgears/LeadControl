@@ -209,9 +209,9 @@
         </div>
     </div>
 }
-@if (currentUser.IsAdmin() || currentUser.HasPermission(Permission.Warehousing))
+@if (currentUser.IsAdmin() || currentUser.HasPermission(Permission.Logistics))
 {
-    var warehouses = currentUser.WarehouseKeepers.Select(wk => wk.WarehouseId);
+    var warehouses = currentUser.IsAdmin() ? dc.Warehouses.Select(w => w.Id) : currentUser.WarehouseKeepers.Select(wk => wk.WarehouseId);
     var ordersToExtract = dc.LeadOrders.Where(o => o.Status != (short) LeadOrderStatus.Completed && warehouses.Contains(o.AssignedWarehouseId)).OrderByDescending(o => o.DateModified).Take(5).ToList();
     <div class="row">
         <div class="col-lg-12">
