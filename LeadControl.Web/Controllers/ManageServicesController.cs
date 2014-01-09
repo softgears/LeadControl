@@ -37,11 +37,11 @@ namespace LeadControl.Web.Controllers
             }
             if (model.ServicePeriods.Length > 0)
             {
-                services = services.Where(p => model.ServiceTypes.Contains(p.PeriodType));
+                services = services.Where(p => model.ServicePeriods.Contains(p.PeriodType));
             }
             if (model.PaymentTypes.Length > 0)
             {
-                services = services.Where(p => model.ServiceTypes.Contains(p.PaymentType));
+                services = services.Where(p => model.PaymentTypes.Contains(p.PaymentType));
             }
             if (!String.IsNullOrEmpty(model.Term))
             {

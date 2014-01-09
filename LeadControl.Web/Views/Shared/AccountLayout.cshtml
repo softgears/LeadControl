@@ -172,6 +172,15 @@
                                 <span class="txt">Лиды</span>
                             </a>
                         </li>
+                        @if (ViewContext.CurrentUser().HasPermission(Permission.ServicesManager))
+                        {
+                        <li>
+                            <a href="/agreements">
+                                <span class="icon"><i class="icon20 i-diamonds"></i></span>
+                                <span class="txt">Договора</span>
+                            </a>
+                        </li>    
+                        }
                         @if (ViewContext.CurrentUser().HasPermission(Permission.OrdersManager))
                         {
                         <li>

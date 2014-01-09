@@ -77,6 +77,9 @@
                                 Телефон
                             </th>
                             <th>
+                                Договоров
+                            </th>
+                            <th>
                                 Заказов
                             </th>
                             <th>
@@ -91,7 +94,7 @@
                         @if (Model.Fetched.Count == 0)
                         {
                             <tr>
-                                <td colspan="7">
+                                <td colspan="8">
                                     Не найдено лидов
                                 </td>
                             </tr>
@@ -114,10 +117,13 @@
                                         @lead.Phone.FormatPhoneNumber()
                                     </td>
                                     <td>
+                                        @lead.LeadAgreements.Count
+                                    </td>
+                                    <td>
                                         @lead.LeadOrders.Count
                                     </td>
                                     <td>
-                                        @String.Format("{0:c}",lead.LeadOrders.Sum(lo => lo.GetOrderTotalPrice()))
+                                        @String.Format("{0:c}",lead.LeadOrders.Sum(lo => lo.LeadOrderPayments.Sum(p => p.Amount)) + lead.LeadAgreements.Sum(la => la.LeadAgreementPayments.Sum(p => p.Amount)))
                                     </td>
                                     <td style="width: 135px">
                                         <a href="/orders?LeadIds=@lead.Id" class="btn btn-xs btn-success tip" title="Заказы"><i class="icon12 i-cart-4"></i></a>    
