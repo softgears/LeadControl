@@ -106,6 +106,27 @@ namespace LeadControl.Domain.DAL
     partial void InsertLeadOrderChangement(LeadControl.Domain.Entities.LeadOrderChangement instance);
     partial void UpdateLeadOrderChangement(LeadControl.Domain.Entities.LeadOrderChangement instance);
     partial void DeleteLeadOrderChangement(LeadControl.Domain.Entities.LeadOrderChangement instance);
+    partial void InsertLeadAgreementChangement(LeadControl.Domain.Entities.LeadAgreementChangement instance);
+    partial void UpdateLeadAgreementChangement(LeadControl.Domain.Entities.LeadAgreementChangement instance);
+    partial void DeleteLeadAgreementChangement(LeadControl.Domain.Entities.LeadAgreementChangement instance);
+    partial void InsertLeadAgreementChangementValue(LeadControl.Domain.Entities.LeadAgreementChangementValue instance);
+    partial void UpdateLeadAgreementChangementValue(LeadControl.Domain.Entities.LeadAgreementChangementValue instance);
+    partial void DeleteLeadAgreementChangementValue(LeadControl.Domain.Entities.LeadAgreementChangementValue instance);
+    partial void InsertLeadAgreementPayment(LeadControl.Domain.Entities.LeadAgreementPayment instance);
+    partial void UpdateLeadAgreementPayment(LeadControl.Domain.Entities.LeadAgreementPayment instance);
+    partial void DeleteLeadAgreementPayment(LeadControl.Domain.Entities.LeadAgreementPayment instance);
+    partial void InsertLeadAgreement(LeadControl.Domain.Entities.LeadAgreement instance);
+    partial void UpdateLeadAgreement(LeadControl.Domain.Entities.LeadAgreement instance);
+    partial void DeleteLeadAgreement(LeadControl.Domain.Entities.LeadAgreement instance);
+    partial void InsertLeadAgreementService(LeadControl.Domain.Entities.LeadAgreementService instance);
+    partial void UpdateLeadAgreementService(LeadControl.Domain.Entities.LeadAgreementService instance);
+    partial void DeleteLeadAgreementService(LeadControl.Domain.Entities.LeadAgreementService instance);
+    partial void InsertLeadAgreementWork(LeadControl.Domain.Entities.LeadAgreementWork instance);
+    partial void UpdateLeadAgreementWork(LeadControl.Domain.Entities.LeadAgreementWork instance);
+    partial void DeleteLeadAgreementWork(LeadControl.Domain.Entities.LeadAgreementWork instance);
+    partial void InsertServiceType(LeadControl.Domain.Entities.ServiceType instance);
+    partial void UpdateServiceType(LeadControl.Domain.Entities.ServiceType instance);
+    partial void DeleteServiceType(LeadControl.Domain.Entities.ServiceType instance);
     #endregion
 		
 		public LCDataContext(string connection) : 
@@ -337,6 +358,62 @@ namespace LeadControl.Domain.DAL
 			get
 			{
 				return this.GetTable<LeadControl.Domain.Entities.LeadOrderChangement>();
+			}
+		}
+		
+		public System.Data.Linq.Table<LeadControl.Domain.Entities.LeadAgreementChangement> LeadAgreementChangements
+		{
+			get
+			{
+				return this.GetTable<LeadControl.Domain.Entities.LeadAgreementChangement>();
+			}
+		}
+		
+		public System.Data.Linq.Table<LeadControl.Domain.Entities.LeadAgreementChangementValue> LeadAgreementChangementValues
+		{
+			get
+			{
+				return this.GetTable<LeadControl.Domain.Entities.LeadAgreementChangementValue>();
+			}
+		}
+		
+		public System.Data.Linq.Table<LeadControl.Domain.Entities.LeadAgreementPayment> LeadAgreementPayments
+		{
+			get
+			{
+				return this.GetTable<LeadControl.Domain.Entities.LeadAgreementPayment>();
+			}
+		}
+		
+		public System.Data.Linq.Table<LeadControl.Domain.Entities.LeadAgreement> LeadAgreements
+		{
+			get
+			{
+				return this.GetTable<LeadControl.Domain.Entities.LeadAgreement>();
+			}
+		}
+		
+		public System.Data.Linq.Table<LeadControl.Domain.Entities.LeadAgreementService> LeadAgreementServices
+		{
+			get
+			{
+				return this.GetTable<LeadControl.Domain.Entities.LeadAgreementService>();
+			}
+		}
+		
+		public System.Data.Linq.Table<LeadControl.Domain.Entities.LeadAgreementWork> LeadAgreementWorks
+		{
+			get
+			{
+				return this.GetTable<LeadControl.Domain.Entities.LeadAgreementWork>();
+			}
+		}
+		
+		public System.Data.Linq.Table<LeadControl.Domain.Entities.ServiceType> ServiceTypes
+		{
+			get
+			{
+				return this.GetTable<LeadControl.Domain.Entities.ServiceType>();
 			}
 		}
 	}
@@ -2530,6 +2607,10 @@ namespace LeadControl.Domain.Entities
 		
 		private EntitySet<LeadOrder> _LeadOrders;
 		
+		private EntitySet<LeadAgreementChangement> _LeadAgreementChangements;
+		
+		private EntitySet<LeadAgreement> _LeadAgreements;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -2556,6 +2637,8 @@ namespace LeadControl.Domain.Entities
 			this._LeadLegalInfos = default(EntityRef<LeadLegalInfo>);
 			this._LeadPassportInfos = default(EntityRef<LeadPassportInfo>);
 			this._LeadOrders = new EntitySet<LeadOrder>(new Action<LeadOrder>(this.attach_LeadOrders), new Action<LeadOrder>(this.detach_LeadOrders));
+			this._LeadAgreementChangements = new EntitySet<LeadAgreementChangement>(new Action<LeadAgreementChangement>(this.attach_LeadAgreementChangements), new Action<LeadAgreementChangement>(this.detach_LeadAgreementChangements));
+			this._LeadAgreements = new EntitySet<LeadAgreement>(new Action<LeadAgreement>(this.attach_LeadAgreements), new Action<LeadAgreement>(this.detach_LeadAgreements));
 			OnCreated();
 		}
 		
@@ -2799,6 +2882,32 @@ namespace LeadControl.Domain.Entities
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Lead_LeadAgreementChangement", Storage="_LeadAgreementChangements", ThisKey="Id", OtherKey="AuthorId")]
+		public EntitySet<LeadAgreementChangement> LeadAgreementChangements
+		{
+			get
+			{
+				return this._LeadAgreementChangements;
+			}
+			set
+			{
+				this._LeadAgreementChangements.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Lead_LeadAgreement", Storage="_LeadAgreements", ThisKey="Id", OtherKey="LeadId")]
+		public EntitySet<LeadAgreement> LeadAgreements
+		{
+			get
+			{
+				return this._LeadAgreements;
+			}
+			set
+			{
+				this._LeadAgreements.Assign(value);
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -2826,6 +2935,30 @@ namespace LeadControl.Domain.Entities
 		}
 		
 		private void detach_LeadOrders(LeadOrder entity)
+		{
+			this.SendPropertyChanging();
+			entity.Lead = null;
+		}
+		
+		private void attach_LeadAgreementChangements(LeadAgreementChangement entity)
+		{
+			this.SendPropertyChanging();
+			entity.Lead = this;
+		}
+		
+		private void detach_LeadAgreementChangements(LeadAgreementChangement entity)
+		{
+			this.SendPropertyChanging();
+			entity.Lead = null;
+		}
+		
+		private void attach_LeadAgreements(LeadAgreement entity)
+		{
+			this.SendPropertyChanging();
+			entity.Lead = this;
+		}
+		
+		private void detach_LeadAgreements(LeadAgreement entity)
 		{
 			this.SendPropertyChanging();
 			entity.Lead = null;
@@ -3401,6 +3534,10 @@ namespace LeadControl.Domain.Entities
 		
 		private EntitySet<LeadOrder> _LeadOrders;
 		
+		private EntitySet<LeadAgreement> _LeadAgreements;
+		
+		private EntitySet<ServiceType> _ServiceTypes;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -3426,6 +3563,8 @@ namespace LeadControl.Domain.Entities
 			this._Warehouses = new EntitySet<Warehouse>(new Action<Warehouse>(this.attach_Warehouses), new Action<Warehouse>(this.detach_Warehouses));
 			this._FEAOrders = new EntitySet<FEAOrder>(new Action<FEAOrder>(this.attach_FEAOrders), new Action<FEAOrder>(this.detach_FEAOrders));
 			this._LeadOrders = new EntitySet<LeadOrder>(new Action<LeadOrder>(this.attach_LeadOrders), new Action<LeadOrder>(this.detach_LeadOrders));
+			this._LeadAgreements = new EntitySet<LeadAgreement>(new Action<LeadAgreement>(this.attach_LeadAgreements), new Action<LeadAgreement>(this.detach_LeadAgreements));
+			this._ServiceTypes = new EntitySet<ServiceType>(new Action<ServiceType>(this.attach_ServiceTypes), new Action<ServiceType>(this.detach_ServiceTypes));
 			OnCreated();
 		}
 		
@@ -3614,6 +3753,32 @@ namespace LeadControl.Domain.Entities
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Project_LeadAgreement", Storage="_LeadAgreements", ThisKey="Id", OtherKey="ProjectId")]
+		public EntitySet<LeadAgreement> LeadAgreements
+		{
+			get
+			{
+				return this._LeadAgreements;
+			}
+			set
+			{
+				this._LeadAgreements.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Project_ServiceType", Storage="_ServiceTypes", ThisKey="Id", OtherKey="ProjectId")]
+		public EntitySet<ServiceType> ServiceTypes
+		{
+			get
+			{
+				return this._ServiceTypes;
+			}
+			set
+			{
+				this._ServiceTypes.Assign(value);
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -3689,6 +3854,30 @@ namespace LeadControl.Domain.Entities
 		}
 		
 		private void detach_LeadOrders(LeadOrder entity)
+		{
+			this.SendPropertyChanging();
+			entity.Project = null;
+		}
+		
+		private void attach_LeadAgreements(LeadAgreement entity)
+		{
+			this.SendPropertyChanging();
+			entity.Project = this;
+		}
+		
+		private void detach_LeadAgreements(LeadAgreement entity)
+		{
+			this.SendPropertyChanging();
+			entity.Project = null;
+		}
+		
+		private void attach_ServiceTypes(ServiceType entity)
+		{
+			this.SendPropertyChanging();
+			entity.Project = this;
+		}
+		
+		private void detach_ServiceTypes(ServiceType entity)
 		{
 			this.SendPropertyChanging();
 			entity.Project = null;
@@ -4397,6 +4586,12 @@ namespace LeadControl.Domain.Entities
 		
 		private EntitySet<LeadOrderChangement> _LeadOrderChangementsWithOldAssignedUser;
 		
+		private EntitySet<LeadAgreementPayment> _LeadAgreementPayments;
+		
+		private EntitySet<LeadAgreement> _LeadAgreements;
+		
+		private EntitySet<LeadAgreementWork> _LeadAgreementWorks;
+		
 		private EntityRef<Role> _Role;
 		
     #region Extensibility Method Definitions
@@ -4446,6 +4641,9 @@ namespace LeadControl.Domain.Entities
 			this._LeadOrderAuthoredChangements = new EntitySet<LeadOrderChangement>(new Action<LeadOrderChangement>(this.attach_LeadOrderAuthoredChangements), new Action<LeadOrderChangement>(this.detach_LeadOrderAuthoredChangements));
 			this._LeadOrderChangementsWithNewAssignedUser = new EntitySet<LeadOrderChangement>(new Action<LeadOrderChangement>(this.attach_LeadOrderChangementsWithNewAssignedUser), new Action<LeadOrderChangement>(this.detach_LeadOrderChangementsWithNewAssignedUser));
 			this._LeadOrderChangementsWithOldAssignedUser = new EntitySet<LeadOrderChangement>(new Action<LeadOrderChangement>(this.attach_LeadOrderChangementsWithOldAssignedUser), new Action<LeadOrderChangement>(this.detach_LeadOrderChangementsWithOldAssignedUser));
+			this._LeadAgreementPayments = new EntitySet<LeadAgreementPayment>(new Action<LeadAgreementPayment>(this.attach_LeadAgreementPayments), new Action<LeadAgreementPayment>(this.detach_LeadAgreementPayments));
+			this._LeadAgreements = new EntitySet<LeadAgreement>(new Action<LeadAgreement>(this.attach_LeadAgreements), new Action<LeadAgreement>(this.detach_LeadAgreements));
+			this._LeadAgreementWorks = new EntitySet<LeadAgreementWork>(new Action<LeadAgreementWork>(this.attach_LeadAgreementWorks), new Action<LeadAgreementWork>(this.detach_LeadAgreementWorks));
 			this._Role = default(EntityRef<Role>);
 			OnCreated();
 		}
@@ -4877,6 +5075,45 @@ namespace LeadControl.Domain.Entities
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_LeadAgreementPayment", Storage="_LeadAgreementPayments", ThisKey="Id", OtherKey="AuthorId")]
+		public EntitySet<LeadAgreementPayment> LeadAgreementPayments
+		{
+			get
+			{
+				return this._LeadAgreementPayments;
+			}
+			set
+			{
+				this._LeadAgreementPayments.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_LeadAgreement", Storage="_LeadAgreements", ThisKey="Id", OtherKey="AssignedUserId")]
+		public EntitySet<LeadAgreement> LeadAgreements
+		{
+			get
+			{
+				return this._LeadAgreements;
+			}
+			set
+			{
+				this._LeadAgreements.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_LeadAgreementWork", Storage="_LeadAgreementWorks", ThisKey="Id", OtherKey="AuthorId")]
+		public EntitySet<LeadAgreementWork> LeadAgreementWorks
+		{
+			get
+			{
+				return this._LeadAgreementWorks;
+			}
+			set
+			{
+				this._LeadAgreementWorks.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Role_User", Storage="_Role", ThisKey="RoleId", OtherKey="Id", IsForeignKey=true)]
 		public Role Role
 		{
@@ -5061,6 +5298,42 @@ namespace LeadControl.Domain.Entities
 		{
 			this.SendPropertyChanging();
 			entity.OldAssignedUser = null;
+		}
+		
+		private void attach_LeadAgreementPayments(LeadAgreementPayment entity)
+		{
+			this.SendPropertyChanging();
+			entity.User = this;
+		}
+		
+		private void detach_LeadAgreementPayments(LeadAgreementPayment entity)
+		{
+			this.SendPropertyChanging();
+			entity.User = null;
+		}
+		
+		private void attach_LeadAgreements(LeadAgreement entity)
+		{
+			this.SendPropertyChanging();
+			entity.User = this;
+		}
+		
+		private void detach_LeadAgreements(LeadAgreement entity)
+		{
+			this.SendPropertyChanging();
+			entity.User = null;
+		}
+		
+		private void attach_LeadAgreementWorks(LeadAgreementWork entity)
+		{
+			this.SendPropertyChanging();
+			entity.User = this;
+		}
+		
+		private void detach_LeadAgreementWorks(LeadAgreementWork entity)
+		{
+			this.SendPropertyChanging();
+			entity.User = null;
 		}
 	}
 	
@@ -8538,6 +8811,2407 @@ namespace LeadControl.Domain.Entities
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.LeadAgreementChangements")]
+	public partial class LeadAgreementChangement : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private long _Id;
+		
+		private long _AgreementId;
+		
+		private long _AuthorId;
+		
+		private System.Nullable<System.DateTime> _DateCreated;
+		
+		private EntitySet<LeadAgreementChangementValue> _LeadAgreementChangementValues;
+		
+		private EntityRef<Lead> _Lead;
+		
+		private EntityRef<LeadAgreement> _LeadAgreement;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(long value);
+    partial void OnIdChanged();
+    partial void OnAgreementIdChanging(long value);
+    partial void OnAgreementIdChanged();
+    partial void OnAuthorIdChanging(long value);
+    partial void OnAuthorIdChanged();
+    partial void OnDateCreatedChanging(System.Nullable<System.DateTime> value);
+    partial void OnDateCreatedChanged();
+    #endregion
+		
+		public LeadAgreementChangement()
+		{
+			this._LeadAgreementChangementValues = new EntitySet<LeadAgreementChangementValue>(new Action<LeadAgreementChangementValue>(this.attach_LeadAgreementChangementValues), new Action<LeadAgreementChangementValue>(this.detach_LeadAgreementChangementValues));
+			this._Lead = default(EntityRef<Lead>);
+			this._LeadAgreement = default(EntityRef<LeadAgreement>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="BigInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public long Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AgreementId", DbType="BigInt NOT NULL")]
+		public long AgreementId
+		{
+			get
+			{
+				return this._AgreementId;
+			}
+			set
+			{
+				if ((this._AgreementId != value))
+				{
+					if (this._LeadAgreement.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnAgreementIdChanging(value);
+					this.SendPropertyChanging();
+					this._AgreementId = value;
+					this.SendPropertyChanged("AgreementId");
+					this.OnAgreementIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AuthorId", DbType="BigInt NOT NULL")]
+		public long AuthorId
+		{
+			get
+			{
+				return this._AuthorId;
+			}
+			set
+			{
+				if ((this._AuthorId != value))
+				{
+					if (this._Lead.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnAuthorIdChanging(value);
+					this.SendPropertyChanging();
+					this._AuthorId = value;
+					this.SendPropertyChanged("AuthorId");
+					this.OnAuthorIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateCreated", DbType="DateTime")]
+		public System.Nullable<System.DateTime> DateCreated
+		{
+			get
+			{
+				return this._DateCreated;
+			}
+			set
+			{
+				if ((this._DateCreated != value))
+				{
+					this.OnDateCreatedChanging(value);
+					this.SendPropertyChanging();
+					this._DateCreated = value;
+					this.SendPropertyChanged("DateCreated");
+					this.OnDateCreatedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LeadAgreementChangement_LeadAgreementChangementValue", Storage="_LeadAgreementChangementValues", ThisKey="Id", OtherKey="ChangementId")]
+		public EntitySet<LeadAgreementChangementValue> LeadAgreementChangementValues
+		{
+			get
+			{
+				return this._LeadAgreementChangementValues;
+			}
+			set
+			{
+				this._LeadAgreementChangementValues.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Lead_LeadAgreementChangement", Storage="_Lead", ThisKey="AuthorId", OtherKey="Id", IsForeignKey=true)]
+		public Lead Lead
+		{
+			get
+			{
+				return this._Lead.Entity;
+			}
+			set
+			{
+				Lead previousValue = this._Lead.Entity;
+				if (((previousValue != value) 
+							|| (this._Lead.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Lead.Entity = null;
+						previousValue.LeadAgreementChangements.Remove(this);
+					}
+					this._Lead.Entity = value;
+					if ((value != null))
+					{
+						value.LeadAgreementChangements.Add(this);
+						this._AuthorId = value.Id;
+					}
+					else
+					{
+						this._AuthorId = default(long);
+					}
+					this.SendPropertyChanged("Lead");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LeadAgreement_LeadAgreementChangement", Storage="_LeadAgreement", ThisKey="AgreementId", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public LeadAgreement LeadAgreement
+		{
+			get
+			{
+				return this._LeadAgreement.Entity;
+			}
+			set
+			{
+				LeadAgreement previousValue = this._LeadAgreement.Entity;
+				if (((previousValue != value) 
+							|| (this._LeadAgreement.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._LeadAgreement.Entity = null;
+						previousValue.LeadAgreementChangements.Remove(this);
+					}
+					this._LeadAgreement.Entity = value;
+					if ((value != null))
+					{
+						value.LeadAgreementChangements.Add(this);
+						this._AgreementId = value.Id;
+					}
+					else
+					{
+						this._AgreementId = default(long);
+					}
+					this.SendPropertyChanged("LeadAgreement");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_LeadAgreementChangementValues(LeadAgreementChangementValue entity)
+		{
+			this.SendPropertyChanging();
+			entity.LeadAgreementChangement = this;
+		}
+		
+		private void detach_LeadAgreementChangementValues(LeadAgreementChangementValue entity)
+		{
+			this.SendPropertyChanging();
+			entity.LeadAgreementChangement = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.LeadAgreementChangementValues")]
+	public partial class LeadAgreementChangementValue : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private long _Id;
+		
+		private long _ChangementId;
+		
+		private string _PropertyName;
+		
+		private string _OldValue;
+		
+		private string _NewValue;
+		
+		private EntityRef<LeadAgreementChangement> _LeadAgreementChangement;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(long value);
+    partial void OnIdChanged();
+    partial void OnChangementIdChanging(long value);
+    partial void OnChangementIdChanged();
+    partial void OnPropertyNameChanging(string value);
+    partial void OnPropertyNameChanged();
+    partial void OnOldValueChanging(string value);
+    partial void OnOldValueChanged();
+    partial void OnNewValueChanging(string value);
+    partial void OnNewValueChanged();
+    #endregion
+		
+		public LeadAgreementChangementValue()
+		{
+			this._LeadAgreementChangement = default(EntityRef<LeadAgreementChangement>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="BigInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public long Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ChangementId", DbType="BigInt NOT NULL")]
+		public long ChangementId
+		{
+			get
+			{
+				return this._ChangementId;
+			}
+			set
+			{
+				if ((this._ChangementId != value))
+				{
+					if (this._LeadAgreementChangement.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnChangementIdChanging(value);
+					this.SendPropertyChanging();
+					this._ChangementId = value;
+					this.SendPropertyChanged("ChangementId");
+					this.OnChangementIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PropertyName", DbType="NVarChar(MAX)")]
+		public string PropertyName
+		{
+			get
+			{
+				return this._PropertyName;
+			}
+			set
+			{
+				if ((this._PropertyName != value))
+				{
+					this.OnPropertyNameChanging(value);
+					this.SendPropertyChanging();
+					this._PropertyName = value;
+					this.SendPropertyChanged("PropertyName");
+					this.OnPropertyNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OldValue", DbType="NVarChar(MAX)")]
+		public string OldValue
+		{
+			get
+			{
+				return this._OldValue;
+			}
+			set
+			{
+				if ((this._OldValue != value))
+				{
+					this.OnOldValueChanging(value);
+					this.SendPropertyChanging();
+					this._OldValue = value;
+					this.SendPropertyChanged("OldValue");
+					this.OnOldValueChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_NewValue", DbType="NVarChar(MAX)")]
+		public string NewValue
+		{
+			get
+			{
+				return this._NewValue;
+			}
+			set
+			{
+				if ((this._NewValue != value))
+				{
+					this.OnNewValueChanging(value);
+					this.SendPropertyChanging();
+					this._NewValue = value;
+					this.SendPropertyChanged("NewValue");
+					this.OnNewValueChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LeadAgreementChangement_LeadAgreementChangementValue", Storage="_LeadAgreementChangement", ThisKey="ChangementId", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public LeadAgreementChangement LeadAgreementChangement
+		{
+			get
+			{
+				return this._LeadAgreementChangement.Entity;
+			}
+			set
+			{
+				LeadAgreementChangement previousValue = this._LeadAgreementChangement.Entity;
+				if (((previousValue != value) 
+							|| (this._LeadAgreementChangement.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._LeadAgreementChangement.Entity = null;
+						previousValue.LeadAgreementChangementValues.Remove(this);
+					}
+					this._LeadAgreementChangement.Entity = value;
+					if ((value != null))
+					{
+						value.LeadAgreementChangementValues.Add(this);
+						this._ChangementId = value.Id;
+					}
+					else
+					{
+						this._ChangementId = default(long);
+					}
+					this.SendPropertyChanged("LeadAgreementChangement");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.LeadAgreementPayments")]
+	public partial class LeadAgreementPayment : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private long _Id;
+		
+		private long _AgreementId;
+		
+		private long _AuthorId;
+		
+		private long _ServiceId;
+		
+		private short _PaymentType;
+		
+		private decimal _Amount;
+		
+		private string _DocumentNumber;
+		
+		private string _Customer;
+		
+		private System.Nullable<System.DateTime> _DateCreated;
+		
+		private EntityRef<User> _User;
+		
+		private EntityRef<LeadAgreement> _LeadAgreement;
+		
+		private EntityRef<LeadAgreementService> _LeadAgreementService;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(long value);
+    partial void OnIdChanged();
+    partial void OnAgreementIdChanging(long value);
+    partial void OnAgreementIdChanged();
+    partial void OnAuthorIdChanging(long value);
+    partial void OnAuthorIdChanged();
+    partial void OnServiceIdChanging(long value);
+    partial void OnServiceIdChanged();
+    partial void OnPaymentTypeChanging(short value);
+    partial void OnPaymentTypeChanged();
+    partial void OnAmountChanging(decimal value);
+    partial void OnAmountChanged();
+    partial void OnDocumentNumberChanging(string value);
+    partial void OnDocumentNumberChanged();
+    partial void OnCustomerChanging(string value);
+    partial void OnCustomerChanged();
+    partial void OnDateCreatedChanging(System.Nullable<System.DateTime> value);
+    partial void OnDateCreatedChanged();
+    #endregion
+		
+		public LeadAgreementPayment()
+		{
+			this._User = default(EntityRef<User>);
+			this._LeadAgreement = default(EntityRef<LeadAgreement>);
+			this._LeadAgreementService = default(EntityRef<LeadAgreementService>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="BigInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public long Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AgreementId", DbType="BigInt NOT NULL")]
+		public long AgreementId
+		{
+			get
+			{
+				return this._AgreementId;
+			}
+			set
+			{
+				if ((this._AgreementId != value))
+				{
+					if (this._LeadAgreement.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnAgreementIdChanging(value);
+					this.SendPropertyChanging();
+					this._AgreementId = value;
+					this.SendPropertyChanged("AgreementId");
+					this.OnAgreementIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AuthorId", DbType="BigInt NOT NULL")]
+		public long AuthorId
+		{
+			get
+			{
+				return this._AuthorId;
+			}
+			set
+			{
+				if ((this._AuthorId != value))
+				{
+					if (this._User.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnAuthorIdChanging(value);
+					this.SendPropertyChanging();
+					this._AuthorId = value;
+					this.SendPropertyChanged("AuthorId");
+					this.OnAuthorIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ServiceId", DbType="BigInt NOT NULL")]
+		public long ServiceId
+		{
+			get
+			{
+				return this._ServiceId;
+			}
+			set
+			{
+				if ((this._ServiceId != value))
+				{
+					if (this._LeadAgreementService.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnServiceIdChanging(value);
+					this.SendPropertyChanging();
+					this._ServiceId = value;
+					this.SendPropertyChanged("ServiceId");
+					this.OnServiceIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PaymentType", DbType="SmallInt NOT NULL")]
+		public short PaymentType
+		{
+			get
+			{
+				return this._PaymentType;
+			}
+			set
+			{
+				if ((this._PaymentType != value))
+				{
+					this.OnPaymentTypeChanging(value);
+					this.SendPropertyChanging();
+					this._PaymentType = value;
+					this.SendPropertyChanged("PaymentType");
+					this.OnPaymentTypeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Amount", DbType="Money NOT NULL")]
+		public decimal Amount
+		{
+			get
+			{
+				return this._Amount;
+			}
+			set
+			{
+				if ((this._Amount != value))
+				{
+					this.OnAmountChanging(value);
+					this.SendPropertyChanging();
+					this._Amount = value;
+					this.SendPropertyChanged("Amount");
+					this.OnAmountChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DocumentNumber", DbType="NVarChar(MAX)")]
+		public string DocumentNumber
+		{
+			get
+			{
+				return this._DocumentNumber;
+			}
+			set
+			{
+				if ((this._DocumentNumber != value))
+				{
+					this.OnDocumentNumberChanging(value);
+					this.SendPropertyChanging();
+					this._DocumentNumber = value;
+					this.SendPropertyChanged("DocumentNumber");
+					this.OnDocumentNumberChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Customer", DbType="NVarChar(MAX)")]
+		public string Customer
+		{
+			get
+			{
+				return this._Customer;
+			}
+			set
+			{
+				if ((this._Customer != value))
+				{
+					this.OnCustomerChanging(value);
+					this.SendPropertyChanging();
+					this._Customer = value;
+					this.SendPropertyChanged("Customer");
+					this.OnCustomerChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateCreated", DbType="DateTime")]
+		public System.Nullable<System.DateTime> DateCreated
+		{
+			get
+			{
+				return this._DateCreated;
+			}
+			set
+			{
+				if ((this._DateCreated != value))
+				{
+					this.OnDateCreatedChanging(value);
+					this.SendPropertyChanging();
+					this._DateCreated = value;
+					this.SendPropertyChanged("DateCreated");
+					this.OnDateCreatedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_LeadAgreementPayment", Storage="_User", ThisKey="AuthorId", OtherKey="Id", IsForeignKey=true)]
+		public User User
+		{
+			get
+			{
+				return this._User.Entity;
+			}
+			set
+			{
+				User previousValue = this._User.Entity;
+				if (((previousValue != value) 
+							|| (this._User.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._User.Entity = null;
+						previousValue.LeadAgreementPayments.Remove(this);
+					}
+					this._User.Entity = value;
+					if ((value != null))
+					{
+						value.LeadAgreementPayments.Add(this);
+						this._AuthorId = value.Id;
+					}
+					else
+					{
+						this._AuthorId = default(long);
+					}
+					this.SendPropertyChanged("User");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LeadAgreement_LeadAgreementPayment", Storage="_LeadAgreement", ThisKey="AgreementId", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public LeadAgreement LeadAgreement
+		{
+			get
+			{
+				return this._LeadAgreement.Entity;
+			}
+			set
+			{
+				LeadAgreement previousValue = this._LeadAgreement.Entity;
+				if (((previousValue != value) 
+							|| (this._LeadAgreement.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._LeadAgreement.Entity = null;
+						previousValue.LeadAgreementPayments.Remove(this);
+					}
+					this._LeadAgreement.Entity = value;
+					if ((value != null))
+					{
+						value.LeadAgreementPayments.Add(this);
+						this._AgreementId = value.Id;
+					}
+					else
+					{
+						this._AgreementId = default(long);
+					}
+					this.SendPropertyChanged("LeadAgreement");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LeadAgreementService_LeadAgreementPayment", Storage="_LeadAgreementService", ThisKey="ServiceId", OtherKey="Id", IsForeignKey=true)]
+		public LeadAgreementService LeadAgreementService
+		{
+			get
+			{
+				return this._LeadAgreementService.Entity;
+			}
+			set
+			{
+				LeadAgreementService previousValue = this._LeadAgreementService.Entity;
+				if (((previousValue != value) 
+							|| (this._LeadAgreementService.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._LeadAgreementService.Entity = null;
+						previousValue.LeadAgreementPayments.Remove(this);
+					}
+					this._LeadAgreementService.Entity = value;
+					if ((value != null))
+					{
+						value.LeadAgreementPayments.Add(this);
+						this._ServiceId = value.Id;
+					}
+					else
+					{
+						this._ServiceId = default(long);
+					}
+					this.SendPropertyChanged("LeadAgreementService");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.LeadAgreements")]
+	public partial class LeadAgreement : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private long _Id;
+		
+		private long _ProjectId;
+		
+		private long _LeadId;
+		
+		private long _AssignedUserId;
+		
+		private string _Number;
+		
+		private System.Nullable<System.DateTime> _Date;
+		
+		private System.Nullable<System.DateTime> _EndDate;
+		
+		private short _Status;
+		
+		private string _AgreementFile;
+		
+		private System.Nullable<System.DateTime> _DateCreated;
+		
+		private System.Nullable<System.DateTime> _DateModified;
+		
+		private EntitySet<LeadAgreementChangement> _LeadAgreementChangements;
+		
+		private EntitySet<LeadAgreementPayment> _LeadAgreementPayments;
+		
+		private EntitySet<LeadAgreementService> _LeadAgreementServices;
+		
+		private EntitySet<LeadAgreementWork> _LeadAgreementWorks;
+		
+		private EntityRef<Lead> _Lead;
+		
+		private EntityRef<Project> _Project;
+		
+		private EntityRef<User> _User;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(long value);
+    partial void OnIdChanged();
+    partial void OnProjectIdChanging(long value);
+    partial void OnProjectIdChanged();
+    partial void OnLeadIdChanging(long value);
+    partial void OnLeadIdChanged();
+    partial void OnAssignedUserIdChanging(long value);
+    partial void OnAssignedUserIdChanged();
+    partial void OnNumberChanging(string value);
+    partial void OnNumberChanged();
+    partial void OnDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnDateChanged();
+    partial void OnEndDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnEndDateChanged();
+    partial void OnStatusChanging(short value);
+    partial void OnStatusChanged();
+    partial void OnAgreementFileChanging(string value);
+    partial void OnAgreementFileChanged();
+    partial void OnDateCreatedChanging(System.Nullable<System.DateTime> value);
+    partial void OnDateCreatedChanged();
+    partial void OnDateModifiedChanging(System.Nullable<System.DateTime> value);
+    partial void OnDateModifiedChanged();
+    #endregion
+		
+		public LeadAgreement()
+		{
+			this._LeadAgreementChangements = new EntitySet<LeadAgreementChangement>(new Action<LeadAgreementChangement>(this.attach_LeadAgreementChangements), new Action<LeadAgreementChangement>(this.detach_LeadAgreementChangements));
+			this._LeadAgreementPayments = new EntitySet<LeadAgreementPayment>(new Action<LeadAgreementPayment>(this.attach_LeadAgreementPayments), new Action<LeadAgreementPayment>(this.detach_LeadAgreementPayments));
+			this._LeadAgreementServices = new EntitySet<LeadAgreementService>(new Action<LeadAgreementService>(this.attach_LeadAgreementServices), new Action<LeadAgreementService>(this.detach_LeadAgreementServices));
+			this._LeadAgreementWorks = new EntitySet<LeadAgreementWork>(new Action<LeadAgreementWork>(this.attach_LeadAgreementWorks), new Action<LeadAgreementWork>(this.detach_LeadAgreementWorks));
+			this._Lead = default(EntityRef<Lead>);
+			this._Project = default(EntityRef<Project>);
+			this._User = default(EntityRef<User>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="BigInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public long Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProjectId", DbType="BigInt NOT NULL")]
+		public long ProjectId
+		{
+			get
+			{
+				return this._ProjectId;
+			}
+			set
+			{
+				if ((this._ProjectId != value))
+				{
+					if (this._Project.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnProjectIdChanging(value);
+					this.SendPropertyChanging();
+					this._ProjectId = value;
+					this.SendPropertyChanged("ProjectId");
+					this.OnProjectIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LeadId", DbType="BigInt NOT NULL")]
+		public long LeadId
+		{
+			get
+			{
+				return this._LeadId;
+			}
+			set
+			{
+				if ((this._LeadId != value))
+				{
+					if (this._Lead.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnLeadIdChanging(value);
+					this.SendPropertyChanging();
+					this._LeadId = value;
+					this.SendPropertyChanged("LeadId");
+					this.OnLeadIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AssignedUserId", DbType="BigInt NOT NULL")]
+		public long AssignedUserId
+		{
+			get
+			{
+				return this._AssignedUserId;
+			}
+			set
+			{
+				if ((this._AssignedUserId != value))
+				{
+					if (this._User.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnAssignedUserIdChanging(value);
+					this.SendPropertyChanging();
+					this._AssignedUserId = value;
+					this.SendPropertyChanged("AssignedUserId");
+					this.OnAssignedUserIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Number", DbType="NVarChar(MAX)")]
+		public string Number
+		{
+			get
+			{
+				return this._Number;
+			}
+			set
+			{
+				if ((this._Number != value))
+				{
+					this.OnNumberChanging(value);
+					this.SendPropertyChanging();
+					this._Number = value;
+					this.SendPropertyChanged("Number");
+					this.OnNumberChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Date", DbType="DateTime")]
+		public System.Nullable<System.DateTime> Date
+		{
+			get
+			{
+				return this._Date;
+			}
+			set
+			{
+				if ((this._Date != value))
+				{
+					this.OnDateChanging(value);
+					this.SendPropertyChanging();
+					this._Date = value;
+					this.SendPropertyChanged("Date");
+					this.OnDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndDate", DbType="DateTime")]
+		public System.Nullable<System.DateTime> EndDate
+		{
+			get
+			{
+				return this._EndDate;
+			}
+			set
+			{
+				if ((this._EndDate != value))
+				{
+					this.OnEndDateChanging(value);
+					this.SendPropertyChanging();
+					this._EndDate = value;
+					this.SendPropertyChanged("EndDate");
+					this.OnEndDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="SmallInt NOT NULL")]
+		public short Status
+		{
+			get
+			{
+				return this._Status;
+			}
+			set
+			{
+				if ((this._Status != value))
+				{
+					this.OnStatusChanging(value);
+					this.SendPropertyChanging();
+					this._Status = value;
+					this.SendPropertyChanged("Status");
+					this.OnStatusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AgreementFile", DbType="NVarChar(MAX)")]
+		public string AgreementFile
+		{
+			get
+			{
+				return this._AgreementFile;
+			}
+			set
+			{
+				if ((this._AgreementFile != value))
+				{
+					this.OnAgreementFileChanging(value);
+					this.SendPropertyChanging();
+					this._AgreementFile = value;
+					this.SendPropertyChanged("AgreementFile");
+					this.OnAgreementFileChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateCreated", DbType="DateTime")]
+		public System.Nullable<System.DateTime> DateCreated
+		{
+			get
+			{
+				return this._DateCreated;
+			}
+			set
+			{
+				if ((this._DateCreated != value))
+				{
+					this.OnDateCreatedChanging(value);
+					this.SendPropertyChanging();
+					this._DateCreated = value;
+					this.SendPropertyChanged("DateCreated");
+					this.OnDateCreatedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateModified", DbType="DateTime")]
+		public System.Nullable<System.DateTime> DateModified
+		{
+			get
+			{
+				return this._DateModified;
+			}
+			set
+			{
+				if ((this._DateModified != value))
+				{
+					this.OnDateModifiedChanging(value);
+					this.SendPropertyChanging();
+					this._DateModified = value;
+					this.SendPropertyChanged("DateModified");
+					this.OnDateModifiedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LeadAgreement_LeadAgreementChangement", Storage="_LeadAgreementChangements", ThisKey="Id", OtherKey="AgreementId")]
+		public EntitySet<LeadAgreementChangement> LeadAgreementChangements
+		{
+			get
+			{
+				return this._LeadAgreementChangements;
+			}
+			set
+			{
+				this._LeadAgreementChangements.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LeadAgreement_LeadAgreementPayment", Storage="_LeadAgreementPayments", ThisKey="Id", OtherKey="AgreementId")]
+		public EntitySet<LeadAgreementPayment> LeadAgreementPayments
+		{
+			get
+			{
+				return this._LeadAgreementPayments;
+			}
+			set
+			{
+				this._LeadAgreementPayments.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LeadAgreement_LeadAgreementService", Storage="_LeadAgreementServices", ThisKey="Id", OtherKey="AgreementId")]
+		public EntitySet<LeadAgreementService> LeadAgreementServices
+		{
+			get
+			{
+				return this._LeadAgreementServices;
+			}
+			set
+			{
+				this._LeadAgreementServices.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LeadAgreement_LeadAgreementWork", Storage="_LeadAgreementWorks", ThisKey="Id", OtherKey="AgreementId")]
+		public EntitySet<LeadAgreementWork> LeadAgreementWorks
+		{
+			get
+			{
+				return this._LeadAgreementWorks;
+			}
+			set
+			{
+				this._LeadAgreementWorks.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Lead_LeadAgreement", Storage="_Lead", ThisKey="LeadId", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public Lead Lead
+		{
+			get
+			{
+				return this._Lead.Entity;
+			}
+			set
+			{
+				Lead previousValue = this._Lead.Entity;
+				if (((previousValue != value) 
+							|| (this._Lead.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Lead.Entity = null;
+						previousValue.LeadAgreements.Remove(this);
+					}
+					this._Lead.Entity = value;
+					if ((value != null))
+					{
+						value.LeadAgreements.Add(this);
+						this._LeadId = value.Id;
+					}
+					else
+					{
+						this._LeadId = default(long);
+					}
+					this.SendPropertyChanged("Lead");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Project_LeadAgreement", Storage="_Project", ThisKey="ProjectId", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public Project Project
+		{
+			get
+			{
+				return this._Project.Entity;
+			}
+			set
+			{
+				Project previousValue = this._Project.Entity;
+				if (((previousValue != value) 
+							|| (this._Project.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Project.Entity = null;
+						previousValue.LeadAgreements.Remove(this);
+					}
+					this._Project.Entity = value;
+					if ((value != null))
+					{
+						value.LeadAgreements.Add(this);
+						this._ProjectId = value.Id;
+					}
+					else
+					{
+						this._ProjectId = default(long);
+					}
+					this.SendPropertyChanged("Project");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_LeadAgreement", Storage="_User", ThisKey="AssignedUserId", OtherKey="Id", IsForeignKey=true)]
+		public User User
+		{
+			get
+			{
+				return this._User.Entity;
+			}
+			set
+			{
+				User previousValue = this._User.Entity;
+				if (((previousValue != value) 
+							|| (this._User.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._User.Entity = null;
+						previousValue.LeadAgreements.Remove(this);
+					}
+					this._User.Entity = value;
+					if ((value != null))
+					{
+						value.LeadAgreements.Add(this);
+						this._AssignedUserId = value.Id;
+					}
+					else
+					{
+						this._AssignedUserId = default(long);
+					}
+					this.SendPropertyChanged("User");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_LeadAgreementChangements(LeadAgreementChangement entity)
+		{
+			this.SendPropertyChanging();
+			entity.LeadAgreement = this;
+		}
+		
+		private void detach_LeadAgreementChangements(LeadAgreementChangement entity)
+		{
+			this.SendPropertyChanging();
+			entity.LeadAgreement = null;
+		}
+		
+		private void attach_LeadAgreementPayments(LeadAgreementPayment entity)
+		{
+			this.SendPropertyChanging();
+			entity.LeadAgreement = this;
+		}
+		
+		private void detach_LeadAgreementPayments(LeadAgreementPayment entity)
+		{
+			this.SendPropertyChanging();
+			entity.LeadAgreement = null;
+		}
+		
+		private void attach_LeadAgreementServices(LeadAgreementService entity)
+		{
+			this.SendPropertyChanging();
+			entity.LeadAgreement = this;
+		}
+		
+		private void detach_LeadAgreementServices(LeadAgreementService entity)
+		{
+			this.SendPropertyChanging();
+			entity.LeadAgreement = null;
+		}
+		
+		private void attach_LeadAgreementWorks(LeadAgreementWork entity)
+		{
+			this.SendPropertyChanging();
+			entity.LeadAgreement = this;
+		}
+		
+		private void detach_LeadAgreementWorks(LeadAgreementWork entity)
+		{
+			this.SendPropertyChanging();
+			entity.LeadAgreement = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.LeadAgreementServices")]
+	public partial class LeadAgreementService : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private long _Id;
+		
+		private long _AgreementId;
+		
+		private long _ServiceTypeId;
+		
+		private decimal _Price;
+		
+		private int _Period;
+		
+		private System.Nullable<System.DateTime> _DateCreated;
+		
+		private System.Nullable<System.DateTime> _DateModified;
+		
+		private EntitySet<LeadAgreementPayment> _LeadAgreementPayments;
+		
+		private EntitySet<LeadAgreementWork> _LeadAgreementWorks;
+		
+		private EntityRef<LeadAgreement> _LeadAgreement;
+		
+		private EntityRef<ServiceType> _ServiceType;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(long value);
+    partial void OnIdChanged();
+    partial void OnAgreementIdChanging(long value);
+    partial void OnAgreementIdChanged();
+    partial void OnServiceTypeIdChanging(long value);
+    partial void OnServiceTypeIdChanged();
+    partial void OnPriceChanging(decimal value);
+    partial void OnPriceChanged();
+    partial void OnPeriodChanging(int value);
+    partial void OnPeriodChanged();
+    partial void OnDateCreatedChanging(System.Nullable<System.DateTime> value);
+    partial void OnDateCreatedChanged();
+    partial void OnDateModifiedChanging(System.Nullable<System.DateTime> value);
+    partial void OnDateModifiedChanged();
+    #endregion
+		
+		public LeadAgreementService()
+		{
+			this._LeadAgreementPayments = new EntitySet<LeadAgreementPayment>(new Action<LeadAgreementPayment>(this.attach_LeadAgreementPayments), new Action<LeadAgreementPayment>(this.detach_LeadAgreementPayments));
+			this._LeadAgreementWorks = new EntitySet<LeadAgreementWork>(new Action<LeadAgreementWork>(this.attach_LeadAgreementWorks), new Action<LeadAgreementWork>(this.detach_LeadAgreementWorks));
+			this._LeadAgreement = default(EntityRef<LeadAgreement>);
+			this._ServiceType = default(EntityRef<ServiceType>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="BigInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public long Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AgreementId", DbType="BigInt NOT NULL")]
+		public long AgreementId
+		{
+			get
+			{
+				return this._AgreementId;
+			}
+			set
+			{
+				if ((this._AgreementId != value))
+				{
+					if (this._LeadAgreement.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnAgreementIdChanging(value);
+					this.SendPropertyChanging();
+					this._AgreementId = value;
+					this.SendPropertyChanged("AgreementId");
+					this.OnAgreementIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ServiceTypeId", DbType="BigInt NOT NULL")]
+		public long ServiceTypeId
+		{
+			get
+			{
+				return this._ServiceTypeId;
+			}
+			set
+			{
+				if ((this._ServiceTypeId != value))
+				{
+					if (this._ServiceType.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnServiceTypeIdChanging(value);
+					this.SendPropertyChanging();
+					this._ServiceTypeId = value;
+					this.SendPropertyChanged("ServiceTypeId");
+					this.OnServiceTypeIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Price", DbType="Money NOT NULL")]
+		public decimal Price
+		{
+			get
+			{
+				return this._Price;
+			}
+			set
+			{
+				if ((this._Price != value))
+				{
+					this.OnPriceChanging(value);
+					this.SendPropertyChanging();
+					this._Price = value;
+					this.SendPropertyChanged("Price");
+					this.OnPriceChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Period", DbType="Int NOT NULL")]
+		public int Period
+		{
+			get
+			{
+				return this._Period;
+			}
+			set
+			{
+				if ((this._Period != value))
+				{
+					this.OnPeriodChanging(value);
+					this.SendPropertyChanging();
+					this._Period = value;
+					this.SendPropertyChanged("Period");
+					this.OnPeriodChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateCreated", DbType="DateTime")]
+		public System.Nullable<System.DateTime> DateCreated
+		{
+			get
+			{
+				return this._DateCreated;
+			}
+			set
+			{
+				if ((this._DateCreated != value))
+				{
+					this.OnDateCreatedChanging(value);
+					this.SendPropertyChanging();
+					this._DateCreated = value;
+					this.SendPropertyChanged("DateCreated");
+					this.OnDateCreatedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateModified", DbType="DateTime")]
+		public System.Nullable<System.DateTime> DateModified
+		{
+			get
+			{
+				return this._DateModified;
+			}
+			set
+			{
+				if ((this._DateModified != value))
+				{
+					this.OnDateModifiedChanging(value);
+					this.SendPropertyChanging();
+					this._DateModified = value;
+					this.SendPropertyChanged("DateModified");
+					this.OnDateModifiedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LeadAgreementService_LeadAgreementPayment", Storage="_LeadAgreementPayments", ThisKey="Id", OtherKey="ServiceId")]
+		public EntitySet<LeadAgreementPayment> LeadAgreementPayments
+		{
+			get
+			{
+				return this._LeadAgreementPayments;
+			}
+			set
+			{
+				this._LeadAgreementPayments.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LeadAgreementService_LeadAgreementWork", Storage="_LeadAgreementWorks", ThisKey="Id", OtherKey="ServiceId")]
+		public EntitySet<LeadAgreementWork> LeadAgreementWorks
+		{
+			get
+			{
+				return this._LeadAgreementWorks;
+			}
+			set
+			{
+				this._LeadAgreementWorks.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LeadAgreement_LeadAgreementService", Storage="_LeadAgreement", ThisKey="AgreementId", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public LeadAgreement LeadAgreement
+		{
+			get
+			{
+				return this._LeadAgreement.Entity;
+			}
+			set
+			{
+				LeadAgreement previousValue = this._LeadAgreement.Entity;
+				if (((previousValue != value) 
+							|| (this._LeadAgreement.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._LeadAgreement.Entity = null;
+						previousValue.LeadAgreementServices.Remove(this);
+					}
+					this._LeadAgreement.Entity = value;
+					if ((value != null))
+					{
+						value.LeadAgreementServices.Add(this);
+						this._AgreementId = value.Id;
+					}
+					else
+					{
+						this._AgreementId = default(long);
+					}
+					this.SendPropertyChanged("LeadAgreement");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ServiceType_LeadAgreementService", Storage="_ServiceType", ThisKey="ServiceTypeId", OtherKey="Id", IsForeignKey=true)]
+		public ServiceType ServiceType
+		{
+			get
+			{
+				return this._ServiceType.Entity;
+			}
+			set
+			{
+				ServiceType previousValue = this._ServiceType.Entity;
+				if (((previousValue != value) 
+							|| (this._ServiceType.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._ServiceType.Entity = null;
+						previousValue.LeadAgreementServices.Remove(this);
+					}
+					this._ServiceType.Entity = value;
+					if ((value != null))
+					{
+						value.LeadAgreementServices.Add(this);
+						this._ServiceTypeId = value.Id;
+					}
+					else
+					{
+						this._ServiceTypeId = default(long);
+					}
+					this.SendPropertyChanged("ServiceType");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_LeadAgreementPayments(LeadAgreementPayment entity)
+		{
+			this.SendPropertyChanging();
+			entity.LeadAgreementService = this;
+		}
+		
+		private void detach_LeadAgreementPayments(LeadAgreementPayment entity)
+		{
+			this.SendPropertyChanging();
+			entity.LeadAgreementService = null;
+		}
+		
+		private void attach_LeadAgreementWorks(LeadAgreementWork entity)
+		{
+			this.SendPropertyChanging();
+			entity.LeadAgreementService = this;
+		}
+		
+		private void detach_LeadAgreementWorks(LeadAgreementWork entity)
+		{
+			this.SendPropertyChanging();
+			entity.LeadAgreementService = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.LeadAgreementWorks")]
+	public partial class LeadAgreementWork : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private long _Id;
+		
+		private long _AgreementId;
+		
+		private long _AuthorId;
+		
+		private long _ServiceId;
+		
+		private string _Description;
+		
+		private string _TimeTaken;
+		
+		private System.Nullable<System.DateTime> _DateCreated;
+		
+		private EntityRef<LeadAgreement> _LeadAgreement;
+		
+		private EntityRef<LeadAgreementService> _LeadAgreementService;
+		
+		private EntityRef<User> _User;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(long value);
+    partial void OnIdChanged();
+    partial void OnAgreementIdChanging(long value);
+    partial void OnAgreementIdChanged();
+    partial void OnAuthorIdChanging(long value);
+    partial void OnAuthorIdChanged();
+    partial void OnServiceIdChanging(long value);
+    partial void OnServiceIdChanged();
+    partial void OnDescriptionChanging(string value);
+    partial void OnDescriptionChanged();
+    partial void OnTimeTakenChanging(string value);
+    partial void OnTimeTakenChanged();
+    partial void OnDateCreatedChanging(System.Nullable<System.DateTime> value);
+    partial void OnDateCreatedChanged();
+    #endregion
+		
+		public LeadAgreementWork()
+		{
+			this._LeadAgreement = default(EntityRef<LeadAgreement>);
+			this._LeadAgreementService = default(EntityRef<LeadAgreementService>);
+			this._User = default(EntityRef<User>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="BigInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public long Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AgreementId", DbType="BigInt NOT NULL")]
+		public long AgreementId
+		{
+			get
+			{
+				return this._AgreementId;
+			}
+			set
+			{
+				if ((this._AgreementId != value))
+				{
+					if (this._LeadAgreement.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnAgreementIdChanging(value);
+					this.SendPropertyChanging();
+					this._AgreementId = value;
+					this.SendPropertyChanged("AgreementId");
+					this.OnAgreementIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AuthorId", DbType="BigInt NOT NULL")]
+		public long AuthorId
+		{
+			get
+			{
+				return this._AuthorId;
+			}
+			set
+			{
+				if ((this._AuthorId != value))
+				{
+					if (this._User.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnAuthorIdChanging(value);
+					this.SendPropertyChanging();
+					this._AuthorId = value;
+					this.SendPropertyChanged("AuthorId");
+					this.OnAuthorIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ServiceId", DbType="BigInt NOT NULL")]
+		public long ServiceId
+		{
+			get
+			{
+				return this._ServiceId;
+			}
+			set
+			{
+				if ((this._ServiceId != value))
+				{
+					if (this._LeadAgreementService.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnServiceIdChanging(value);
+					this.SendPropertyChanging();
+					this._ServiceId = value;
+					this.SendPropertyChanged("ServiceId");
+					this.OnServiceIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="NVarChar(MAX)")]
+		public string Description
+		{
+			get
+			{
+				return this._Description;
+			}
+			set
+			{
+				if ((this._Description != value))
+				{
+					this.OnDescriptionChanging(value);
+					this.SendPropertyChanging();
+					this._Description = value;
+					this.SendPropertyChanged("Description");
+					this.OnDescriptionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TimeTaken", DbType="NVarChar(MAX)")]
+		public string TimeTaken
+		{
+			get
+			{
+				return this._TimeTaken;
+			}
+			set
+			{
+				if ((this._TimeTaken != value))
+				{
+					this.OnTimeTakenChanging(value);
+					this.SendPropertyChanging();
+					this._TimeTaken = value;
+					this.SendPropertyChanged("TimeTaken");
+					this.OnTimeTakenChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateCreated", DbType="DateTime")]
+		public System.Nullable<System.DateTime> DateCreated
+		{
+			get
+			{
+				return this._DateCreated;
+			}
+			set
+			{
+				if ((this._DateCreated != value))
+				{
+					this.OnDateCreatedChanging(value);
+					this.SendPropertyChanging();
+					this._DateCreated = value;
+					this.SendPropertyChanged("DateCreated");
+					this.OnDateCreatedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LeadAgreement_LeadAgreementWork", Storage="_LeadAgreement", ThisKey="AgreementId", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public LeadAgreement LeadAgreement
+		{
+			get
+			{
+				return this._LeadAgreement.Entity;
+			}
+			set
+			{
+				LeadAgreement previousValue = this._LeadAgreement.Entity;
+				if (((previousValue != value) 
+							|| (this._LeadAgreement.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._LeadAgreement.Entity = null;
+						previousValue.LeadAgreementWorks.Remove(this);
+					}
+					this._LeadAgreement.Entity = value;
+					if ((value != null))
+					{
+						value.LeadAgreementWorks.Add(this);
+						this._AgreementId = value.Id;
+					}
+					else
+					{
+						this._AgreementId = default(long);
+					}
+					this.SendPropertyChanged("LeadAgreement");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LeadAgreementService_LeadAgreementWork", Storage="_LeadAgreementService", ThisKey="ServiceId", OtherKey="Id", IsForeignKey=true)]
+		public LeadAgreementService LeadAgreementService
+		{
+			get
+			{
+				return this._LeadAgreementService.Entity;
+			}
+			set
+			{
+				LeadAgreementService previousValue = this._LeadAgreementService.Entity;
+				if (((previousValue != value) 
+							|| (this._LeadAgreementService.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._LeadAgreementService.Entity = null;
+						previousValue.LeadAgreementWorks.Remove(this);
+					}
+					this._LeadAgreementService.Entity = value;
+					if ((value != null))
+					{
+						value.LeadAgreementWorks.Add(this);
+						this._ServiceId = value.Id;
+					}
+					else
+					{
+						this._ServiceId = default(long);
+					}
+					this.SendPropertyChanged("LeadAgreementService");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_LeadAgreementWork", Storage="_User", ThisKey="AuthorId", OtherKey="Id", IsForeignKey=true)]
+		public User User
+		{
+			get
+			{
+				return this._User.Entity;
+			}
+			set
+			{
+				User previousValue = this._User.Entity;
+				if (((previousValue != value) 
+							|| (this._User.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._User.Entity = null;
+						previousValue.LeadAgreementWorks.Remove(this);
+					}
+					this._User.Entity = value;
+					if ((value != null))
+					{
+						value.LeadAgreementWorks.Add(this);
+						this._AuthorId = value.Id;
+					}
+					else
+					{
+						this._AuthorId = default(long);
+					}
+					this.SendPropertyChanged("User");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ServiceTypes")]
+	public partial class ServiceType : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private long _Id;
+		
+		private long _ProjectId;
+		
+		private string _Title;
+		
+		private string _Description;
+		
+		private decimal _Price;
+		
+		private short _ServiceType1;
+		
+		private short _PaymentType;
+		
+		private short _PeriodType;
+		
+		private string _AgreementFile;
+		
+		private System.Nullable<System.DateTime> _DateCreated;
+		
+		private System.Nullable<System.DateTime> _DateModified;
+		
+		private EntitySet<LeadAgreementService> _LeadAgreementServices;
+		
+		private EntityRef<Project> _Project;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(long value);
+    partial void OnIdChanged();
+    partial void OnProjectIdChanging(long value);
+    partial void OnProjectIdChanged();
+    partial void OnTitleChanging(string value);
+    partial void OnTitleChanged();
+    partial void OnDescriptionChanging(string value);
+    partial void OnDescriptionChanged();
+    partial void OnPriceChanging(decimal value);
+    partial void OnPriceChanged();
+    partial void OnServiceType1Changing(short value);
+    partial void OnServiceType1Changed();
+    partial void OnPaymentTypeChanging(short value);
+    partial void OnPaymentTypeChanged();
+    partial void OnPeriodTypeChanging(short value);
+    partial void OnPeriodTypeChanged();
+    partial void OnAgreementFileChanging(string value);
+    partial void OnAgreementFileChanged();
+    partial void OnDateCreatedChanging(System.Nullable<System.DateTime> value);
+    partial void OnDateCreatedChanged();
+    partial void OnDateModifiedChanging(System.Nullable<System.DateTime> value);
+    partial void OnDateModifiedChanged();
+    #endregion
+		
+		public ServiceType()
+		{
+			this._LeadAgreementServices = new EntitySet<LeadAgreementService>(new Action<LeadAgreementService>(this.attach_LeadAgreementServices), new Action<LeadAgreementService>(this.detach_LeadAgreementServices));
+			this._Project = default(EntityRef<Project>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="BigInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public long Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProjectId", DbType="BigInt NOT NULL")]
+		public long ProjectId
+		{
+			get
+			{
+				return this._ProjectId;
+			}
+			set
+			{
+				if ((this._ProjectId != value))
+				{
+					if (this._Project.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnProjectIdChanging(value);
+					this.SendPropertyChanging();
+					this._ProjectId = value;
+					this.SendPropertyChanged("ProjectId");
+					this.OnProjectIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Title", DbType="NVarChar(255) NOT NULL", CanBeNull=false)]
+		public string Title
+		{
+			get
+			{
+				return this._Title;
+			}
+			set
+			{
+				if ((this._Title != value))
+				{
+					this.OnTitleChanging(value);
+					this.SendPropertyChanging();
+					this._Title = value;
+					this.SendPropertyChanged("Title");
+					this.OnTitleChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="NVarChar(MAX)")]
+		public string Description
+		{
+			get
+			{
+				return this._Description;
+			}
+			set
+			{
+				if ((this._Description != value))
+				{
+					this.OnDescriptionChanging(value);
+					this.SendPropertyChanging();
+					this._Description = value;
+					this.SendPropertyChanged("Description");
+					this.OnDescriptionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Price", DbType="Money NOT NULL")]
+		public decimal Price
+		{
+			get
+			{
+				return this._Price;
+			}
+			set
+			{
+				if ((this._Price != value))
+				{
+					this.OnPriceChanging(value);
+					this.SendPropertyChanging();
+					this._Price = value;
+					this.SendPropertyChanged("Price");
+					this.OnPriceChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="ServiceType", Storage="_ServiceType1", DbType="SmallInt NOT NULL")]
+		public short ServiceType1
+		{
+			get
+			{
+				return this._ServiceType1;
+			}
+			set
+			{
+				if ((this._ServiceType1 != value))
+				{
+					this.OnServiceType1Changing(value);
+					this.SendPropertyChanging();
+					this._ServiceType1 = value;
+					this.SendPropertyChanged("ServiceType1");
+					this.OnServiceType1Changed();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PaymentType", DbType="SmallInt NOT NULL")]
+		public short PaymentType
+		{
+			get
+			{
+				return this._PaymentType;
+			}
+			set
+			{
+				if ((this._PaymentType != value))
+				{
+					this.OnPaymentTypeChanging(value);
+					this.SendPropertyChanging();
+					this._PaymentType = value;
+					this.SendPropertyChanged("PaymentType");
+					this.OnPaymentTypeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PeriodType", DbType="SmallInt NOT NULL")]
+		public short PeriodType
+		{
+			get
+			{
+				return this._PeriodType;
+			}
+			set
+			{
+				if ((this._PeriodType != value))
+				{
+					this.OnPeriodTypeChanging(value);
+					this.SendPropertyChanging();
+					this._PeriodType = value;
+					this.SendPropertyChanged("PeriodType");
+					this.OnPeriodTypeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AgreementFile", DbType="NVarChar(MAX)")]
+		public string AgreementFile
+		{
+			get
+			{
+				return this._AgreementFile;
+			}
+			set
+			{
+				if ((this._AgreementFile != value))
+				{
+					this.OnAgreementFileChanging(value);
+					this.SendPropertyChanging();
+					this._AgreementFile = value;
+					this.SendPropertyChanged("AgreementFile");
+					this.OnAgreementFileChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateCreated", DbType="DateTime")]
+		public System.Nullable<System.DateTime> DateCreated
+		{
+			get
+			{
+				return this._DateCreated;
+			}
+			set
+			{
+				if ((this._DateCreated != value))
+				{
+					this.OnDateCreatedChanging(value);
+					this.SendPropertyChanging();
+					this._DateCreated = value;
+					this.SendPropertyChanged("DateCreated");
+					this.OnDateCreatedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateModified", DbType="DateTime")]
+		public System.Nullable<System.DateTime> DateModified
+		{
+			get
+			{
+				return this._DateModified;
+			}
+			set
+			{
+				if ((this._DateModified != value))
+				{
+					this.OnDateModifiedChanging(value);
+					this.SendPropertyChanging();
+					this._DateModified = value;
+					this.SendPropertyChanged("DateModified");
+					this.OnDateModifiedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ServiceType_LeadAgreementService", Storage="_LeadAgreementServices", ThisKey="Id", OtherKey="ServiceTypeId")]
+		public EntitySet<LeadAgreementService> LeadAgreementServices
+		{
+			get
+			{
+				return this._LeadAgreementServices;
+			}
+			set
+			{
+				this._LeadAgreementServices.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Project_ServiceType", Storage="_Project", ThisKey="ProjectId", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public Project Project
+		{
+			get
+			{
+				return this._Project.Entity;
+			}
+			set
+			{
+				Project previousValue = this._Project.Entity;
+				if (((previousValue != value) 
+							|| (this._Project.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Project.Entity = null;
+						previousValue.ServiceTypes.Remove(this);
+					}
+					this._Project.Entity = value;
+					if ((value != null))
+					{
+						value.ServiceTypes.Add(this);
+						this._ProjectId = value.Id;
+					}
+					else
+					{
+						this._ProjectId = default(long);
+					}
+					this.SendPropertyChanged("Project");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_LeadAgreementServices(LeadAgreementService entity)
+		{
+			this.SendPropertyChanging();
+			entity.ServiceType = this;
+		}
+		
+		private void detach_LeadAgreementServices(LeadAgreementService entity)
+		{
+			this.SendPropertyChanging();
+			entity.ServiceType = null;
 		}
 	}
 }

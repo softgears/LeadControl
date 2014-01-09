@@ -21,7 +21,7 @@ namespace LeadControl.Web.Controllers
         /// </summary>
         /// <returns></returns>
         [Route("orders")]
-        [AuthorizationCheck(Permission.Manager)]
+        [AuthorizationCheck(Permission.OrdersManager)]
         public ActionResult Index(OrdersFiltrationModel model)
         {
             // Выбираем
@@ -109,7 +109,7 @@ namespace LeadControl.Web.Controllers
         /// </summary>
         /// <returns></returns>
         [Route("orders/create")]
-        [AuthorizationCheck(Permission.Manager)]
+        [AuthorizationCheck(Permission.OrdersManager)]
         public ActionResult Create()
         {
             PushNavigationItem("Заказы", "/orders");
@@ -126,7 +126,7 @@ namespace LeadControl.Web.Controllers
         /// <param name="model">Модель данных по новому лиду</param>
         /// <returns></returns>
         [Route("orders/create-1")]
-        [AuthorizationCheck(Permission.Manager)]
+        [AuthorizationCheck(Permission.OrdersManager)]
         [HttpPost]
         public ActionResult Create1Step(long LeadId, long ProjectId, Lead model)
         {
@@ -183,7 +183,7 @@ namespace LeadControl.Web.Controllers
         /// <param name="id">Идентификатор заказа</param>
         /// <returns></returns>
         [Route("orders/create-edit-items/{id}")]
-        [AuthorizationCheck(Permission.Manager)]
+        [AuthorizationCheck(Permission.OrdersManager)]
         public ActionResult EditOrderItems(long id)
         {
             var order = DataContext.LeadOrders.FirstOrDefault(lo => lo.Id == id);
@@ -216,7 +216,7 @@ namespace LeadControl.Web.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("orders/change-order-item-product")]
-        [AuthorizationCheck(Permission.Manager)]
+        [AuthorizationCheck(Permission.OrdersManager)]
         public ActionResult ChangeOrderItemProduct(long id, long itemId, long productId, long newId)
         {
             var order = DataContext.LeadOrders.FirstOrDefault(o => o.Id == id);
@@ -310,7 +310,7 @@ namespace LeadControl.Web.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("orders/change-order-item-quantity")]
-        [AuthorizationCheck(Permission.Manager)]
+        [AuthorizationCheck(Permission.OrdersManager)]
         public ActionResult ChangeOrderItemQuantity(long id, long itemId, long productId, int quantity)
         {
             var order = DataContext.LeadOrders.FirstOrDefault(o => o.Id == id);
@@ -394,7 +394,7 @@ namespace LeadControl.Web.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("orders/change-order-item-price")]
-        [AuthorizationCheck(Permission.Manager)]
+        [AuthorizationCheck(Permission.OrdersManager)]
         public ActionResult ChangeOrderItemPrice(long id, long itemId, long productId, decimal price)
         {
             var order = DataContext.LeadOrders.FirstOrDefault(o => o.Id == id);
@@ -476,7 +476,7 @@ namespace LeadControl.Web.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("orders/delete-order-item")]
-        [AuthorizationCheck(Permission.Manager)]
+        [AuthorizationCheck(Permission.OrdersManager)]
         public ActionResult DeleteOrderItem(long id, long itemId)
         {
             // Ищем заказ
@@ -536,7 +536,7 @@ namespace LeadControl.Web.Controllers
         /// <param name="id">Идентификатор заказа</param>
         /// <returns></returns>
         [Route("orders/create-info/{id}")]
-        [AuthorizationCheck(Permission.Manager)]
+        [AuthorizationCheck(Permission.OrdersManager)]
         public ActionResult EditOrderInfo(long id)
         {
             var order = DataContext.LeadOrders.FirstOrDefault(lo => lo.Id == id);
@@ -562,7 +562,7 @@ namespace LeadControl.Web.Controllers
         /// <returns></returns>
         [Route("orders/create-3")]
         [HttpPost]
-        [AuthorizationCheck(Permission.Manager)]
+        [AuthorizationCheck(Permission.OrdersManager)]
         public ActionResult Create3Step(long id, short paymentType, short deliveryType, string deliveryAddress)
         {
             var order = DataContext.LeadOrders.FirstOrDefault(lo => lo.Id == id);

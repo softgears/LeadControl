@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-	//------------- Elfinder file manager  -------------//
+	//------------- Elfinder file OrdersManager  -------------//
     var elf = $('#elfinder').elfinder({
 		// lang: 'ru',             // language (OPTIONAL)
 		url : 'php/connector.php'  // connector URL (REQUIRED)

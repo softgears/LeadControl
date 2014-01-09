@@ -228,7 +228,7 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'about'           : 'About',
 			'shortcuts'       : 'Shortcuts',
 			'help'            : 'Help',
-			'webfm'           : 'Web file manager',
+			'webfm'           : 'Web file OrdersManager',
 			'ver'             : 'Version',
 			'protocol'        : 'protocol version',
 			'homepage'        : 'Project home',

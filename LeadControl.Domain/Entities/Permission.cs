@@ -42,9 +42,9 @@ namespace LeadControl.Domain.Entities
         public const long ManageWarehouses = 5;
 
         /// <summary>
-        /// Привилегии менеджера
+        /// Привилегии менеджера по заказам
         /// </summary>
-        public const long Manager = 6;
+        public const long OrdersManager = 6;
 
         /// <summary>
         /// Привилегии бухгалтера
@@ -65,5 +65,15 @@ namespace LeadControl.Domain.Entities
         /// Управление остатками на складах
         /// </summary>
         public const long Warehousing = 10;
+
+        /// <summary>
+        /// Привилегии менеджера по услугам
+        /// </summary>
+        public const long ServicesManager = 11;
+
+        /// <summary>
+        /// Управление услугами
+        /// </summary>
+        public const long ManageServices = 12;
     }
 }

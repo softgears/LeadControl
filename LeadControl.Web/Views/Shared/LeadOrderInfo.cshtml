@@ -83,7 +83,7 @@
                             @Model.DateModified.FormatDateTime()
                         </div>
                     </div>
-                    @if (ViewContext.CurrentUser().IsAdmin() || ViewContext.CurrentUser().HasPermission(Permission.Manager))
+                    @if (ViewContext.CurrentUser().IsAdmin() || ViewContext.CurrentUser().HasPermission(Permission.OrdersManager))
                     {
                         <div class="form-group">
                             <div class="col-lg-offset-2">
@@ -108,7 +108,7 @@
                 <a href="#" class="minimize"></a>
             </div>
             <div class="panel-body">
-                @if (Model.Status == (short)LeadOrderStatus.Initial && (ViewContext.CurrentUser().IsAdmin() || ViewContext.CurrentUser().HasPermission(Permission.Manager)))
+                @if (Model.Status == (short)LeadOrderStatus.Initial && (ViewContext.CurrentUser().IsAdmin() || ViewContext.CurrentUser().HasPermission(Permission.OrdersManager)))
                 {
                     @Html.Partial("OrderItemsEditor", Model)
                 }

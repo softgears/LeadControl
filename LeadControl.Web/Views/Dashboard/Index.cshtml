@@ -12,7 +12,7 @@
     var dc = Locator.GetService<LCDataContext>();
 }
 
-@if (currentUser.IsAdmin() || currentUser.HasPermission(Permission.Manager))
+@if (currentUser.IsAdmin() || currentUser.HasPermission(Permission.OrdersManager))
 {
     var createdOrders = dc.LeadOrders.Where(o => o.Status != (short) LeadOrderStatus.Completed && o.AssignedUserId == currentUser.Id || (o.LeadOrderChangements.Count > 0 && o.LeadOrderChangements.First().AuthorId == currentUser.Id)).OrderByDescending(o => o.DateModified).Take(5).ToList();
     <div class="row">

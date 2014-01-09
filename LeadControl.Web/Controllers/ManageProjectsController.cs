@@ -91,6 +91,11 @@ namespace LeadControl.Web.Controllers
                 ShowError("Нельзя удалить этот проект, потому что в нем имеются заказы");
                 return RedirectToAction("Index");
             }
+            if (project.LeadAgreements.Count > 0)
+            {
+                ShowError("Нельзя удалить этот проект, потому что в нем имеются договора на оказание услуг");
+                return RedirectToAction("Index");
+            }
 
             DataContext.Projects.DeleteOnSubmit(project);
             DataContext.SubmitChanges();

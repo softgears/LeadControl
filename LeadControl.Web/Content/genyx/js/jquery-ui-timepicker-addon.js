@@ -30,7 +30,7 @@ if ($.ui.timepicker.version) {
 
 $.extend($.ui, { timepicker: { version: "1.0.2" } });
 
-/* Time picker manager.
+/* Time picker OrdersManager.
    Use the singleton instance of this class, $.timepicker, to interact with the time picker.
    Settings for (groups of) time pickers are maintained in an instance object,
    allowing multiple different settings on the same page. */
@@ -135,7 +135,7 @@ $.extend(Timepicker.prototype, {
 
 	/* Override the default settings for all instances of the time picker.
 	   @param  settings  object - the new settings to use as defaults (anonymous object)
-	   @return the manager object */
+	   @return the OrdersManager object */
 	setDefaults: function(settings) {
 		extendRemove(this._defaults, settings || {});
 		return this;

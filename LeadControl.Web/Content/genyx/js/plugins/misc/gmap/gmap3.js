@@ -1513,7 +1513,7 @@
     //-----------------------------------------------------------------------//
 
     /**
-     * store actions to execute in a stack manager
+     * store actions to execute in a stack OrdersManager
      **/
     this._plan = function(list){
       for(var k = 0; k < list.length; k++) {

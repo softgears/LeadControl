@@ -37,7 +37,7 @@
                     <div class="form-group">
                         <label class="col-lg-2 control-label" for="order-manager-field">Менеджер</label>
                         <div class="col-lg-10">
-                            <select name="ManagerId" id="order-manager-field">
+                            <select name="OrdersManagerId" id="order-manager-field">
                                 @foreach (var user in availableUsers)
                                 {
                                     <option value="@user.Id">@user.GetFio()</option>

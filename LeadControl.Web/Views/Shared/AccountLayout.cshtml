@@ -172,7 +172,7 @@
                                 <span class="txt">Лиды</span>
                             </a>
                         </li>
-                        @if (ViewContext.CurrentUser().HasPermission(Permission.Manager))
+                        @if (ViewContext.CurrentUser().HasPermission(Permission.OrdersManager))
                         {
                         <li>
                             <a href="/orders">

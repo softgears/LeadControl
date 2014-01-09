@@ -147,7 +147,7 @@
                                     <a href="/fea/@order.Id/edit" class="btn btn-xs btn-info tip" title="Карточка заявки"><i class="icon12 i-info"></i></a>
                                     @if (ViewContext.CurrentUser().IsAdmin())
                                     {
-                                        <a href="javascript:changeManager(@order.Id)" class="btn btn-xs btn-warning tip" title="Назначить менеджера"><i class="icon12 i-user-plus"></i></a>    
+                                        <a href="javascript:changeOrdersManager(@order.Id)" class="btn btn-xs btn-warning tip" title="Назначить менеджера"><i class="icon12 i-user-plus"></i></a>    
                                         if (order.Status == (short)FEAOrderStatus.Gathering)
                                         {
                                         <a href="/fea/@order.Id/delete" class="btn btn-xs btn-danger tip" onclick="return confirm('Вы действительно хотите удалить эту заявку?')" title="Удалить заявку"><i class="icon12 i-remove-5"></i></a>             
@@ -163,7 +163,7 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="change-manager-dialog" tabindex="-1" role="dialog" aria-labelledby="changeManagerLabel" aria-hidden="true">
+<div class="modal fade" id="change-manager-dialog" tabindex="-1" role="dialog" aria-labelledby="changeOrdersManagerLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -188,7 +188,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
-                <button type="button" class="btn btn-primary" onclick="$('#change-manager-form').submit();">Изменить</button>
+                <button type="button" class="btn btn-primary" onclick="$('#change-OrdersManager-form').submit();">Изменить</button>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -200,8 +200,8 @@
         $("#projects-field, #users-field, #statuses-field").select2();
     });
     function changeManager(id) {
-        $("#change-manager-order-id-field").val(id);
-        $("#change-manager-dialog").modal({
+        $("#change-OrdersManager-order-id-field").val(id);
+        $("#change-OrdersManager-dialog").modal({
             keyboard: true
         });
     }

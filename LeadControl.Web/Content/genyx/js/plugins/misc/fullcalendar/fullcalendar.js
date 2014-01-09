@@ -5163,7 +5163,7 @@ function SelectionManager() {
 	}
 	
 	
-	function daySelectionMousedown(ev) { // not really a generic manager method, oh well
+	function daySelectionMousedown(ev) { // not really a generic OrdersManager method, oh well
 		var cellDate = t.cellDate;
 		var cellIsAllDay = t.cellIsAllDay;
 		var hoverListener = t.getHoverListener();

@@ -172,6 +172,12 @@ namespace LeadControl.Web.Controllers
                 return RedirectToAction("Index");
             }
 
+            if (lead.LeadAgreements.Count > 0)
+            {
+                ShowError("Нельзя удалить лида, у которого есть договора");
+                return RedirectToAction("Index");
+            }
+
             DataContext.Leads.DeleteOnSubmit(lead);
             DataContext.SubmitChanges();
             ShowSuccess("Лид был успешно удален");

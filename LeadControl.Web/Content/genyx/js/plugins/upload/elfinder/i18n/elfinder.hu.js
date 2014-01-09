@@ -175,7 +175,7 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'about'           : 'Névjegy',
 			'shortcuts'       : 'Gyorsbillenytyűk',
 			'help'            : 'Súgó',
-			'webfm'           : 'Web file manager',
+			'webfm'           : 'Web file OrdersManager',
 			'ver'             : 'Verzió',
 			'protocol'        : 'protokol verzió',
 			'homepage'        : 'Projekt honlap',
