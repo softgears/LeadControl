@@ -106,9 +106,6 @@ namespace LeadControl.Domain.DAL
     partial void InsertLeadOrderChangement(LeadControl.Domain.Entities.LeadOrderChangement instance);
     partial void UpdateLeadOrderChangement(LeadControl.Domain.Entities.LeadOrderChangement instance);
     partial void DeleteLeadOrderChangement(LeadControl.Domain.Entities.LeadOrderChangement instance);
-    partial void InsertLeadAgreementChangement(LeadControl.Domain.Entities.LeadAgreementChangement instance);
-    partial void UpdateLeadAgreementChangement(LeadControl.Domain.Entities.LeadAgreementChangement instance);
-    partial void DeleteLeadAgreementChangement(LeadControl.Domain.Entities.LeadAgreementChangement instance);
     partial void InsertLeadAgreementChangementValue(LeadControl.Domain.Entities.LeadAgreementChangementValue instance);
     partial void UpdateLeadAgreementChangementValue(LeadControl.Domain.Entities.LeadAgreementChangementValue instance);
     partial void DeleteLeadAgreementChangementValue(LeadControl.Domain.Entities.LeadAgreementChangementValue instance);
@@ -127,6 +124,9 @@ namespace LeadControl.Domain.DAL
     partial void InsertServiceType(LeadControl.Domain.Entities.ServiceType instance);
     partial void UpdateServiceType(LeadControl.Domain.Entities.ServiceType instance);
     partial void DeleteServiceType(LeadControl.Domain.Entities.ServiceType instance);
+    partial void InsertLeadAgreementChangement(LeadControl.Domain.Entities.LeadAgreementChangement instance);
+    partial void UpdateLeadAgreementChangement(LeadControl.Domain.Entities.LeadAgreementChangement instance);
+    partial void DeleteLeadAgreementChangement(LeadControl.Domain.Entities.LeadAgreementChangement instance);
     #endregion
 		
 		public LCDataContext(string connection) : 
@@ -361,14 +361,6 @@ namespace LeadControl.Domain.DAL
 			}
 		}
 		
-		public System.Data.Linq.Table<LeadControl.Domain.Entities.LeadAgreementChangement> LeadAgreementChangements
-		{
-			get
-			{
-				return this.GetTable<LeadControl.Domain.Entities.LeadAgreementChangement>();
-			}
-		}
-		
 		public System.Data.Linq.Table<LeadControl.Domain.Entities.LeadAgreementChangementValue> LeadAgreementChangementValues
 		{
 			get
@@ -414,6 +406,14 @@ namespace LeadControl.Domain.DAL
 			get
 			{
 				return this.GetTable<LeadControl.Domain.Entities.ServiceType>();
+			}
+		}
+		
+		public System.Data.Linq.Table<LeadControl.Domain.Entities.LeadAgreementChangement> LeadAgreementChangements
+		{
+			get
+			{
+				return this.GetTable<LeadControl.Domain.Entities.LeadAgreementChangement>();
 			}
 		}
 	}
@@ -2607,9 +2607,9 @@ namespace LeadControl.Domain.Entities
 		
 		private EntitySet<LeadOrder> _LeadOrders;
 		
-		private EntitySet<LeadAgreementChangement> _LeadAgreementChangements;
-		
 		private EntitySet<LeadAgreement> _LeadAgreements;
+		
+		private EntitySet<LeadAgreementChangement> _LeadAgreementChangements;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -2637,8 +2637,8 @@ namespace LeadControl.Domain.Entities
 			this._LeadLegalInfos = default(EntityRef<LeadLegalInfo>);
 			this._LeadPassportInfos = default(EntityRef<LeadPassportInfo>);
 			this._LeadOrders = new EntitySet<LeadOrder>(new Action<LeadOrder>(this.attach_LeadOrders), new Action<LeadOrder>(this.detach_LeadOrders));
-			this._LeadAgreementChangements = new EntitySet<LeadAgreementChangement>(new Action<LeadAgreementChangement>(this.attach_LeadAgreementChangements), new Action<LeadAgreementChangement>(this.detach_LeadAgreementChangements));
 			this._LeadAgreements = new EntitySet<LeadAgreement>(new Action<LeadAgreement>(this.attach_LeadAgreements), new Action<LeadAgreement>(this.detach_LeadAgreements));
+			this._LeadAgreementChangements = new EntitySet<LeadAgreementChangement>(new Action<LeadAgreementChangement>(this.attach_LeadAgreementChangements), new Action<LeadAgreementChangement>(this.detach_LeadAgreementChangements));
 			OnCreated();
 		}
 		
@@ -2882,19 +2882,6 @@ namespace LeadControl.Domain.Entities
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Lead_LeadAgreementChangement", Storage="_LeadAgreementChangements", ThisKey="Id", OtherKey="AuthorId")]
-		public EntitySet<LeadAgreementChangement> LeadAgreementChangements
-		{
-			get
-			{
-				return this._LeadAgreementChangements;
-			}
-			set
-			{
-				this._LeadAgreementChangements.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Lead_LeadAgreement", Storage="_LeadAgreements", ThisKey="Id", OtherKey="LeadId")]
 		public EntitySet<LeadAgreement> LeadAgreements
 		{
@@ -2905,6 +2892,19 @@ namespace LeadControl.Domain.Entities
 			set
 			{
 				this._LeadAgreements.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Lead_LeadAgreementChangement", Storage="_LeadAgreementChangements", ThisKey="Id", OtherKey="AuthorId")]
+		public EntitySet<LeadAgreementChangement> LeadAgreementChangements
+		{
+			get
+			{
+				return this._LeadAgreementChangements;
+			}
+			set
+			{
+				this._LeadAgreementChangements.Assign(value);
 			}
 		}
 		
@@ -2940,18 +2940,6 @@ namespace LeadControl.Domain.Entities
 			entity.Lead = null;
 		}
 		
-		private void attach_LeadAgreementChangements(LeadAgreementChangement entity)
-		{
-			this.SendPropertyChanging();
-			entity.Lead = this;
-		}
-		
-		private void detach_LeadAgreementChangements(LeadAgreementChangement entity)
-		{
-			this.SendPropertyChanging();
-			entity.Lead = null;
-		}
-		
 		private void attach_LeadAgreements(LeadAgreement entity)
 		{
 			this.SendPropertyChanging();
@@ -2959,6 +2947,18 @@ namespace LeadControl.Domain.Entities
 		}
 		
 		private void detach_LeadAgreements(LeadAgreement entity)
+		{
+			this.SendPropertyChanging();
+			entity.Lead = null;
+		}
+		
+		private void attach_LeadAgreementChangements(LeadAgreementChangement entity)
+		{
+			this.SendPropertyChanging();
+			entity.Lead = this;
+		}
+		
+		private void detach_LeadAgreementChangements(LeadAgreementChangement entity)
 		{
 			this.SendPropertyChanging();
 			entity.Lead = null;
@@ -8814,250 +8814,6 @@ namespace LeadControl.Domain.Entities
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.LeadAgreementChangements")]
-	public partial class LeadAgreementChangement : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private long _Id;
-		
-		private long _AgreementId;
-		
-		private long _AuthorId;
-		
-		private System.Nullable<System.DateTime> _DateCreated;
-		
-		private EntitySet<LeadAgreementChangementValue> _LeadAgreementChangementValues;
-		
-		private EntityRef<Lead> _Lead;
-		
-		private EntityRef<LeadAgreement> _LeadAgreement;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIdChanging(long value);
-    partial void OnIdChanged();
-    partial void OnAgreementIdChanging(long value);
-    partial void OnAgreementIdChanged();
-    partial void OnAuthorIdChanging(long value);
-    partial void OnAuthorIdChanged();
-    partial void OnDateCreatedChanging(System.Nullable<System.DateTime> value);
-    partial void OnDateCreatedChanged();
-    #endregion
-		
-		public LeadAgreementChangement()
-		{
-			this._LeadAgreementChangementValues = new EntitySet<LeadAgreementChangementValue>(new Action<LeadAgreementChangementValue>(this.attach_LeadAgreementChangementValues), new Action<LeadAgreementChangementValue>(this.detach_LeadAgreementChangementValues));
-			this._Lead = default(EntityRef<Lead>);
-			this._LeadAgreement = default(EntityRef<LeadAgreement>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="BigInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public long Id
-		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				if ((this._Id != value))
-				{
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AgreementId", DbType="BigInt NOT NULL")]
-		public long AgreementId
-		{
-			get
-			{
-				return this._AgreementId;
-			}
-			set
-			{
-				if ((this._AgreementId != value))
-				{
-					if (this._LeadAgreement.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnAgreementIdChanging(value);
-					this.SendPropertyChanging();
-					this._AgreementId = value;
-					this.SendPropertyChanged("AgreementId");
-					this.OnAgreementIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AuthorId", DbType="BigInt NOT NULL")]
-		public long AuthorId
-		{
-			get
-			{
-				return this._AuthorId;
-			}
-			set
-			{
-				if ((this._AuthorId != value))
-				{
-					if (this._Lead.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnAuthorIdChanging(value);
-					this.SendPropertyChanging();
-					this._AuthorId = value;
-					this.SendPropertyChanged("AuthorId");
-					this.OnAuthorIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateCreated", DbType="DateTime")]
-		public System.Nullable<System.DateTime> DateCreated
-		{
-			get
-			{
-				return this._DateCreated;
-			}
-			set
-			{
-				if ((this._DateCreated != value))
-				{
-					this.OnDateCreatedChanging(value);
-					this.SendPropertyChanging();
-					this._DateCreated = value;
-					this.SendPropertyChanged("DateCreated");
-					this.OnDateCreatedChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LeadAgreementChangement_LeadAgreementChangementValue", Storage="_LeadAgreementChangementValues", ThisKey="Id", OtherKey="ChangementId")]
-		public EntitySet<LeadAgreementChangementValue> LeadAgreementChangementValues
-		{
-			get
-			{
-				return this._LeadAgreementChangementValues;
-			}
-			set
-			{
-				this._LeadAgreementChangementValues.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Lead_LeadAgreementChangement", Storage="_Lead", ThisKey="AuthorId", OtherKey="Id", IsForeignKey=true)]
-		public Lead Lead
-		{
-			get
-			{
-				return this._Lead.Entity;
-			}
-			set
-			{
-				Lead previousValue = this._Lead.Entity;
-				if (((previousValue != value) 
-							|| (this._Lead.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Lead.Entity = null;
-						previousValue.LeadAgreementChangements.Remove(this);
-					}
-					this._Lead.Entity = value;
-					if ((value != null))
-					{
-						value.LeadAgreementChangements.Add(this);
-						this._AuthorId = value.Id;
-					}
-					else
-					{
-						this._AuthorId = default(long);
-					}
-					this.SendPropertyChanged("Lead");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LeadAgreement_LeadAgreementChangement", Storage="_LeadAgreement", ThisKey="AgreementId", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
-		public LeadAgreement LeadAgreement
-		{
-			get
-			{
-				return this._LeadAgreement.Entity;
-			}
-			set
-			{
-				LeadAgreement previousValue = this._LeadAgreement.Entity;
-				if (((previousValue != value) 
-							|| (this._LeadAgreement.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._LeadAgreement.Entity = null;
-						previousValue.LeadAgreementChangements.Remove(this);
-					}
-					this._LeadAgreement.Entity = value;
-					if ((value != null))
-					{
-						value.LeadAgreementChangements.Add(this);
-						this._AgreementId = value.Id;
-					}
-					else
-					{
-						this._AgreementId = default(long);
-					}
-					this.SendPropertyChanged("LeadAgreement");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_LeadAgreementChangementValues(LeadAgreementChangementValue entity)
-		{
-			this.SendPropertyChanging();
-			entity.LeadAgreementChangement = this;
-		}
-		
-		private void detach_LeadAgreementChangementValues(LeadAgreementChangementValue entity)
-		{
-			this.SendPropertyChanging();
-			entity.LeadAgreementChangement = null;
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.LeadAgreementChangementValues")]
 	public partial class LeadAgreementChangementValue : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -9662,13 +9418,13 @@ namespace LeadControl.Domain.Entities
 		
 		private System.Nullable<System.DateTime> _DateModified;
 		
-		private EntitySet<LeadAgreementChangement> _LeadAgreementChangements;
-		
 		private EntitySet<LeadAgreementPayment> _LeadAgreementPayments;
 		
 		private EntitySet<LeadAgreementService> _LeadAgreementServices;
 		
 		private EntitySet<LeadAgreementWork> _LeadAgreementWorks;
+		
+		private EntitySet<LeadAgreementChangement> _LeadAgreementChangements;
 		
 		private EntityRef<Lead> _Lead;
 		
@@ -9706,10 +9462,10 @@ namespace LeadControl.Domain.Entities
 		
 		public LeadAgreement()
 		{
-			this._LeadAgreementChangements = new EntitySet<LeadAgreementChangement>(new Action<LeadAgreementChangement>(this.attach_LeadAgreementChangements), new Action<LeadAgreementChangement>(this.detach_LeadAgreementChangements));
 			this._LeadAgreementPayments = new EntitySet<LeadAgreementPayment>(new Action<LeadAgreementPayment>(this.attach_LeadAgreementPayments), new Action<LeadAgreementPayment>(this.detach_LeadAgreementPayments));
 			this._LeadAgreementServices = new EntitySet<LeadAgreementService>(new Action<LeadAgreementService>(this.attach_LeadAgreementServices), new Action<LeadAgreementService>(this.detach_LeadAgreementServices));
 			this._LeadAgreementWorks = new EntitySet<LeadAgreementWork>(new Action<LeadAgreementWork>(this.attach_LeadAgreementWorks), new Action<LeadAgreementWork>(this.detach_LeadAgreementWorks));
+			this._LeadAgreementChangements = new EntitySet<LeadAgreementChangement>(new Action<LeadAgreementChangement>(this.attach_LeadAgreementChangements), new Action<LeadAgreementChangement>(this.detach_LeadAgreementChangements));
 			this._Lead = default(EntityRef<Lead>);
 			this._Project = default(EntityRef<Project>);
 			this._User = default(EntityRef<User>);
@@ -9948,19 +9704,6 @@ namespace LeadControl.Domain.Entities
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LeadAgreement_LeadAgreementChangement", Storage="_LeadAgreementChangements", ThisKey="Id", OtherKey="AgreementId")]
-		public EntitySet<LeadAgreementChangement> LeadAgreementChangements
-		{
-			get
-			{
-				return this._LeadAgreementChangements;
-			}
-			set
-			{
-				this._LeadAgreementChangements.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LeadAgreement_LeadAgreementPayment", Storage="_LeadAgreementPayments", ThisKey="Id", OtherKey="AgreementId")]
 		public EntitySet<LeadAgreementPayment> LeadAgreementPayments
 		{
@@ -9997,6 +9740,19 @@ namespace LeadControl.Domain.Entities
 			set
 			{
 				this._LeadAgreementWorks.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LeadAgreement_LeadAgreementChangement", Storage="_LeadAgreementChangements", ThisKey="Id", OtherKey="AgreementId")]
+		public EntitySet<LeadAgreementChangement> LeadAgreementChangements
+		{
+			get
+			{
+				return this._LeadAgreementChangements;
+			}
+			set
+			{
+				this._LeadAgreementChangements.Assign(value);
 			}
 		}
 		
@@ -10122,18 +9878,6 @@ namespace LeadControl.Domain.Entities
 			}
 		}
 		
-		private void attach_LeadAgreementChangements(LeadAgreementChangement entity)
-		{
-			this.SendPropertyChanging();
-			entity.LeadAgreement = this;
-		}
-		
-		private void detach_LeadAgreementChangements(LeadAgreementChangement entity)
-		{
-			this.SendPropertyChanging();
-			entity.LeadAgreement = null;
-		}
-		
 		private void attach_LeadAgreementPayments(LeadAgreementPayment entity)
 		{
 			this.SendPropertyChanging();
@@ -10165,6 +9909,18 @@ namespace LeadControl.Domain.Entities
 		}
 		
 		private void detach_LeadAgreementWorks(LeadAgreementWork entity)
+		{
+			this.SendPropertyChanging();
+			entity.LeadAgreement = null;
+		}
+		
+		private void attach_LeadAgreementChangements(LeadAgreementChangement entity)
+		{
+			this.SendPropertyChanging();
+			entity.LeadAgreement = this;
+		}
+		
+		private void detach_LeadAgreementChangements(LeadAgreementChangement entity)
 		{
 			this.SendPropertyChanging();
 			entity.LeadAgreement = null;
@@ -10890,8 +10646,8 @@ namespace LeadControl.Domain.Entities
     partial void OnDescriptionChanged();
     partial void OnPriceChanging(decimal value);
     partial void OnPriceChanged();
-    partial void OnServiceType1Changing(short value);
-    partial void OnServiceType1Changed();
+    partial void OnTypeChanging(short value);
+    partial void OnTypeChanged();
     partial void OnPaymentTypeChanging(short value);
     partial void OnPaymentTypeChanged();
     partial void OnPeriodTypeChanging(short value);
@@ -11016,7 +10772,7 @@ namespace LeadControl.Domain.Entities
 		}
 		
 		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="ServiceType", Storage="_ServiceType1", DbType="SmallInt NOT NULL")]
-		public short ServiceType1
+		public short Type
 		{
 			get
 			{
@@ -11026,11 +10782,11 @@ namespace LeadControl.Domain.Entities
 			{
 				if ((this._ServiceType1 != value))
 				{
-					this.OnServiceType1Changing(value);
+					this.OnTypeChanging(value);
 					this.SendPropertyChanging();
 					this._ServiceType1 = value;
-					this.SendPropertyChanged("ServiceType1");
-					this.OnServiceType1Changed();
+					this.SendPropertyChanged("Type");
+					this.OnTypeChanged();
 				}
 			}
 		}
@@ -11212,6 +10968,274 @@ namespace LeadControl.Domain.Entities
 		{
 			this.SendPropertyChanging();
 			entity.ServiceType = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.LeadAgreementChangements")]
+	public partial class LeadAgreementChangement : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private long _Id;
+		
+		private long _AgreementId;
+		
+		private long _AuthorId;
+		
+		private string _Comments;
+		
+		private System.Nullable<System.DateTime> _DateCreated;
+		
+		private EntitySet<LeadAgreementChangementValue> _LeadAgreementChangementValues;
+		
+		private EntityRef<LeadAgreement> _LeadAgreement;
+		
+		private EntityRef<Lead> _Lead;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(long value);
+    partial void OnIdChanged();
+    partial void OnAgreementIdChanging(long value);
+    partial void OnAgreementIdChanged();
+    partial void OnAuthorIdChanging(long value);
+    partial void OnAuthorIdChanged();
+    partial void OnCommentsChanging(string value);
+    partial void OnCommentsChanged();
+    partial void OnDateCreatedChanging(System.Nullable<System.DateTime> value);
+    partial void OnDateCreatedChanged();
+    #endregion
+		
+		public LeadAgreementChangement()
+		{
+			this._LeadAgreementChangementValues = new EntitySet<LeadAgreementChangementValue>(new Action<LeadAgreementChangementValue>(this.attach_LeadAgreementChangementValues), new Action<LeadAgreementChangementValue>(this.detach_LeadAgreementChangementValues));
+			this._LeadAgreement = default(EntityRef<LeadAgreement>);
+			this._Lead = default(EntityRef<Lead>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="BigInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public long Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AgreementId", DbType="BigInt NOT NULL")]
+		public long AgreementId
+		{
+			get
+			{
+				return this._AgreementId;
+			}
+			set
+			{
+				if ((this._AgreementId != value))
+				{
+					if (this._LeadAgreement.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnAgreementIdChanging(value);
+					this.SendPropertyChanging();
+					this._AgreementId = value;
+					this.SendPropertyChanged("AgreementId");
+					this.OnAgreementIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AuthorId", DbType="BigInt NOT NULL")]
+		public long AuthorId
+		{
+			get
+			{
+				return this._AuthorId;
+			}
+			set
+			{
+				if ((this._AuthorId != value))
+				{
+					if (this._Lead.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnAuthorIdChanging(value);
+					this.SendPropertyChanging();
+					this._AuthorId = value;
+					this.SendPropertyChanged("AuthorId");
+					this.OnAuthorIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Comments", DbType="NVarChar(MAX)")]
+		public string Comments
+		{
+			get
+			{
+				return this._Comments;
+			}
+			set
+			{
+				if ((this._Comments != value))
+				{
+					this.OnCommentsChanging(value);
+					this.SendPropertyChanging();
+					this._Comments = value;
+					this.SendPropertyChanged("Comments");
+					this.OnCommentsChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateCreated", DbType="DateTime")]
+		public System.Nullable<System.DateTime> DateCreated
+		{
+			get
+			{
+				return this._DateCreated;
+			}
+			set
+			{
+				if ((this._DateCreated != value))
+				{
+					this.OnDateCreatedChanging(value);
+					this.SendPropertyChanging();
+					this._DateCreated = value;
+					this.SendPropertyChanged("DateCreated");
+					this.OnDateCreatedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LeadAgreementChangement_LeadAgreementChangementValue", Storage="_LeadAgreementChangementValues", ThisKey="Id", OtherKey="ChangementId")]
+		public EntitySet<LeadAgreementChangementValue> LeadAgreementChangementValues
+		{
+			get
+			{
+				return this._LeadAgreementChangementValues;
+			}
+			set
+			{
+				this._LeadAgreementChangementValues.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LeadAgreement_LeadAgreementChangement", Storage="_LeadAgreement", ThisKey="AgreementId", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public LeadAgreement LeadAgreement
+		{
+			get
+			{
+				return this._LeadAgreement.Entity;
+			}
+			set
+			{
+				LeadAgreement previousValue = this._LeadAgreement.Entity;
+				if (((previousValue != value) 
+							|| (this._LeadAgreement.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._LeadAgreement.Entity = null;
+						previousValue.LeadAgreementChangements.Remove(this);
+					}
+					this._LeadAgreement.Entity = value;
+					if ((value != null))
+					{
+						value.LeadAgreementChangements.Add(this);
+						this._AgreementId = value.Id;
+					}
+					else
+					{
+						this._AgreementId = default(long);
+					}
+					this.SendPropertyChanged("LeadAgreement");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Lead_LeadAgreementChangement", Storage="_Lead", ThisKey="AuthorId", OtherKey="Id", IsForeignKey=true)]
+		public Lead Lead
+		{
+			get
+			{
+				return this._Lead.Entity;
+			}
+			set
+			{
+				Lead previousValue = this._Lead.Entity;
+				if (((previousValue != value) 
+							|| (this._Lead.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Lead.Entity = null;
+						previousValue.LeadAgreementChangements.Remove(this);
+					}
+					this._Lead.Entity = value;
+					if ((value != null))
+					{
+						value.LeadAgreementChangements.Add(this);
+						this._AuthorId = value.Id;
+					}
+					else
+					{
+						this._AuthorId = default(long);
+					}
+					this.SendPropertyChanged("Lead");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_LeadAgreementChangementValues(LeadAgreementChangementValue entity)
+		{
+			this.SendPropertyChanging();
+			entity.LeadAgreementChangement = this;
+		}
+		
+		private void detach_LeadAgreementChangementValues(LeadAgreementChangementValue entity)
+		{
+			this.SendPropertyChanging();
+			entity.LeadAgreementChangement = null;
 		}
 	}
 }

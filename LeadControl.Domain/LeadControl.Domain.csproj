@@ -75,7 +75,11 @@
     <Compile Include="Enums\EnumDescriptionAttribute.cs" />
     <Compile Include="Enums\EnumUtils.cs" />
     <Compile Include="Enums\FEAOrderStatus.cs" />
+    <Compile Include="Enums\LeadAgreementStatus.cs" />
     <Compile Include="Enums\LeadOrderStatus.cs" />
+    <Compile Include="Enums\LeadServicePaymentTypes.cs" />
+    <Compile Include="Enums\LeadServicePeriods.cs" />
+    <Compile Include="Enums\LeadServiceTypes.cs" />
     <Compile Include="Enums\PaymentTypes.cs" />
     <Compile Include="Enums\UserStatus.cs" />
     <Compile Include="Enums\WarehouseProductChangementDirection.cs" />

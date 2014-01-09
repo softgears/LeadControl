@@ -112,8 +112,8 @@
       <Association Name="Lead_LeadLegalInfo" Member="LeadLegalInfos" ThisKey="Id" OtherKey="LeadId" Type="LeadLegalInfo" Cardinality="One" />
       <Association Name="Lead_LeadPassportInfo" Member="LeadPassportInfos" ThisKey="Id" OtherKey="LeadId" Type="LeadPassportInfo" Cardinality="One" />
       <Association Name="Lead_LeadOrder" Member="LeadOrders" ThisKey="Id" OtherKey="LeadId" Type="LeadOrder" />
-      <Association Name="Lead_LeadAgreementChangement" Member="LeadAgreementChangements" ThisKey="Id" OtherKey="AuthorId" Type="LeadAgreementChangement" />
       <Association Name="Lead_LeadAgreement" Member="LeadAgreements" ThisKey="Id" OtherKey="LeadId" Type="LeadAgreement" />
+      <Association Name="Lead_LeadAgreementChangement" Member="LeadAgreementChangements" ThisKey="Id" OtherKey="AuthorId" Type="LeadAgreementChangement" />
     </Type>
   </Table>
   <Table Name="dbo.Permissions" Member="Permissions">
@@ -375,17 +375,6 @@
       <Association Name="Warehouse_LeadOrderChangement1" Member="OldWarehouse" ThisKey="OldWarehouseId" OtherKey="Id" Type="Warehouse" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.LeadAgreementChangements" Member="LeadAgreementChangements">
-    <Type Name="LeadAgreementChangement">
-      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="AgreementId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
-      <Column Name="AuthorId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
-      <Column Name="DateCreated" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Association Name="LeadAgreementChangement_LeadAgreementChangementValue" Member="LeadAgreementChangementValues" ThisKey="Id" OtherKey="ChangementId" Type="LeadAgreementChangementValue" />
-      <Association Name="Lead_LeadAgreementChangement" Member="Lead" ThisKey="AuthorId" OtherKey="Id" Type="Lead" IsForeignKey="true" />
-      <Association Name="LeadAgreement_LeadAgreementChangement" Member="LeadAgreement" ThisKey="AgreementId" OtherKey="Id" Type="LeadAgreement" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.LeadAgreementChangementValues" Member="LeadAgreementChangementValues">
     <Type Name="LeadAgreementChangementValue">
       <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -425,10 +414,10 @@
       <Column Name="AgreementFile" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Column Name="DateCreated" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Column Name="DateModified" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Association Name="LeadAgreement_LeadAgreementChangement" Member="LeadAgreementChangements" ThisKey="Id" OtherKey="AgreementId" Type="LeadAgreementChangement" />
       <Association Name="LeadAgreement_LeadAgreementPayment" Member="LeadAgreementPayments" ThisKey="Id" OtherKey="AgreementId" Type="LeadAgreementPayment" />
       <Association Name="LeadAgreement_LeadAgreementService" Member="LeadAgreementServices" ThisKey="Id" OtherKey="AgreementId" Type="LeadAgreementService" />
       <Association Name="LeadAgreement_LeadAgreementWork" Member="LeadAgreementWorks" ThisKey="Id" OtherKey="AgreementId" Type="LeadAgreementWork" />
+      <Association Name="LeadAgreement_LeadAgreementChangement" Member="LeadAgreementChangements" ThisKey="Id" OtherKey="AgreementId" Type="LeadAgreementChangement" />
       <Association Name="Lead_LeadAgreement" Member="Lead" ThisKey="LeadId" OtherKey="Id" Type="Lead" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
       <Association Name="Project_LeadAgreement" Member="Project" ThisKey="ProjectId" OtherKey="Id" Type="Project" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
       <Association Name="User_LeadAgreement" Member="User" ThisKey="AssignedUserId" OtherKey="Id" Type="User" IsForeignKey="true" />
@@ -470,7 +459,7 @@
       <Column Name="Title" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
       <Column Name="Description" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Column Name="Price" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
-      <Column Name="ServiceType" Member="ServiceType1" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="ServiceType" Member="Type" Storage="_ServiceType1" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
       <Column Name="PaymentType" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
       <Column Name="PeriodType" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
       <Column Name="AgreementFile" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
@@ -478,6 +467,18 @@
       <Column Name="DateModified" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Association Name="ServiceType_LeadAgreementService" Member="LeadAgreementServices" ThisKey="Id" OtherKey="ServiceTypeId" Type="LeadAgreementService" />
       <Association Name="Project_ServiceType" Member="Project" ThisKey="ProjectId" OtherKey="Id" Type="Project" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.LeadAgreementChangements" Member="LeadAgreementChangements">
+    <Type Name="LeadAgreementChangement">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="AgreementId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="AuthorId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="Comments" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="DateCreated" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="LeadAgreementChangement_LeadAgreementChangementValue" Member="LeadAgreementChangementValues" ThisKey="Id" OtherKey="ChangementId" Type="LeadAgreementChangementValue" />
+      <Association Name="LeadAgreement_LeadAgreementChangement" Member="LeadAgreement" ThisKey="AgreementId" OtherKey="Id" Type="LeadAgreement" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="Lead_LeadAgreementChangement" Member="Lead" ThisKey="AuthorId" OtherKey="Id" Type="Lead" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

@@ -38,6 +38,12 @@
                                 Пользователей
                             </th>
                             <th>
+                                Договоров
+                            </th>
+                            <th>
+                                Договоров в работе
+                            </th>
+                            <th>
                                 Заказов всего
                             </th>
                             <th>
@@ -58,7 +64,7 @@
                         @if (Model.Count == 0)
                         {
                             <tr>
-                                <td colspan="9">
+                                <td colspan="11">
                                     Не найдено проектов
                                 </td>
                             </tr>
@@ -81,6 +87,12 @@
                                         @project.ProjectUsers.Count
                                     </td>
                                     <td>
+                                        @project.LeadAgreements.Count
+                                    </td>
+                                    <td>
+                                        @project.LeadAgreements.Count(a => a.Status == (short)LeadAgreementStatus.Signed)
+                                    </td>
+                                    <td>
                                         @project.LeadOrders.Count
                                     </td>
                                     <td>
@@ -90,7 +102,7 @@
                                         @project.LeadOrders.Count(o => o.Status == (short)LeadOrderStatus.Completed)
                                     </td>
                                     <td>
-                                        @String.Format("{0:c}",project.LeadOrders.Where(o => o.Status >= (short)LeadOrderStatus.Payed).Sum(o => o.GetOrderTotalPrice()))
+                                        @String.Format("{0:c}",project.LeadOrders.Sum(lo => lo.LeadOrderPayments.Sum(p => p.Amount)) + project.LeadAgreements.Sum(la => la.LeadAgreementPayments.Sum(p => p.Amount)))
                                     </td>
                                     <td style="width: 45px">
                                         <a href="/manage/projects/@project.Id/delete" class="btn btn-xs btn-danger tip" onclick="return confirm('Вы действительно хотите удалить этот проект?')" title="Удалить роль из системы"><i class="icon12 i-remove"></i></a>    

@@ -66,6 +66,16 @@ $(document).ready(function() {
     //add class .nostyle if not want uniform to style field
     //$("input, textarea, select").not('.nostyle').uniform();
     $("[type='checkbox'], [type='radio'], [type='file'], select").not('.toggle, .select2, .multiselect').uniform();
+
+    $.validator.addMethod(
+        "floatNumbers",
+        function (value, element) {
+            var re = /^[0-9]*\,?[0-9]*$/;
+            var check = re.test(value);
+            return this.optional(element) || check;
+        },
+        "Неверный формат числа с плавающей запятой"
+    );
 });
 
 function showSuccess(msg) {

@@ -234,6 +234,15 @@
                                     </a>
                                 </li>
                                 }
+                                @if (ViewContext.CurrentUser().HasPermission(Permission.ManageServices))
+                                {
+                                <li>
+                                    <a href="/manage/services">
+                                        <span class="icon"><i class="icon20 i-gift"></i></span>
+                                        <span class="txt">Услуги</span>
+                                    </a>
+                                </li>
+                                }
                                 @if (ViewContext.CurrentUser().HasPermission(Permission.ManageProducts))
                                 {
                                 <li>

@@ -139,6 +139,7 @@
     <Compile Include="Controllers\ManageProductsController.cs" />
     <Compile Include="Controllers\ManageProjectsController.cs" />
     <Compile Include="Controllers\ManageRolesController.cs" />
+    <Compile Include="Controllers\ManageServicesController.cs" />
     <Compile Include="Controllers\ManageUsersController.cs" />
     <Compile Include="Controllers\ManageWarehousesController.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
@@ -153,6 +154,7 @@
     <Compile Include="Models\FEA\FEAFiltrationModel.cs" />
     <Compile Include="Models\Leads\LeadsFiltrationModel.cs" />
     <Compile Include="Models\Manage\ProductsFiltrationModel.cs" />
+    <Compile Include="Models\Manage\ServicesFiltrationModel.cs" />
     <Compile Include="Models\Manage\UsersFiltrationModel.cs" />
     <Compile Include="Models\Manage\WarehousesFiltrationModel.cs" />
     <Compile Include="Models\Orders\LeadOrderFilterModel.cs" />
@@ -1283,6 +1285,8 @@
     <Content Include="Views\Shared\OrderItemsTable.cshtml" />
     <Content Include="Views\Finances\Index.cshtml" />
     <Content Include="Views\Logistics\Index.cshtml" />
+    <Content Include="Views\ManageServices\Index.cshtml" />
+    <Content Include="Views\ManageServices\ServicesEditForm.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

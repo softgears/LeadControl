@@ -1,0 +1,190 @@
+﻿@using LeadControl.Domain.DAL
+@using LeadControl.Domain.Enums
+@using LeadControl.Domain.IoC
+@using LeadControl.Web.Classes.Ext
+@model LeadControl.Web.Models.Manage.ServicesFiltrationModel
+
+@{
+    ViewBag.Title = "Список типов услуг";
+    Layout = "../Shared/AccountLayout.cshtml";
+    var dc = Locator.GetService<LCDataContext>();
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="icon"><i class="icon20 i-filter-3"></i></div>
+                <h4>Фильтрация</h4>
+                <a href="#" class="minimize"></a>
+            </div>
+            <!-- End .panel-heading -->
+            <div class="panel-body">
+                <form action="/manage/services" id="products-form" method="GET" class="form-horizontal">
+                    @Html.HiddenFor(m => m.Page)
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="term-field">Поисковая строка</label>
+                        <div class="col-lg-10">
+                            <input type="text" class="form-control" name="Term" id="term-field" placeholder="Введите фразу для поиска" value="@Model.Term"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="projects-field">Проекты</label>
+                        <div class="col-lg-10">
+                            <select id="projects-field" name="ProjectIds" multiple="multiple">
+                                @foreach (var project in dc.Projects.Where(p => p.ProjectUsers.Any(pu => pu.UserId == ViewContext.CurrentUser().Id)))
+                                {
+                                    <option value="@project.Id" @(Model.ProjectIds.Contains(project.Id) ? "selected=selected":"")>@project.Title</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="types-field">Тип оказания</label>
+                        <div class="col-lg-10">
+                            <select id="types-field" name="ServiceTypes" multiple="multiple">
+                                @foreach (LeadServiceTypes type in Enum.GetValues(typeof (LeadServiceTypes)))
+                                {
+                                    var s = (short) type;
+                                    <option value="@s" @(Model.ServiceTypes.Contains(s) ? "selected=selected":"")>@type.GetEnumMemberName()</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="periods-field">Период оказания</label>
+                        <div class="col-lg-10">
+                            <select id="periods-field" name="ServicePeriods" multiple="multiple">
+                                @foreach (LeadServicePeriods type in Enum.GetValues(typeof (LeadServicePeriods)))
+                                {
+                                    var s = (short) type;
+                                    <option value="@s" @(Model.ServicePeriods.Contains(s) ? "selected=selected":"")>@type.GetEnumMemberName()</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="payments-field">Тип оплаты</label>
+                        <div class="col-lg-10">
+                            <select id="payments-field" name="PaymentTypes" multiple="multiple">
+                                @foreach (LeadServicePaymentTypes type in Enum.GetValues(typeof(LeadServicePaymentTypes)))
+                                {
+                                    var s = (short) type;
+                                    <option value="@s" @(Model.PaymentTypes.Contains(s) ? "selected=selected":"")>@type.GetEnumMemberName()</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-offset-2">
+                            <div class="pad-left15">
+                                <button type="submit" class="btn btn-primary">Фильтрация</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="icon"><i class="icon20 i-table"></i></div>
+                <h4>Типы услуг в системе</h4>
+                <a href="#" class="minimize"></a>
+            </div>
+            <!-- End .panel-heading -->
+            <div class="panel-body">
+                <p>
+                    <a href="/manage/services/add" class="btn btn-info tip" title="Добавить новый тип услуги в систему">Добавить тип услуги</a>    
+                </p>
+                <table class="table table-striped table-bordered" id="services-table">
+                    <thead>
+                        <tr>
+                            <th>
+                                ИД
+                            </th>
+                            <th>
+                                Наименование
+                            </th>
+                            <th>
+                                Проект
+                            </th>
+                            <th>
+                                Тип оказания
+                            </th>
+                            <th>
+                                Периодичность оказания
+                            </th>
+                            <th>
+                                Тип оплаты
+                            </th>
+                            <th>
+                                Договоров
+                            </th>
+                            <th>
+                                Прибыль
+                            </th>
+                            <th>
+                                
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Fetched.Count == 0)
+                        {
+                            <tr>
+                                <td colspan="9">
+                                    Не найдено подходящих типов услуг
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            foreach (var service in Model.Fetched)
+                            {
+                                <tr>
+                                    <td>
+                                        <a href="/manage/services/@service.Id/edit">@service.Id</a>
+                                    </td>
+                                    <td>
+                                        <a href="/manage/services/@service.Id/edit">@service.Title</a>
+                                    </td>
+                                    <td>
+                                        <a href="/manage/projects/@service.ProjectId/edit">@service.Project.Title</a>
+                                    </td>
+                                    <td>
+                                        @(((LeadServiceTypes)service.Type).GetEnumMemberName())
+                                    </td>
+                                    <td>
+                                        @(((LeadServicePeriods)service.PeriodType).GetEnumMemberName())
+                                    </td>
+                                    <td>
+                                        @(((LeadServicePaymentTypes)service.PaymentType).GetEnumMemberName())
+                                    </td>
+                                    <td>
+                                        @service.LeadAgreementServices.Count шт.
+                                    </td>
+                                    <td>
+                                        @String.Format("{0:c}",service.LeadAgreementServices.Sum(s => s.LeadAgreementPayments.Sum(p => p.Amount)))
+                                    </td>
+                                    <td style="width: 90px">
+                                        <a href="/manage/services/@service.Id/edit" class="btn btn-xs btn-warning tip" title="Редактировать тип услуги"><i class="icon12 i-pen-3"></i></a>    
+                                        <a href="/manage/services/@service.Id/delete" class="btn btn-xs btn-danger tip" onclick="return confirm('Вы действительно хотите удалить этот тип услуги?')" title="Удалить тип услуги"><i class="icon12 i-remove-5"></i></a>    
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#projects-field, #types-field, #periods-field, #payments-field").select2();
+    });
+</script>
