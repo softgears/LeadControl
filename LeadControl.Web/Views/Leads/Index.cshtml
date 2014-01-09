@@ -125,7 +125,8 @@
                                     <td>
                                         @String.Format("{0:c}",lead.LeadOrders.Sum(lo => lo.LeadOrderPayments.Sum(p => p.Amount)) + lead.LeadAgreements.Sum(la => la.LeadAgreementPayments.Sum(p => p.Amount)))
                                     </td>
-                                    <td style="width: 135px">
+                                    <td style="width: 180px">
+                                        <a href="/agreements?LeadIds=@lead.Id" class="btn btn-xs btn-success tip" title="Договора"><i class="icon12 i-diamond"></i></a>    
                                         <a href="/orders?LeadIds=@lead.Id" class="btn btn-xs btn-success tip" title="Заказы"><i class="icon12 i-cart-4"></i></a>    
                                         <a href="/leads/@lead.Id/edit" class="btn btn-xs btn-warning tip" title="Редактировать лид"><i class="icon12 i-pen-3"></i></a>    
                                         <a href="/leads/@lead.Id/delete" class="btn btn-xs btn-danger tip" onclick="return confirm('Вы действительно хотите удалить этот контакт?')" title="Удалить лид"><i class="icon12 i-remove-5"></i></a>    
