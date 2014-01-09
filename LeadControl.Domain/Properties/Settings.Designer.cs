@@ -43,5 +43,15 @@ namespace LeadControl.Domain.Properties {
                 return ((string)(this["LeadControlConnectionString1"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=.\\SQLExpress;Initial Catalog=LeadControl;User ID=super")]
+        public string LeadControlConnectionString2 {
+            get {
+                return ((string)(this["LeadControlConnectionString2"]));
+            }
+        }
     }
 }

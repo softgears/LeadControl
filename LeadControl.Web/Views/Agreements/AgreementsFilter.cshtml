@@ -1,0 +1,110 @@
+﻿@using LeadControl.Domain.DAL
+@using LeadControl.Domain.Enums
+@using LeadControl.Domain.IoC
+@using LeadControl.Web.Classes.Ext
+@model LeadControl.Web.Models.Agreements.LeadAgreementFilterModel
+
+@{
+    var dc = Locator.GetService<LCDataContext>();
+    var leads = dc.Leads;
+    var availableProjects = ViewContext.CurrentUser().IsAdmin() ? dc.Projects.ToList() : ViewContext.CurrentUser().ProjectUsers.Select(pu => pu.Project).ToList();
+    var availableUsers = ViewContext.CurrentUser().IsAdmin() ? dc.Users.ToList() : (from project in availableProjects from user in project.ProjectUsers select user.User).ToList();
+    var availableServiceTypes = ViewContext.CurrentUser().IsAdmin() ? dc.ServiceTypes.ToList() : (from project in availableProjects from serviceType in project.ServiceTypes select serviceType).ToList();
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="icon"><i class="icon20 i-filter-3"></i></div>
+                <h4>Фильтрация</h4>
+                <a href="#" class="minimize"></a>
+            </div>
+            <!-- End .panel-heading -->
+            <div class="panel-body">
+                <form action="@Model.CallbackUrl" id="filter-orders-form" method="GET" class="form-horizontal">
+                    @Html.HiddenFor(m => m.FilterData.Page)
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="term-field">Поисковая строка</label>
+                        <div class="col-lg-10">
+                            <input type="text" class="form-control" name="Term" id="term-field" placeholder="Введите фразу для поиска" value="@Model.FilterData.Term"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="projects-field">Лиды - клиенты</label>
+                        <div class="col-lg-10">
+                            <select id="leads-field" name="LeadIds" multiple="multiple">
+                                @foreach (var lead in leads)
+                                {
+                                    <option value="@lead.Id" @(Model.FilterData.LeadIds.Contains(lead.Id) ? "selected=selected":"")>@lead.ToString()</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="projects-field">Проекты</label>
+                        <div class="col-lg-10">
+                            <select id="projects-field" name="ProjectIds" multiple="multiple">
+                                @foreach (var project in availableProjects)
+                                {
+                                    <option value="@project.Id" @(Model.FilterData.ProjectIds.Contains(project.Id) ? "selected=selected":"")>@project.Title</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="projects-field">Пользователи</label>
+                        <div class="col-lg-10">
+                            <select id="users-field" name="Managers" multiple="multiple">
+                                @foreach (var user in availableUsers)
+                                {
+                                    <option value="@user.Id" @(Model.FilterData.Managers.Contains(user.Id) ? "selected=selected":"")>@user.GetFio()</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="projects-field">Статусы</label>
+                        <div class="col-lg-10">
+                            <select id="statuses-field" name="Statuses" multiple="multiple">
+                                @foreach (LeadAgreementStatus status in Enum.GetValues(typeof(LeadAgreementStatus)))
+                                {
+                                    var st = (short) status;
+                                    <option value="@st" @(Model.FilterData.Statuses.Contains(st) ? "selected=selected":"")>@status.GetEnumMemberName()</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="projects-field">Услуги</label>
+                        <div class="col-lg-10">
+                            <select id="product-types-field" name="ServiceTypes" multiple="multiple">
+                                @foreach (var project in availableServiceTypes.GroupBy(st => st.Project))
+                                {
+                                    <optgroup label="@project.Key.Title">
+                                        @foreach (var productType in project)
+                                        {
+                                            <option value="@productType.Id" @(Model.FilterData.ServiceTypes.Contains(productType.Id) ? "selected=selected":"")>@productType.Title</option>
+                                        }
+                                    </optgroup>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-offset-2">
+                            <div class="pad-left15">
+                                <button type="submit" class="btn btn-primary">Фильтрация</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#users-field, #projects-field, #statuses-field, #product-types-field, #leads-field").select2();
+    });
+</script>

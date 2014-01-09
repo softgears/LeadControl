@@ -130,6 +130,7 @@
     <Compile Include="Classes\Utils\MathUtils.cs" />
     <Compile Include="Classes\WebLayer.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AgreementsController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\FEAController.cs" />
@@ -149,6 +150,8 @@
     </Compile>
     <Compile Include="Models\Account\ChangePasswordModel.cs" />
     <Compile Include="Models\Account\LoginModel.cs" />
+    <Compile Include="Models\Agreements\AgreementsFiltrationModel.cs" />
+    <Compile Include="Models\Agreements\LeadAgreementFilterModel.cs" />
     <Compile Include="Models\BaseFiltrationModel.cs" />
     <Compile Include="Models\Dashboard\DashboardModel.cs" />
     <Compile Include="Models\FEA\FEAFiltrationModel.cs" />
@@ -1287,6 +1290,9 @@
     <Content Include="Views\Logistics\Index.cshtml" />
     <Content Include="Views\ManageServices\Index.cshtml" />
     <Content Include="Views\ManageServices\ServicesEditForm.cshtml" />
+    <Content Include="Views\Agreements\Index.cshtml" />
+    <Content Include="Views\Agreements\AgreementsFilter.cshtml" />
+    <Content Include="Views\Agreements\Create.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
