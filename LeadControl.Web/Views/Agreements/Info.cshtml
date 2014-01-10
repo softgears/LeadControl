@@ -1,0 +1,216 @@
+﻿@using LeadControl.Domain.Entities
+@using LeadControl.Domain.Enums
+@using LeadControl.Web.Classes.Ext
+@model LeadControl.Domain.Entities.LeadAgreement
+
+@{
+    ViewBag.Title = "Договор №" + Model.Id;
+    Layout = "../Shared/AccountLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="icon"><i class="icon20 i-user"></i></div>
+                <h4>Сведения о договоре</h4>
+                <a href="#" class="minimize"></a>
+            </div>
+            <!-- End .panel-heading -->
+            <div class="panel-body">
+                <form action="/agreements/update-agreement-info" id="agreement-form" method="POST" class="form-horizontal">
+                    @Html.HiddenFor(m => m.Id)
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="lead-field">Номер</label>
+                        <div class="col-lg-10">
+                            <input type="text" class="form-control" name="Number" placeholder="Номер договора" value="@Model.Number"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="lead-field">Дата</label>
+                        <div class="col-lg-10">
+                            <input type="text" class="form-control" id="agreement-date-field" name="Date" placeholder="Дата заключения договора" value="@Model.Date.FormatDate()"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="lead-field">Дата завершения</label>
+                        <div class="col-lg-10">
+                            <input type="text" class="form-control" id="agreement-end-date-field" name="EndDate" placeholder="Дата завершения действия договора, необязательно" value="@Model.EndDate.FormatDate()"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="lead-field">Название</label>
+                        <div class="col-lg-10">
+                            <input type="text" class="form-control" name="Title" placeholder="Внутренее идентификационное название договора" value="@Model.Title"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="lead-field">Описание</label>
+                        <div class="col-lg-10">
+                            <textarea class="form-control" name="Description" placeholder="Описание договора">@Model.Description</textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="lead-field">Лид - клиент</label>
+                        <div class="col-lg-10">
+                            @Model.Lead.ToString()
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="agreement-status-field">Статус</label>
+                        <div class="col-lg-10">
+                            <select id="agreement-status-field" name="Status">
+                                @foreach (LeadAgreementStatus status in Enum.GetValues(typeof(LeadAgreementStatus)))
+                                {
+                                    short pt = (short)status;
+                                    <option value="@pt" @(Model.Status == pt ? "selected=selected" : "")>@status.GetEnumMemberName()</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="lead-field">Дата создания</label>
+                        <div class="col-lg-10">
+                            @Model.DateCreated.FormatDateTime()
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="lead-field">Дата изменения</label>
+                        <div class="col-lg-10">
+                            @Model.DateModified.FormatDateTime()
+                        </div>
+                    </div>
+                    @if (ViewContext.CurrentUser().IsAdmin() || ViewContext.CurrentUser().HasPermission(Permission.ServicesManager))
+                    {
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label" for="lead-field">Комментарии к изменению</label>
+                            <div class="col-lg-10">
+                                <textarea class="form-control" name="comments" placeholder="Введите комментарии к изменению"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-lg-offset-2">
+                                <div class="pad-left15">
+                                    <button type="submit" class="btn btn-primary">Обновить</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <ul id="dashboard-tabs" class="nav nav-tabs">
+            <li class="active"><a href="#services" data-toggle="tab">Услуги</a></li>
+            <li class=""><a href="#history" data-toggle="tab">История изменений</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane fade active in" id="services">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="icon"><i class="icon20 i-gift"></i></div>
+                        <h4>Услуги в договоре</h4>
+                        <a href="#" class="minimize"></a>
+                    </div>
+                    <div class="panel-body">
+                        @if (Model.Status == (short)LeadAgreementStatus.Negotiation && (ViewContext.CurrentUser().IsAdmin() || ViewContext.CurrentUser().HasPermission(Permission.ServicesManager)))
+                        {
+                            @Html.Partial("AgreementServicesEditor", Model)
+                        }
+                        else
+                        {
+                            @Html.Partial("AgreementServicesTable", Model)
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="history">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="icon"><i class="icon20 i-history"></i></div>
+                        <h4>История договора</h4>
+                        <a href="#" class="minimize"></a>
+                    </div>
+                    <div class="panel-body">
+                        <div class="chat-layout">
+                            @if (Model.LeadAgreementChangements.Count > 0)
+                            {
+                                <ul>
+                                    @foreach (var changement in Model.LeadAgreementChangements.OrderBy(s => s.DateCreated))
+                                    {
+                                        <li class="clearfix leftside">
+                                            <div class="user center" style="width: 115px">
+                                                <div class="avatar center" style="margin-top: 0px">
+                                                    <img style="width: 60px; height: 60px" src="@changement.User.GetAvatar()" alt="@changement.User.GetFio()">
+                                                </div>
+                                                <span class="ago tip" title="@changement.DateCreated.FormatDateTime()">@changement.DateCreated.TimeAgo()</span>
+                                            </div>
+                                            <div class="message" style="margin-left: 120px; min-height: 75px">
+                                                <span class="name">@changement.User.GetFio()</span>
+                                                <span class="txt">
+                                                    @foreach (var changedValues in changement.LeadAgreementChangementValues)
+                                                    {
+                                                        if (changedValues.PropertyName.Contains("Описание"))
+                                                        {
+                                                            <text><b>Описание изменено</b><br/></text>
+                                                        }
+                                                        else
+                                                        {
+                                                            <text><b>@changedValues.PropertyName:</b> @changedValues.OldValue &rarr; @changedValues.NewValue</text><br />
+                                                        }
+                                                    }
+                                                    @if (!String.IsNullOrEmpty(changement.Comments))
+                                                    {
+                                                        @changement.Comments
+                                                    }
+                                                </span>
+                                            </div>
+                                        </li>
+                                    }
+                                </ul>    
+                            }
+                            else
+                            {
+                                <p>
+                                    С договором еще не выполняли каких нибудь действий.
+                                </p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#agreement-form").validate({
+            rules: {
+                Number: {
+                    required: true,
+                    maxlength: 255
+                },
+                Date: {
+                    required: true,
+                    maxlength: 255
+                },
+                DateEnd: {
+                    maxlength: 255
+                },
+                Title: {
+                    required: true,
+                    maxlength: 255
+                },
+                Description: {
+                    required: false,
+                    maxlength: 4000
+                }
+            }
+        });
+        $("#agreement-date-field").mask("99.99.9999");
+        $("#agreement-end-date-field").mask("99.99.9999");
+    });
+</script>

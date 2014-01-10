@@ -1,0 +1,185 @@
+﻿@using LeadControl.Domain.Enums
+@model LeadControl.Domain.Entities.LeadAgreement
+
+@{
+    var services = Model.Project.ServiceTypes.ToList();
+}
+<div id="services-sample" style="display: none">
+    <select class="service-type-selector select2">
+    @foreach (var product in services)
+    {
+        <option value="@product.Id">@product.Title</option>
+    }
+    </select>    
+</div>
+
+<p>
+    <a href="#" class="btn btn-info tip create" title="Создание новой позиции в договоре">Добавить услугу</a>   
+</p>
+<table class="table table-bordered" id="fea-items-table" style="position: relative">
+    <thead>
+        <tr>
+            <th>Наименование услуги</th>    
+            <th style="width: 200px">Периодичность</th>
+            <th>Цена</th>
+            <th>Кол-во оказаний</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var serviceItem in Model.LeadAgreementServices)
+        {
+            <tr data-id="@serviceItem.Id" data-service="@serviceItem.ServiceTypeId" class="item-row">
+                <td>
+                    <select class="service-type-selector select2" style="width: 100%">
+                        @foreach (var serviceType in services)
+                        {
+                            <option value="@serviceType.Id" @(serviceItem.ServiceTypeId == serviceType.Id ? "selected=selected":"")>@serviceType.Title</option>
+                        }
+                    </select>
+                </td>
+                <td class="period">
+                    @(((LeadServicePeriods)serviceItem.ServiceType.PeriodType).GetEnumMemberName())
+                </td>
+                <td style="width: 100px">
+                    <input type="text" class="price-selector" value="@String.Format("{0:0.00}",serviceItem.Price)" style="width: 95px"/>
+                </td>
+                <td style="width: 100px">
+                    <input type="text" class="period-selector" value="@String.Format("{0}",serviceItem.Period)" style="width: 95px"/>
+                </td>
+                <td style="width: 45px">
+                    <a href="#" class="btn btn-xs btn-danger tip delete-row" title="Удалить услугу"><i class="icon12 i-remove-5"></i></a>             
+                </td>
+            </tr>
+        }
+        
+        <tr class="summary-row">
+            @*<td colspan="5" class="center">Общая стоимость <span id="total">@String.Format("{0:c}",Model.GetTotalPlannedAmount())</span></td>*@
+            <td colspan="5" class="center">Кол-во оказаний, общее количество раз, которая данная услуга будет оказана за весь период действия договора. Используется для рассчета общей прибыли с договора.</td>
+        </tr>
+    </tbody>
+</table>
+<script type="text/javascript">
+    $(document).ready(function() {
+        function bindRow(tr) {
+            $(tr).find(".service-type-selector").change(function(e) {
+                var p = $(this).parent().parent();
+                var id = $(p).data("id");
+                var serviceId = $(p).data("service");
+                var newId = $(this).val();
+                blockEditors(p);
+                $.post("/agreements/change-agreement-item-service", { id: @Model.Id, itemId: id, serviceId: serviceId, newId: newId }, function (data) {
+                    if (data.success == true) {
+                        showSuccess("Позиция была успешно обновлена");
+                        $(p).data("id", data.id);
+                        $(p).data("service", data.serviceId);
+                        $(p).find(".period").text(data.period);
+                        $(p).find(".price-selector").val(data.price);
+                        $(p).find(".period-selector").val(data.periods);
+                    } else {
+                        alert('Не удалось обновить позицию. Обновите страницу');
+                    }
+                    unblockEditors(p);
+                }, 'json');
+            }).select2();
+            $(tr).find(".period-selector").change(function (e) {
+                recalc();
+                var p = $(this).parent().parent();
+                var id = $(p).data("id");
+                var serviceId = $(p).data("service");
+                var quantity = $(this).val();
+                blockEditors(p);
+                blockEditors(p);
+                $.post("/agreements/change-agreement-item-period", { id: @Model.Id, itemId: id, serviceId: serviceId, quantity: quantity }, function (data) {
+                    if (data.success == true) {
+                        showSuccess("Позиция была успешно обновлена");
+                        $(p).data("id", data.id);
+                        $(p).data("service", data.serviceId);
+                    } else {
+                        alert('Не удалось обновить позицию. Обновите страницу');
+                    }
+                    unblockEditors(p);
+                }, 'json');
+            });
+            $(tr).find(".price-selector").change(function(e) {
+                recalc();
+                var p = $(this).parent().parent();
+                var id = $(p).data("id");
+                var serviceId = $(p).data("service");
+                var price = $(this).val();
+                blockEditors(p);
+                $.post("/agreements/change-agreement-item-price", { id: @Model.Id, itemId: id, serviceId: serviceId, price: price }, function (data) {
+                    if (data.success == true) {
+                        showSuccess("Позиция была успешно обновлена");
+                        $(p).data("id", data.id);
+                        $(p).data("service", data.productId);
+                    } else {
+                        alert('Не удалось обновить позицию. Обновите страницу');
+                    }
+                    unblockEditors(p);
+                }, 'json');
+            });
+            $(tr).find(".delete-row").click(function(e) {
+                if (confirm('Вы действительно хотите удалить эту позицию?')) {
+                    var id = parseInt($(this).parent().parent().data("id"));
+                    $(this).parent().parent().remove();
+                    if (id > 0) {
+                        $.post("/agreements/delete-agreement-item", { id: @Model.Id, itemId: id }, function(data) {
+                            if (data.success == true) {
+                                showSuccess("Позиция была успешно удалена из договора");
+                                recalc();
+                            } else {
+                                alert('Не удалось удалить позицию. Обновите страницу');
+                            }
+                        }, 'json');
+                    }
+                }
+                return false;
+            });
+        }
+
+        $("#fea-items-table").find("tbody").find('.item-row').each(function(index, item) {
+            bindRow($(item));
+        });
+        
+        function recalc() {
+            return;
+            var total = 0;
+            $(".item-row").each(function(index, item) {
+                var price = parseFloat($(item).find(".price-selector").val().replace(",", "."));
+                if (isNaN(price)) {
+                    price = 0.0;
+                    $(item).find(".price-selector").val("0");
+                }
+                var quantity = parseInt($(item).find(".quantity-selector").val());
+                var sum = price * quantity;
+                var s = fmtMoney(sum);
+                $(item).find(".total-price").text(s);
+                total += sum;
+            });
+            $("#total").text(fmtMoney(total));
+        }
+        
+        function blockEditors(parent) {
+            return;
+            $(parent).find("input, select").attr("readonly", "readonly");
+        }
+        
+        function unblockEditors(parent) {
+            return;
+            $(parent).find("input, select").attr("readonly", null);
+        }
+        
+        function createRow() {
+            var html = '<tr data-id="0" data-service="0" class="item-row"><td>' + $("#services-sample").html() + '</td><td class="period"></td><td style="width: 100px"><input type="text" class="price-selector" value="0,00" style="width: 95px"/></td><td style="width: 100px"><input type="text" class="period-selector" value="1" style="width: 95px"/></td><td style="width: 45px"><a href="#" class="btn btn-xs btn-danger tip delete-row" title="Удалить позицию"><i class="icon12 i-remove-5"></i></a></td>';
+            var row = $(html);
+            $(".summary-row").before(row);
+            bindRow(row);
+        }
+
+        $(".create").click(function() {
+            createRow();
+            return false;
+        });
+    });
+</script>

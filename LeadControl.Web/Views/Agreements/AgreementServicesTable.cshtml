@@ -1,0 +1,43 @@
+﻿@using LeadControl.Domain.Enums
+@model LeadControl.Domain.Entities.LeadAgreement
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Услуга</th>
+            <th>Периодичность</th>
+            <th>Стоимость</th>
+            <th class="tip" title="Общее количество раз, которая данная услуга будет оказана в период действия договора. Используется для автоматического рассчета прибыли">Кол-во оказаний</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            var counter = 0;
+        }
+        @foreach (var serviceItem in Model.LeadAgreementServices)
+        {
+            counter++;
+            <tr>
+                <td>
+                    @counter
+                </td>
+                <td>
+                    @serviceItem.ServiceType.Title     
+                </td>
+                <td>
+                    @(((LeadServicePeriods)serviceItem.ServiceType.PeriodType).GetEnumMemberName())
+                </td>
+                <td>
+                    @String.Format("{0:c}",serviceItem.Price)
+                </td>
+                <td>
+                    @serviceItem.Period
+                </td>
+            </tr>
+        }
+        <tr>
+            <td colspan="5" class="center">Общая планируемая прибыль <span id="total">@String.Format("{0:c}",Model.GetTotalPlannedAmount())</span></td>
+        </tr>
+    </tbody>
+</table>

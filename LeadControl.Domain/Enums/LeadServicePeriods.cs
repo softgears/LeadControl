@@ -19,7 +19,7 @@ namespace LeadControl.Domain.Enums
         /// <summary>
         /// Без периодичности
         /// </summary>
-        [EnumDescription("Без периодичности")]
+        [EnumDescription("Разово")]
         No = 0,
 
         /// <summary>

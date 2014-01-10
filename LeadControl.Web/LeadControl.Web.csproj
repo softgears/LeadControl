@@ -1293,6 +1293,9 @@
     <Content Include="Views\Agreements\Index.cshtml" />
     <Content Include="Views\Agreements\AgreementsFilter.cshtml" />
     <Content Include="Views\Agreements\Create.cshtml" />
+    <Content Include="Views\Agreements\Info.cshtml" />
+    <Content Include="Views\Agreements\AgreementServicesTable.cshtml" />
+    <Content Include="Views\Agreements\AgreementServicesEditor.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

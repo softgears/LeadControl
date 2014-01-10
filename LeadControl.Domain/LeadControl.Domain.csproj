@@ -67,9 +67,11 @@
     </Compile>
     <Compile Include="Entities\FEAOrder.cs" />
     <Compile Include="Entities\Lead.cs" />
+    <Compile Include="Entities\LeadAgreement.cs" />
     <Compile Include="Entities\LeadOrder.cs" />
     <Compile Include="Entities\Permission.cs" />
     <Compile Include="Entities\Role.cs" />
+    <Compile Include="Entities\ServiceType.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="Enums\DeliveryTypes.cs" />
     <Compile Include="Enums\EnumDescriptionAttribute.cs" />
