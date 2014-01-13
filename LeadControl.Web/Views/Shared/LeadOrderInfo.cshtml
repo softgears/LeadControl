@@ -32,7 +32,7 @@
                             <select id="payment-field" name="paymentType">
                                 @foreach (PaymentTypes paymentType in Enum.GetValues(typeof(PaymentTypes)))
                                 {
-                                    short pt = (short) paymentType;
+                                    short pt = (short)paymentType;
                                     <option value="@pt">@paymentType.GetEnumMemberName()</option>
                                 }
                             </select>
@@ -44,7 +44,7 @@
                             <select id="delivery-field" name="deliveryType">
                                 @foreach (DeliveryTypes deliveryType in Enum.GetValues(typeof(DeliveryTypes)))
                                 {
-                                    short dt = (short) deliveryType;
+                                    short dt = (short)deliveryType;
                                     <option value="@dt">@deliveryType.GetEnumMemberName()</option>
                                 }
                             </select>
@@ -64,12 +64,12 @@
                     </div>
                     @if (Model.Warehouse != null)
                     {
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label" for="lead-field">Назначенный склад</label>
-                        <div class="col-lg-10">
-                            @String.Format("{0} ({1})",Model.Warehouse.Title,Model.Warehouse.City)
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label" for="lead-field">Назначенный склад</label>
+                            <div class="col-lg-10">
+                                @String.Format("{0} ({1})", Model.Warehouse.Title, Model.Warehouse.City)
+                            </div>
                         </div>
-                    </div>
                     }
                     <div class="form-group">
                         <label class="col-lg-2 control-label" for="lead-field">Дата создания</label>
@@ -99,145 +99,150 @@
     </div>
 </div>
 <div class="row">
-    <a name="items"></a>
     <div class="col-lg-12">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <div class="icon"><i class="icon20 i-cart"></i></div>
-                <h4>Позиции заказа</h4>
-                <a href="#" class="minimize"></a>
-            </div>
-            <div class="panel-body">
-                @if (Model.Status == (short)LeadOrderStatus.Initial && (ViewContext.CurrentUser().IsAdmin() || ViewContext.CurrentUser().HasPermission(Permission.OrdersManager)))
-                {
-                    @Html.Partial("OrderItemsEditor", Model)
-                }
-                else
-                {
-                    @Html.Partial("OrderItemsTable", Model)
-                }
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <a name="history"></a>
-    <div class="col-lg-12">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <div class="icon"><i class="icon20 i-history"></i></div>
-                <h4>История заказа</h4>
-                <a href="#" class="minimize"></a>
-            </div>
-            <div class="panel-body">
-                <div class="chat-layout">
-                    @if (Model.LeadOrderChangements.Count > 0)
-                    {
-                        <ul>
-                            @foreach (var changement in Model.LeadOrderChangements.OrderBy(s => s.DateCreated))
-                            {
-                                <li class="clearfix leftside">
-                                    <div class="user center" style="width: 115px">
-                                        <div class="avatar center" style="margin-top: 0px">
-                                            <img style="width: 60px; height: 60px" src="@changement.Author.GetAvatar()" alt="@changement.Author.GetFio()">
-                                        </div>
-                                        <span class="ago tip" title="@changement.DateCreated.FormatDateTime()">@changement.DateCreated.TimeAgo()</span>
-                                    </div>
-                                    <div class="message" style="margin-left: 120px; min-height: 75px">
-                                        <span class="name">@changement.Author.GetFio()</span>
-                                        <span class="txt">
-                                            @if (changement.NewStatus != changement.OldStatus && changement.OldStatus != 0)
-                                            {
-                                                <text><b>Статус изменен:</b> @(((LeadOrderStatus)changement.OldStatus).GetEnumMemberName()) &rarr; @(((LeadOrderStatus)changement.NewStatus).GetEnumMemberName())</text><br/>
-                                            }
-                                            @if (changement.NewAssignedUserId != changement.OldAssignedUserId && changement.OldAssignedUser != null)
-                                            {
-                                                <text><b>Назначенный пользователь изменен:</b> @changement.OldAssignedUser.GetFio() &rarr; @changement.NewAssignedUser.GetFio()</text><br/>
-                                            }
-                                            @if (changement.NewWarehouseId != changement.OldWarehouseId)
-                                            {
-                                                <text><b>Назначенный склад изменен:</b> @(changement.OldWarehouse != null ? String.Format("{0} ({1})",changement.OldWarehouse.Title, changement.OldWarehouse.City) : "" ) &rarr; @String.Format("{0} ({1})",changement.NewWarehouse.Title, changement.NewWarehouse.City)</text><br/>
-                                            }
-                                            @if (!String.IsNullOrEmpty(changement.Comments))
-                                            {
-                                                @changement.Comments
-                                            }
-                                        </span>
-                                    </div>
-                                </li>
-                            }
-                        </ul>    
-                    }
-                    else
-                    {
-                        <p>
-                            Заказ еще не изменял своего статуса
-                        </p>
-                    }
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-@if (ViewContext.CurrentUser().IsAdmin() && ViewContext.CurrentUser().HasPermission(Permission.Finances))
-{
-<div class="row">
-    <a name="money"></a>
-    <div class="col-lg-12">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <div class="icon"><i class="icon20 i-coins"></i></div>
-                <h4>Поступившая оплата</h4>
-                <a href="#" class="minimize"></a>
-            </div>
-            <div class="panel-body">
-                <table class="table table-bordered table-hover">
-                    <thead>
-                        <tr>
-                            <th>Дата</th>
-                            <th>Тип</th>
-                            <th>Сумма</th>
-                            <th>Контрагент</th>
-                            <th>Номер п.п.</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Model.LeadOrderPayments.Count > 0)
+        <ul id="dashboard-tabs" class="nav nav-tabs">
+            <li class="active"><a href="#positions" data-toggle="tab">Позиции</a></li>
+            <li class=""><a href="#history" data-toggle="tab">История изменений</a></li>
+            @if (ViewContext.CurrentUser().IsAdmin() && ViewContext.CurrentUser().HasPermission(Permission.Finances))
+            {
+                <li class=""><a href="#payments" data-toggle="tab">История оплаты</a></li>    
+            }
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane fade active in" id="positions">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="icon"><i class="icon20 i-cart"></i></div>
+                        <h4>Позиции заказа</h4>
+                        <a href="#" class="minimize"></a>
+                    </div>
+                    <div class="panel-body">
+                        @if (Model.Status == (short)LeadOrderStatus.Initial && (ViewContext.CurrentUser().IsAdmin() || ViewContext.CurrentUser().HasPermission(Permission.OrdersManager)))
                         {
-                            foreach (var payment in Model.LeadOrderPayments.OrderBy(p => p.DateCreated))
-                            {
-                                <tr>
-                                    <td>
-                                        <span class="tip" title="@payment.DateCreated.FormatDateTime()">@payment.DateCreated.TimeAgo()</span>
-                                    </td>
-                                    <td>
-                                        @(((PaymentTypes)payment.PaymentType).GetEnumMemberName())
-                                    </td>
-                                    <td>
-                                        @String.Format("{0:c}", payment.Amount)
-                                    </td>
-                                    <td>
-                                        @payment.Customer
-                                    </td>
-                                    <td>
-                                        @payment.DocumentNumber
-                                    </td>
-                                </tr>
-                            }
+                            @Html.Partial("OrderItemsEditor", Model)
                         }
                         else
                         {
-                            <tr>
-                                <td colspan="4">По данному заказу еще не поступало оплаты</td>
-                            </tr>
+                            @Html.Partial("OrderItemsTable", Model)
                         }
-                    </tbody>
-                </table>
+                    </div>
+                </div>
             </div>
+            <div class="tab-pane fade" id="history">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="icon"><i class="icon20 i-history"></i></div>
+                        <h4>История заказа</h4>
+                        <a href="#" class="minimize"></a>
+                    </div>
+                    <div class="panel-body">
+                        <div class="chat-layout">
+                            @if (Model.LeadOrderChangements.Count > 0)
+                            {
+                                <ul>
+                                    @foreach (var changement in Model.LeadOrderChangements.OrderBy(s => s.DateCreated))
+                                    {
+                                        <li class="clearfix leftside">
+                                            <div class="user center" style="width: 115px">
+                                                <div class="avatar center" style="margin-top: 0px">
+                                                    <img style="width: 60px; height: 60px" src="@changement.Author.GetAvatar()" alt="@changement.Author.GetFio()">
+                                                </div>
+                                                <span class="ago tip" title="@changement.DateCreated.FormatDateTime()">@changement.DateCreated.TimeAgo()</span>
+                                            </div>
+                                            <div class="message" style="margin-left: 120px; min-height: 75px">
+                                                <span class="name">@changement.Author.GetFio()</span>
+                                                <span class="txt">
+                                                    @if (changement.NewStatus != changement.OldStatus && changement.OldStatus != 0)
+                                                    {
+                                                        <text><b>Статус изменен:</b> @(((LeadOrderStatus)changement.OldStatus).GetEnumMemberName()) &rarr; @(((LeadOrderStatus)changement.NewStatus).GetEnumMemberName())</text><br />
+                                                    }
+                                                    @if (changement.NewAssignedUserId != changement.OldAssignedUserId && changement.OldAssignedUser != null)
+                                                    {
+                                                        <text><b>Назначенный пользователь изменен:</b> @changement.OldAssignedUser.GetFio() &rarr; @changement.NewAssignedUser.GetFio()</text><br />
+                                                    }
+                                                    @if (changement.NewWarehouseId != changement.OldWarehouseId)
+                                                    {
+                                                        <text><b>Назначенный склад изменен:</b> @(changement.OldWarehouse != null ? String.Format("{0} ({1})", changement.OldWarehouse.Title, changement.OldWarehouse.City) : "") &rarr; @String.Format("{0} ({1})", changement.NewWarehouse.Title, changement.NewWarehouse.City)</text><br />
+                                                    }
+                                                    @if (!String.IsNullOrEmpty(changement.Comments))
+                                                    {
+                                                        @changement.Comments
+                                                    }
+                                                </span>
+                                            </div>
+                                        </li>
+                                    }
+                                </ul>    
+                            }
+                            else
+                            {
+                                <p>
+                                    Заказ еще не изменял своего статуса
+                                </p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @if (ViewContext.CurrentUser().IsAdmin() && ViewContext.CurrentUser().HasPermission(Permission.Finances))
+            {
+                <div class="tab-pane fade" id="payments">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <div class="icon"><i class="icon20 i-coins"></i></div>
+                            <h4>Поступившая оплата</h4>
+                            <a href="#" class="minimize"></a>
+                        </div>
+                        <div class="panel-body">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Дата</th>
+                                        <th>Тип</th>
+                                        <th>Сумма</th>
+                                        <th>Контрагент</th>
+                                        <th>Номер п.п.</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.LeadOrderPayments.Count > 0)
+                                    {
+                                        foreach (var payment in Model.LeadOrderPayments.OrderBy(p => p.DateCreated))
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <span class="tip" title="@payment.DateCreated.FormatDateTime()">@payment.DateCreated.TimeAgo()</span>
+                                                </td>
+                                                <td>
+                                                    @(((PaymentTypes) payment.PaymentType).GetEnumMemberName())
+                                                </td>
+                                                <td>
+                                                    @String.Format("{0:c}", payment.Amount)
+                                                </td>
+                                                <td>
+                                                    @payment.Customer
+                                                </td>
+                                                <td>
+                                                    @payment.DocumentNumber
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td colspan="4">По данному заказу еще не поступало оплаты</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
     </div>
 </div>
-}
 @if (Model.CanChangeStatus(ViewContext.CurrentUser()))
 {
     <div class="row">
@@ -251,15 +256,15 @@
                 </div>
                 <div class="panel-body">
                     <form action="/orders/change-order-status" id="change-status-form" method="POST" class="form-horizontal">
-                        @Html.Hidden("id",Model.Id)
+                        @Html.Hidden("id", Model.Id)
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Новый статус</label>
                             <div class="col-lg-10">
                                 <select name="newStatus" id="new-status-field">
-                                    @foreach (LeadOrderStatus status in Enum.GetValues(typeof (LeadOrderStatus)))
+                                    @foreach (LeadOrderStatus status in Enum.GetValues(typeof(LeadOrderStatus)))
                                     {
-                                        var s = (short) status;
-                                        <option value="@s" @(Model.Status == s ? "selected=selected":"")>@status.GetEnumMemberName()</option>
+                                        var s = (short)status;
+                                        <option value="@s" @(Model.Status == s ? "selected=selected" : "")>@status.GetEnumMemberName()</option>
                                     }
                                 </select>
                             </div>
@@ -270,7 +275,7 @@
                                 <select name="newUser" id="new-user-field">
                                     @foreach (User user in Model.Project.ProjectUsers.Select(pu => pu.User))
                                     {
-                                        <option value="@user.Id" @(Model.AssignedUserId == user.Id ? "selected=selected":"")>@user.GetFio()</option>
+                                        <option value="@user.Id" @(Model.AssignedUserId == user.Id ? "selected=selected" : "")>@user.GetFio()</option>
                                     }
                                 </select>
                             </div>
@@ -282,7 +287,7 @@
                                     <option value="0">Не назначен</option>
                                     @foreach (Warehouse warehouse in Model.Project.Warehouses)
                                     {
-                                        <option value="@warehouse.Id" @(Model.AssignedWarehouseId == warehouse.Id ? "selected=selected":"")>@warehouse.Title @(warehouse.City)</option>
+                                        <option value="@warehouse.Id" @(Model.AssignedWarehouseId == warehouse.Id ? "selected=selected" : "")>@warehouse.Title @(warehouse.City)</option>
                                     }
                                 </select>
                             </div>
@@ -295,12 +300,12 @@
                         </div>
                         @if (ViewContext.CurrentUser().HasPermission(Permission.Warehousing))
                         {
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label">Извлечь остатки со склада</label>
-                            <div class="col-lg-10">
-                                @Html.CheckBox("extractFromWarehouse")
-                            </div>
-                        </div>    
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Извлечь остатки со склада</label>
+                                <div class="col-lg-10">
+                                    @Html.CheckBox("extractFromWarehouse")
+                                </div>
+                            </div>    
                         }
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Комментарии</label>
@@ -315,7 +320,7 @@
                                 </div>
                             </div>
                         </div>
-                        @Html.Hidden("redirectUrl",Request.Url.AbsolutePath)
+                        @Html.Hidden("redirectUrl", Request.Url.AbsolutePath)
                     </form>
                 </div>
             </div>

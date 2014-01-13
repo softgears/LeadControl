@@ -193,10 +193,24 @@
                         @if (ViewContext.CurrentUser().HasPermission(Permission.Finances))
                         {
                         <li>
-                            <a href="/finances">
+                            <a href="#">
                                 <span class="icon"><i class="icon20 i-coins"></i></span>
                                 <span class="txt">Бухгалтерия</span>
                             </a>
+                            <ul class="sub">
+                                <li>
+                                    <a href="/finances/orders">
+                                        <span class="icon"><i class="icon20 i-cart-2"></i></span>
+                                        <span class="txt">Оплата по заказам</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/finances/agreements">
+                                        <span class="icon"><i class="icon20 i-diamonds"></i></span>
+                                        <span class="txt">Оплата по договорам</span>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>    
                         }
                         @if (ViewContext.CurrentUser().HasPermission(Permission.Warehousing))

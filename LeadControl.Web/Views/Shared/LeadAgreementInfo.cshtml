@@ -106,6 +106,10 @@
         <ul id="dashboard-tabs" class="nav nav-tabs">
             <li class="active"><a href="#services" data-toggle="tab">Услуги</a></li>
             <li class=""><a href="#history" data-toggle="tab">История изменений</a></li>
+            @if (ViewContext.CurrentUser().IsAdmin() && ViewContext.CurrentUser().HasPermission(Permission.Finances))
+            {
+                <li class=""><a href="#payments" data-toggle="tab">История оплаты</a></li>    
+            }
         </ul>
         <div class="tab-content">
             <div class="tab-pane fade active in" id="services">
@@ -182,6 +186,69 @@
                     </div>
                 </div>
             </div>
+            @if (ViewContext.CurrentUser().IsAdmin() && ViewContext.CurrentUser().HasPermission(Permission.Finances))
+            {
+                <div class="tab-pane fade" id="payments">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <div class="icon"><i class="icon20 i-coins"></i></div>
+                            <h4>Поступившая оплата</h4>
+                            <a href="#" class="minimize"></a>
+                        </div>
+                        <div class="panel-body">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Дата</th>
+                                        <th>Тип</th>
+                                        <th>Услуга</th>
+                                        <th>Сумма</th>
+                                        <th>Контрагент</th>
+                                        <th>Номер п.п.</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.LeadAgreementPayments.Count > 0)
+                                    {
+                                        foreach (var payment in Model.LeadAgreementPayments.OrderBy(p => p.DateCreated))
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <span class="tip" title="@payment.DateCreated.FormatDateTime()">@payment.DateCreated.TimeAgo()</span>
+                                                </td>
+                                                <td>
+                                                    @(((PaymentTypes) payment.PaymentType).GetEnumMemberName())
+                                                </td>
+                                                <td>
+                                                    @if (payment.LeadAgreementService != null)
+                                                    {
+                                                        @payment.LeadAgreementService.ServiceType.Title
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @String.Format("{0:c}", payment.Amount)
+                                                </td>
+                                                <td>
+                                                    @payment.Customer
+                                                </td>
+                                                <td>
+                                                    @payment.DocumentNumber
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td colspan="5">По данному договору еще не поступало оплаты</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
     </div>
 </div>

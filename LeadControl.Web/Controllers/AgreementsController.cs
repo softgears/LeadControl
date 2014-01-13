@@ -174,7 +174,7 @@ namespace LeadControl.Web.Controllers
             PushNavigationItem("Договора", "/agreements");
             PushNavigationItem("Договор №"+agreement.Number, "#");
 
-            return View(agreement);
+            return View("LeadAgreementInfo",agreement);
         }
 
         /// <summary>

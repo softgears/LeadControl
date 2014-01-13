@@ -1,20 +1,16 @@
-﻿@using LeadControl.Domain.DAL
-@using LeadControl.Domain.Enums
-@using LeadControl.Domain.IoC
+﻿@using LeadControl.Domain.Enums
 @using LeadControl.Web.Classes.Ext
 @using LeadControl.Web.Models.Agreements
-@using LeadControl.Web.Models.Orders
 @model LeadControl.Web.Models.Agreements.AgreementsFiltrationModel
 
 @{
-    ViewBag.Title = "Список договоров";
+    ViewBag.Title = "Оплата по договорам";
     Layout = "../Shared/AccountLayout.cshtml";
-    var dc = Locator.GetService<LCDataContext>();
 }
 
 @Html.Partial("AgreementsFilter",new LeadAgreementFilterModel()
 {
-    CallbackUrl = "/agreements",
+    CallbackUrl = "/finances/agreements",
     FilterData = Model
 })
 <div class="row">
@@ -33,9 +29,6 @@
                 <table class="table table-striped table-bordered table-hover" id="agreements-table">
                     <thead>
                         <tr>
-                            <th>
-                                ИД
-                            </th>
                             <th>
                                 Номер
                             </th>
@@ -78,7 +71,7 @@
                         @if (Model.Fetched.Count == 0)
                         {
                             <tr>
-                                <td colspan="13">
+                                <td colspan="12">
                                     Не найдено договоров
                                 </td>
                             </tr>
@@ -89,10 +82,7 @@
                             {
                                 <tr>
                                     <td>
-                                        <a href="/agreements/@agreement.Id/info">@agreement.Id</a>
-                                    </td>
-                                    <td>
-                                        <a href="/agreements/@agreement.Id/info">@agreement.Number</a>
+                                        <a href="/finances/agreements/@agreement.Id/info">@agreement.Number</a>
                                     </td>
                                     <td>
                                         @if (agreement.Date.HasValue)
@@ -131,8 +121,9 @@
                                     <td>
                                         <span class="tip" title="@agreement.DateModified.FormatDateTime()">@agreement.DateModified.TimeAgo()</span>
                                     </td>
-                                    <td style="width: 45px">
-                                        <a href="/agreements/@agreement.Id/info" class="btn btn-xs btn-info tip" title="Карточка договора"><i class="icon12 i-info"></i></a> 
+                                    <td style="width: 90px">
+                                        <a href="/finances/agreements/@agreement.Id/info" class="btn btn-xs btn-info tip" title="Карточка договора"><i class="icon12 i-info"></i></a> 
+                                        <a href="javascript:addTrange(@agreement.Id)" class="btn btn-xs btn-success tip" title="Добавить оплату по договору"><i class="icon12 i-coin"></i></a>
                                     </td>
                                 </tr>
                             }
@@ -143,3 +134,78 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="add-payment-dialog" tabindex="-1" role="dialog" aria-labelledby="addPaymentLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Новое поступление по договору</h4>
+            </div>
+            <div class="modal-body">
+                <form id="add-payment-form" method="POST" class="form-horizontal" role="form" action="/finances/add-agreement-payment">
+                    <input type="hidden" id="add-payment-order-id-field" name="id" value="-1" />
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">Тип платежа</label>
+                        <div class="col-lg-9">
+                            <select name="paymentType">
+                                @foreach (PaymentTypes paymentType in Enum.GetValues(typeof(PaymentTypes)))
+                                {
+                                    var pt = (short) paymentType;
+                                    <option value="@pt">@paymentType.GetEnumMemberName()</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">Сумма</label>
+                        <div class="col-lg-9">
+                            <input type="text" class="form-control" name="amount" placeholder="Введите сумму поступления"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">Контрагент</label>
+                        <div class="col-lg-9">
+                            <input type="text" class="form-control" name="customer" placeholder="Введите описание контрагента"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">Номер счета / п.п.</label>
+                        <div class="col-lg-9">
+                            <input type="text" class="form-control" name="document" placeholder="Введите номер счета или платежного поручения"/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                <button type="button" class="btn btn-primary" onclick="$('#add-payment-form').submit();">Добавить</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#add-payment-form").validate({            
+           rules: {
+               amount: {
+                   required: true,
+                   digits: true
+               },
+               customer: {
+                   maxlength: 255
+               },
+               document: {
+                   maxlength: 255
+               }
+           } 
+        });
+    });
+    function addTrange(id) {
+        $("#add-payment-order-id-field").val(id);
+        $("#add-payment-dialog").modal({
+            keyboard: true
+        });
+    }
+</script>

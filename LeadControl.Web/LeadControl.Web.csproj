@@ -1291,11 +1291,12 @@
     <Content Include="Views\ManageServices\Index.cshtml" />
     <Content Include="Views\ManageServices\ServicesEditForm.cshtml" />
     <Content Include="Views\Agreements\Index.cshtml" />
-    <Content Include="Views\Agreements\AgreementsFilter.cshtml" />
+    <Content Include="Views\Shared\AgreementsFilter.cshtml" />
     <Content Include="Views\Agreements\Create.cshtml" />
-    <Content Include="Views\Agreements\Info.cshtml" />
-    <Content Include="Views\Agreements\AgreementServicesTable.cshtml" />
-    <Content Include="Views\Agreements\AgreementServicesEditor.cshtml" />
+    <Content Include="Views\Shared\LeadAgreementInfo.cshtml" />
+    <Content Include="Views\Shared\AgreementServicesTable.cshtml" />
+    <Content Include="Views\Shared\AgreementServicesEditor.cshtml" />
+    <Content Include="Views\Finances\AgreementsIndex.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
